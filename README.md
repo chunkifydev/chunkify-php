@@ -10,22 +10,10 @@ The REST API documentation can be found on [chunkify.dev](https://chunkify.dev/d
 
 ## Installation
 
-To use this package, install via Composer by adding the following to your application's `composer.json`:
-
 <!-- x-release-please-start-version -->
 
-```json
-{
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@github.com:chunkifydev/chunkify-php.git"
-    }
-  ],
-  "require": {
-    "chunkify/chunkify-php": "dev-main"
-  }
-}
+```
+composer require "chunkify/chunkify-php 0.0.1"
 ```
 
 <!-- x-release-please-end -->
