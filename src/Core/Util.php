@@ -27,6 +27,8 @@ final class Util
 
     public const STREAMING_CONTENT_TYPE = ['/^text\/event-stream/', self::JSONL_CONTENT_TYPE];
 
+    private const QUERY_ARRAY_FORMAT = 'repeat';
+
     public static function getenv(string $key): ?string
     {
         if (array_key_exists($key, array: $_ENV)) {
@@ -207,14 +209,14 @@ final class Util
         parse_str($base->getQuery(), $q1);
         parse_str($parsed['query'] ?? '', $q2);
 
-        $mergedQuery = array_merge_recursive($q1, $q2, $query);
+        $mergedQuery = array_replace_recursive($q1, $q2, $query);
 
         /** @var array<string,mixed> */
         $normalizedQuery = self::mapRecursive(
             static fn ($v) => is_bool($v) || is_numeric($v) ? self::strVal($v) : $v,
             value: $mergedQuery
         );
-        $qs = http_build_query($normalizedQuery, encoding_type: PHP_QUERY_RFC3986);
+        $qs = self::buildQueryString($normalizedQuery);
 
         return $base->withQuery($qs);
     }
@@ -445,6 +447,97 @@ final class Util
     public static function prettyEncodeJson(mixed $obj): string
     {
         return json_encode($obj, flags: JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) ?: '';
+    }
+
+    /**
+     * @param array<string,mixed> $query
+     */
+    private static function buildQueryString(array $query): string
+    {
+        $renderKey = static function (string $key, string|int $subKey): string {
+            $subKey = (string) $subKey;
+            if ('' === $key) {
+                return $subKey;
+            }
+
+            return $key.'['.$subKey.']';
+        };
+
+        $collectValues = static function (mixed $value) use (&$collectValues): array {
+            if (is_null($value)) {
+                return [];
+            }
+
+            if (is_array($value)) {
+                $values = [];
+                foreach ($value as $item) {
+                    array_push($values, ...$collectValues($item));
+                }
+
+                return $values;
+            }
+
+            return [self::strVal($value)];
+        };
+
+        $parts = [];
+        $append = static function (string $key, mixed $value) use (&$parts, &$append, $renderKey, $collectValues): void {
+            if (is_null($value)) {
+                return;
+            }
+
+            if (is_array($value)) {
+                if (array_is_list($value)) {
+                    switch (self::QUERY_ARRAY_FORMAT) {
+                        case 'comma':
+                            $values = [];
+                            foreach ($value as $item) {
+                                array_push($values, ...$collectValues($item));
+                            }
+                            if ([] !== $values) {
+                                $parts[] = rawurlencode($key).'='.rawurlencode(implode(',', $values));
+                            }
+
+                            return;
+
+                        case 'repeat':
+                            foreach ($value as $item) {
+                                $append($key, $item);
+                            }
+
+                            return;
+
+                        case 'indices':
+                            foreach ($value as $i => $item) {
+                                $append($key.'['.$i.']', $item);
+                            }
+
+                            return;
+
+                        case 'brackets':
+                            foreach ($value as $item) {
+                                $append($key.'[]', $item);
+                            }
+
+                            return;
+                    }
+                }
+
+                foreach ($value as $subKey => $item) {
+                    $append($renderKey($key, $subKey), $item);
+                }
+
+                return;
+            }
+
+            $parts[] = rawurlencode($key).'='.rawurlencode(self::strVal($value));
+        };
+
+        foreach ($query as $key => $value) {
+            $append((string) $key, $value);
+        }
+
+        return implode('&', $parts);
     }
 
     /**
