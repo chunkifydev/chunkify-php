@@ -27,7 +27,7 @@ final class Util
 
     public const STREAMING_CONTENT_TYPE = ['/^text\/event-stream/', self::JSONL_CONTENT_TYPE];
 
-    private const QUERY_ARRAY_FORMAT = 'repeat';
+    private const QUERY_ARRAY_FORMAT = 'brackets';
 
     private const QUERY_NESTED_FORMAT = 'brackets';
 
