@@ -7,7 +7,7 @@
 * respect configured query array formats
 * replace pagination offsets instead of merging them
 * report the released package version in request headers
-  
+
 ### Chores
 
 * use chunkify stlc forks in CI ([976c7b5](https://github.com/chunkifydev/chunkify-php/commit/976c7b566bf37f3bafd10fc1ede5cf417a742d0e))
