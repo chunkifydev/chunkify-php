@@ -29,8 +29,6 @@ final class Util
 
     private const QUERY_ARRAY_FORMAT = 'repeat';
 
-    private const QUERY_NESTED_FORMAT = 'brackets';
-
     public static function getenv(string $key): ?string
     {
         if (array_key_exists($key, array: $_ENV)) {
@@ -462,7 +460,7 @@ final class Util
                 return $subKey;
             }
 
-            return self::QUERY_NESTED_FORMAT === 'dots' ? $key.'.'.$subKey : $key.'['.$subKey.']';
+            return $key.'['.$subKey.']';
         };
 
         $collectValues = static function (mixed $value) use (&$collectValues): array {
