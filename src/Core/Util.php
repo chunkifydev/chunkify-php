@@ -29,8 +29,6 @@ final class Util
 
     private const QUERY_ARRAY_FORMAT = 'repeat';
 
-    private const QUERY_NESTED_FORMAT = 'brackets';
-
     public static function getenv(string $key): ?string
     {
         if (array_key_exists($key, array: $_ENV)) {

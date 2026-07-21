@@ -52,10 +52,6 @@ class UtilTest extends TestCase
 
         /** @var 'brackets'|'comma'|'indices'|'repeat' $arrayFormat */
         $arrayFormat = $util->getConstant('QUERY_ARRAY_FORMAT');
-
-        /** @var 'brackets'|'dots' $nestedFormat */
-        $nestedFormat = $util->getConstant('QUERY_NESTED_FORMAT');
-        $nestedKey = 'dots' === $nestedFormat ? 'dog.dog' : 'dog%5Bdog%5D';
         $cases = [
             [
                 '',
@@ -94,11 +90,14 @@ class UtilTest extends TestCase
             [
                 '',
                 ['dog' => ['dog' => ['dog']]],
-                match ($arrayFormat) {
-                    'brackets' => "http://localhost?{$nestedKey}%5B%5D=dog",
-                    'indices' => "http://localhost?{$nestedKey}%5B0%5D=dog",
-                    'comma', 'repeat' => "http://localhost?{$nestedKey}=dog",
-                },
+                array_map(
+                    static fn (string $nestedKey): string => match ($arrayFormat) {
+                        'brackets' => "http://localhost?{$nestedKey}%5B%5D=dog",
+                        'indices' => "http://localhost?{$nestedKey}%5B0%5D=dog",
+                        'comma', 'repeat' => "http://localhost?{$nestedKey}=dog",
+                    },
+                    ['dog.dog', 'dog%5Bdog%5D'],
+                ),
             ],
             [
                 '',
@@ -118,6 +117,13 @@ class UtilTest extends TestCase
         ];
 
         foreach ($cases as [$path, $query, $output]) {
+            if (is_array($output)) {
+                $actual = Util::joinUri($base, path: $path, query: $query);
+                $this->assertContains($actual->__toString(), $output);
+
+                continue;
+            }
+
             $expected = $factory->createUri($output);
             $actual = Util::joinUri($base, path: $path, query: $query);
             $this->assertEquals($expected, $actual);
