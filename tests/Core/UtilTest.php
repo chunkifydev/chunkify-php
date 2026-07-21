@@ -48,6 +48,10 @@ class UtilTest extends TestCase
     {
         $factory = Psr17FactoryDiscovery::findUriFactory();
         $base = $factory->createUri('http://localhost');
+        $util = new \ReflectionClass(Util::class);
+
+        /** @var 'brackets'|'comma'|'indices'|'repeat' $arrayFormat */
+        $arrayFormat = $util->getConstant('QUERY_ARRAY_FORMAT');
         $cases = [
             [
                 '',
@@ -67,21 +71,59 @@ class UtilTest extends TestCase
             [
                 '',
                 ['dog' => ['dog']],
-                'http://localhost?dog[0]=dog',
+                match ($arrayFormat) {
+                    'brackets' => 'http://localhost?dog%5B%5D=dog',
+                    'indices' => 'http://localhost?dog%5B0%5D=dog',
+                    'comma', 'repeat' => 'http://localhost?dog=dog',
+                },
             ],
             [
                 '',
                 ['dog' => [true, false]],
-                'http://localhost?dog[0]=true&dog[1]=false',
+                match ($arrayFormat) {
+                    'brackets' => 'http://localhost?dog%5B%5D=true&dog%5B%5D=false',
+                    'indices' => 'http://localhost?dog%5B0%5D=true&dog%5B1%5D=false',
+                    'comma' => 'http://localhost?dog=true%2Cfalse',
+                    'repeat' => 'http://localhost?dog=true&dog=false',
+                },
             ],
             [
                 '',
                 ['dog' => ['dog' => ['dog']]],
-                'http://localhost?dog[dog][0]=dog',
+                array_map(
+                    static fn (string $nestedKey): string => match ($arrayFormat) {
+                        'brackets' => "http://localhost?{$nestedKey}%5B%5D=dog",
+                        'indices' => "http://localhost?{$nestedKey}%5B0%5D=dog",
+                        'comma', 'repeat' => "http://localhost?{$nestedKey}=dog",
+                    },
+                    ['dog.dog', 'dog%5Bdog%5D'],
+                ),
+            ],
+            [
+                '',
+                ['metadata' => [['group:test_jobs'], ['uploaded_by:user_demo']]],
+                match ($arrayFormat) {
+                    'brackets' => 'http://localhost?metadata%5B%5D%5B%5D=group%3Atest_jobs&metadata%5B%5D%5B%5D=uploaded_by%3Auser_demo',
+                    'indices' => 'http://localhost?metadata%5B0%5D%5B0%5D=group%3Atest_jobs&metadata%5B1%5D%5B0%5D=uploaded_by%3Auser_demo',
+                    'comma' => 'http://localhost?metadata=group%3Atest_jobs%2Cuploaded_by%3Auser_demo',
+                    'repeat' => 'http://localhost?metadata=group%3Atest_jobs&metadata=uploaded_by%3Auser_demo',
+                },
+            ],
+            [
+                '/jobs?limit=2&offset=0',
+                ['limit' => 2, 'offset' => 2],
+                'http://localhost/jobs?limit=2&offset=2',
             ],
         ];
 
         foreach ($cases as [$path, $query, $output]) {
+            if (is_array($output)) {
+                $actual = Util::joinUri($base, path: $path, query: $query);
+                $this->assertContains($actual->__toString(), $output);
+
+                continue;
+            }
+
             $expected = $factory->createUri($output);
             $actual = Util::joinUri($base, path: $path, query: $query);
             $this->assertEquals($expected, $actual);
