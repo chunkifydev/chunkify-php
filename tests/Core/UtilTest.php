@@ -49,7 +49,11 @@ class UtilTest extends TestCase
         $factory = Psr17FactoryDiscovery::findUriFactory();
         $base = $factory->createUri('http://localhost');
         $util = new \ReflectionClass(Util::class);
+
+        /** @var 'brackets'|'comma'|'indices'|'repeat' $arrayFormat */
         $arrayFormat = $util->getConstant('QUERY_ARRAY_FORMAT');
+
+        /** @var 'brackets'|'dots' $nestedFormat */
         $nestedFormat = $util->getConstant('QUERY_NESTED_FORMAT');
         $nestedKey = 'dots' === $nestedFormat ? 'dog.dog' : 'dog%5Bdog%5D';
         $cases = [

@@ -462,7 +462,7 @@ final class Util
                 return $subKey;
             }
 
-            return self::QUERY_NESTED_FORMAT === 'dots' ? $key.'.'.$subKey : $key.'['.$subKey.']';
+            return $key.'['.$subKey.']';
         };
 
         $collectValues = static function (mixed $value) use (&$collectValues): array {
