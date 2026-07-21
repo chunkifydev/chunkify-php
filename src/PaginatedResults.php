@@ -105,7 +105,7 @@ final class PaginatedResults implements BaseModel, BasePage
             return null;
         }
 
-        $nextRequest = array_merge_recursive(
+        $nextRequest = array_replace_recursive(
             $this->requestInfo,
             ['query' => ['offset' => $curr]]
         );
