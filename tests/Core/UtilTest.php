@@ -106,6 +106,11 @@ class UtilTest extends TestCase
                     'repeat' => 'http://localhost?metadata=group%3Atest_jobs&metadata=uploaded_by%3Auser_demo',
                 },
             ],
+            [
+                '/jobs?limit=2&offset=0',
+                ['limit' => 2, 'offset' => 2],
+                'http://localhost/jobs?limit=2&offset=2',
+            ],
         ];
 
         foreach ($cases as [$path, $query, $output]) {
