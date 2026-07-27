@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.1](https://github.com/chunkifydev/chunkify-php/compare/v0.1.0...v0.1.1) (2026-07-21)
+
+### Bug Fixes
+
+* respect configured query array formats
+* replace pagination offsets instead of merging them
+* report the released package version in request headers
+
+### Chores
+
+* use chunkify stlc forks in CI ([976c7b5](https://github.com/chunkifydev/chunkify-php/commit/976c7b566bf37f3bafd10fc1ede5cf417a742d0e))
+
 ## [0.1.0](https://github.com/chunkifydev/chunkify-php/compare/v0.0.1...v0.1.0) (2026-07-20)
 
 
