@@ -38,6 +38,7 @@ use Chunkify\Jobs\HlsH264\Profilev;
  *   maxrate?: int|null,
  *   minrate?: int|null,
  *   movflags?: string|null,
+ *   perTitle?: bool|null,
  *   pixfmt?: null|Pixfmt|value-of<Pixfmt>,
  *   preset?: null|Preset|value-of<Preset>,
  *   profilev?: null|Profilev|value-of<Profilev>,
@@ -198,6 +199,12 @@ final class HlsH264 implements BaseModel
     public ?string $movflags;
 
     /**
+     * Enables per-title optimization. Disabled by default. Set it to true to let Chunkify select rate control automatically. When enabled, explicit rate-control fields cannot be provided. For HLS outputs, either audio_bitrate or video_bitrate is required when per-title optimization is disabled or omitted.
+     */
+    #[Optional('per_title')]
+    public ?bool $perTitle;
+
+    /**
      * PixFmt specifies the pixel format.
      * Valid value: yuv420p.
      *
@@ -300,6 +307,7 @@ final class HlsH264 implements BaseModel
         ?int $maxrate = null,
         ?int $minrate = null,
         ?string $movflags = null,
+        ?bool $perTitle = null,
         Pixfmt|string|null $pixfmt = null,
         Preset|string|null $preset = null,
         Profilev|string|null $profilev = null,
@@ -330,6 +338,7 @@ final class HlsH264 implements BaseModel
         null !== $maxrate && $self['maxrate'] = $maxrate;
         null !== $minrate && $self['minrate'] = $minrate;
         null !== $movflags && $self['movflags'] = $movflags;
+        null !== $perTitle && $self['perTitle'] = $perTitle;
         null !== $pixfmt && $self['pixfmt'] = $pixfmt;
         null !== $preset && $self['preset'] = $preset;
         null !== $profilev && $self['profilev'] = $profilev;
@@ -590,6 +599,17 @@ final class HlsH264 implements BaseModel
     {
         $self = clone $this;
         $self['movflags'] = $movflags;
+
+        return $self;
+    }
+
+    /**
+     * Enables per-title optimization. Disabled by default. Set it to true to let Chunkify select rate control automatically. When enabled, explicit rate-control fields cannot be provided. For HLS outputs, either audio_bitrate or video_bitrate is required when per-title optimization is disabled or omitted.
+     */
+    public function withPerTitle(bool $perTitle): self
+    {
+        $self = clone $this;
+        $self['perTitle'] = $perTitle;
 
         return $self;
     }
