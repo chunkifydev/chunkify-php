@@ -73,6 +73,7 @@ final class JobsTest extends TestCase
                 'maxrate' => 100000,
                 'minrate' => 100000,
                 'movflags' => 'movflags',
+                'perTitle' => true,
                 'pixfmt' => 'yuv410p',
                 'preset' => '10',
                 'profilev' => 'main10',

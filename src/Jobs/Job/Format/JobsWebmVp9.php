@@ -31,6 +31,7 @@ use Chunkify\Jobs\WebmVp9\Quality;
  *   height?: int|null,
  *   maxrate?: int|null,
  *   minrate?: int|null,
+ *   perTitle?: bool|null,
  *   pixfmt?: null|Pixfmt|value-of<Pixfmt>,
  *   quality?: null|Quality|value-of<Quality>,
  *   seek?: int|null,
@@ -143,6 +144,12 @@ final class JobsWebmVp9 implements BaseModel
     public ?int $minrate;
 
     /**
+     * Enables per-title optimization. Disabled by default. Set it to true to let Chunkify select rate control automatically. When enabled, explicit rate-control fields cannot be provided. For HLS outputs, either audio_bitrate or video_bitrate is required when per-title optimization is disabled or omitted.
+     */
+    #[Optional('per_title')]
+    public ?bool $perTitle;
+
+    /**
      * PixFmt specifies the pixel format.
      * Valid value: yuv420p.
      *
@@ -212,6 +219,7 @@ final class JobsWebmVp9 implements BaseModel
         ?int $height = null,
         ?int $maxrate = null,
         ?int $minrate = null,
+        ?bool $perTitle = null,
         Pixfmt|string|null $pixfmt = null,
         Quality|string|null $quality = null,
         ?int $seek = null,
@@ -233,6 +241,7 @@ final class JobsWebmVp9 implements BaseModel
         null !== $height && $self['height'] = $height;
         null !== $maxrate && $self['maxrate'] = $maxrate;
         null !== $minrate && $self['minrate'] = $minrate;
+        null !== $perTitle && $self['perTitle'] = $perTitle;
         null !== $pixfmt && $self['pixfmt'] = $pixfmt;
         null !== $quality && $self['quality'] = $quality;
         null !== $seek && $self['seek'] = $seek;
@@ -409,6 +418,17 @@ final class JobsWebmVp9 implements BaseModel
     {
         $self = clone $this;
         $self['minrate'] = $minrate;
+
+        return $self;
+    }
+
+    /**
+     * Enables per-title optimization. Disabled by default. Set it to true to let Chunkify select rate control automatically. When enabled, explicit rate-control fields cannot be provided. For HLS outputs, either audio_bitrate or video_bitrate is required when per-title optimization is disabled or omitted.
+     */
+    public function withPerTitle(bool $perTitle): self
+    {
+        $self = clone $this;
+        $self['perTitle'] = $perTitle;
 
         return $self;
     }
