@@ -13,7 +13,7 @@ The REST API documentation can be found on [chunkify.dev](https://chunkify.dev/d
 <!-- x-release-please-start-version -->
 
 ```
-composer require "chunkify/chunkify-php 0.1.1"
+composer require "chunkify/chunkify-php 0.2.0"
 ```
 
 <!-- x-release-please-end -->
