@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/chunkifydev/chunkify-php/compare/v0.1.1...v0.2.0) (2026-09-01)
+
+
+### Features
+
+* **openapi:** per title support ([32040e5](https://github.com/chunkifydev/chunkify-php/commit/32040e5e187c1a4d98d54643acf706c4cc8708eb))
+
 ## [0.1.1](https://github.com/chunkifydev/chunkify-php/compare/v0.1.0...v0.1.1) (2026-07-21)
 
 ### Bug Fixes
