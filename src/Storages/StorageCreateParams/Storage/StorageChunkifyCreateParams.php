@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Storages\StorageCreateParams\Storage;
 
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -13,7 +14,9 @@ use Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams\Re
  * Storage parameters for Chunkify ephemeral storage.
  *
  * @phpstan-type StorageChunkifyCreateParamsShape = array{
- *   provider: 'chunkify', region: Region|value-of<Region>
+ *   provider: 'chunkify',
+ *   region: Region|value-of<Region>,
+ *   cdnBaseURL?: string|null,
  * }
  */
 final class StorageChunkifyCreateParams implements BaseModel
@@ -36,6 +39,12 @@ final class StorageChunkifyCreateParams implements BaseModel
      */
     #[Required(enum: Region::class)]
     public string $region;
+
+    /**
+     * Unsupported for Chunkify-managed temporary storage. Requests that provide this field are rejected.
+     */
+    #[Optional('cdn_base_url', nullable: true)]
+    public ?string $cdnBaseURL;
 
     /**
      * `new StorageChunkifyCreateParams()` is missing required properties by the API.
@@ -63,11 +72,15 @@ final class StorageChunkifyCreateParams implements BaseModel
      *
      * @param Region|value-of<Region> $region
      */
-    public static function with(Region|string $region): self
-    {
+    public static function with(
+        Region|string $region,
+        ?string $cdnBaseURL = null
+    ): self {
         $self = new self;
 
         $self['region'] = $region;
+
+        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }
@@ -94,6 +107,17 @@ final class StorageChunkifyCreateParams implements BaseModel
     {
         $self = clone $this;
         $self['region'] = $region;
+
+        return $self;
+    }
+
+    /**
+     * Unsupported for Chunkify-managed temporary storage. Requests that provide this field are rejected.
+     */
+    public function withCdnBaseURL(?string $cdnBaseURL): self
+    {
+        $self = clone $this;
+        $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }
