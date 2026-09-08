@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Files;
 
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -26,6 +27,7 @@ use Chunkify\Core\Contracts\BaseModel;
  *   videoCodec: string,
  *   videoFramerate: float,
  *   width: int,
+ *   cdnURL?: string|null,
  * }
  */
 final class JobFile implements BaseModel
@@ -130,6 +132,12 @@ final class JobFile implements BaseModel
     public int $width;
 
     /**
+     * Stable, unsigned CDN delivery URL derived from the file's current storage configuration. Omitted when no CDN base URL is configured.
+     */
+    #[Optional('cdn_url', nullable: true)]
+    public ?string $cdnURL;
+
+    /**
      * `new JobFile()` is missing required properties by the API.
      *
      * To enforce required parameters use
@@ -203,6 +211,7 @@ final class JobFile implements BaseModel
         string $videoCodec,
         float $videoFramerate,
         int $width,
+        ?string $cdnURL = null,
     ): self {
         $self = new self;
 
@@ -222,6 +231,8 @@ final class JobFile implements BaseModel
         $self['videoCodec'] = $videoCodec;
         $self['videoFramerate'] = $videoFramerate;
         $self['width'] = $width;
+
+        null !== $cdnURL && $self['cdnURL'] = $cdnURL;
 
         return $self;
     }
@@ -398,6 +409,17 @@ final class JobFile implements BaseModel
     {
         $self = clone $this;
         $self['width'] = $width;
+
+        return $self;
+    }
+
+    /**
+     * Stable, unsigned CDN delivery URL derived from the file's current storage configuration. Omitted when no CDN base URL is configured.
+     */
+    public function withCdnURL(?string $cdnURL): self
+    {
+        $self = clone $this;
+        $self['cdnURL'] = $cdnURL;
 
         return $self;
     }

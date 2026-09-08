@@ -49,6 +49,23 @@ interface StoragesContract
     /**
      * @api
      *
+     * @param string $storageID Storage id
+     * @param string $basePrefix Object-key prefix for future final job outputs. Existing files keep their stored object keys. Send an empty string to use the bucket root.
+     * @param string|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function update(
+        string $storageID,
+        ?string $basePrefix = null,
+        ?string $cdnBaseURL = null,
+        RequestOptions|array|null $requestOptions = null,
+    ): mixed;
+
+    /**
+     * @api
+     *
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException

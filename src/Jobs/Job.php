@@ -90,7 +90,7 @@ final class Job implements BaseModel
     public string $sourceID;
 
     /**
-     * Current status of the job.
+     * Current status of the job. New jobs start as pending while waiting for scheduler admission, then become queued when admitted for processing.
      *
      * @var value-of<Status> $status
      */
@@ -203,7 +203,7 @@ final class Job implements BaseModel
         Storage|array $storage,
         Transcoder|array $transcoder,
         \DateTimeInterface $updatedAt,
-        Status|string $status = 'queued',
+        Status|string $status = 'pending',
         ChunkifyError|array|null $error = null,
         ?string $hlsManifestID = null,
         ?array $metadata = null,
@@ -300,7 +300,7 @@ final class Job implements BaseModel
     }
 
     /**
-     * Current status of the job.
+     * Current status of the job. New jobs start as pending while waiting for scheduler admission, then become queued when admitted for processing.
      *
      * @param Status|value-of<Status> $status
      */
