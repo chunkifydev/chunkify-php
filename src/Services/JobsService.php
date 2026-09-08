@@ -71,7 +71,7 @@ final class JobsService implements JobsContract
     /**
      * @api
      *
-     * Create a new video processing job with specified parameters
+     * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available.
      *
      * @param FormatShape $format Required format configuration, one and only one valid format configuration must be provided.
      * If you want to use a format without specifying any configuration, use an empty object in the corresponding field.

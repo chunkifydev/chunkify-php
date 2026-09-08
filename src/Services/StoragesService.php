@@ -81,6 +81,34 @@ final class StoragesService implements StoragesContract
     /**
      * @api
      *
+     * Update customer-owned storage settings. Prefix changes apply to final outputs that have not been uploaded yet. Existing files keep their stored object keys.
+     *
+     * @param string $storageID Storage id
+     * @param string $basePrefix Object-key prefix for future final job outputs. Existing files keep their stored object keys. Send an empty string to use the bucket root.
+     * @param string|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function update(
+        string $storageID,
+        ?string $basePrefix = null,
+        ?string $cdnBaseURL = null,
+        RequestOptions|array|null $requestOptions = null,
+    ): mixed {
+        $params = Util::removeNulls(
+            ['basePrefix' => $basePrefix, 'cdnBaseURL' => $cdnBaseURL]
+        );
+
+        // @phpstan-ignore-next-line argument.type
+        $response = $this->raw->update($storageID, params: $params, requestOptions: $requestOptions);
+
+        return $response->parse();
+    }
+
+    /**
+     * @api
+     *
      * Retrieve a list of all storage configurations for the current project.
      *
      * @param RequestOpts|null $requestOptions

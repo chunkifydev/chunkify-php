@@ -84,7 +84,7 @@ final class JobsTest extends TestCase
             sourceID: 'src_UioP9I876hjKlNBH78ILp0mo56t',
             hlsManifestID: 'hls_2v6EIgcNAycdS5g0IUm0TXBjvHV',
             metadata: ['key' => 'value', 'key2' => 'value2'],
-            storage: ['id' => 'aws-my-storage', 'path' => '/path/to/video.mp4'],
+            storage: ['id' => 'aws-my-storage', 'path' => 'exports/video.mp4'],
             transcoder: ['quantity' => 2, 'type' => '4vCPU'],
         );
 

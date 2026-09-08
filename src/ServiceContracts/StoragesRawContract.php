@@ -12,6 +12,7 @@ use Chunkify\Storages\Storage\StorageChunkify;
 use Chunkify\Storages\Storage\StorageCloudflare;
 use Chunkify\Storages\StorageCreateParams;
 use Chunkify\Storages\StorageListResponse;
+use Chunkify\Storages\StorageUpdateParams;
 
 /**
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
@@ -46,6 +47,23 @@ interface StoragesRawContract
     public function retrieve(
         string $storageID,
         RequestOptions|array|null $requestOptions = null
+    ): BaseResponse;
+
+    /**
+     * @api
+     *
+     * @param string $storageID Storage id
+     * @param array<string,mixed>|StorageUpdateParams $params
+     * @param RequestOpts|null $requestOptions
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function update(
+        string $storageID,
+        array|StorageUpdateParams $params,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
