@@ -14,7 +14,7 @@ use Chunkify\Jobs\JobCreateParams\Storage;
 use Chunkify\Jobs\JobCreateParams\Transcoder;
 
 /**
- * Create a new video processing job with specified parameters.
+ * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available.
  *
  * @see Chunkify\Services\JobsService::create()
  *

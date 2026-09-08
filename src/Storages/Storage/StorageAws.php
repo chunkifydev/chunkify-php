@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Storages\Storage;
 
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -12,12 +13,14 @@ use Chunkify\Storages\Storage\StorageAws\Region;
 /**
  * @phpstan-type StorageAwsShape = array{
  *   id: string,
+ *   basePrefix: string,
  *   bucket: string,
  *   createdAt: \DateTimeInterface,
  *   provider: 'aws',
  *   public: bool,
  *   region: Region|value-of<Region>,
  *   slug: string,
+ *   cdnBaseURL?: string|null,
  * }
  */
 final class StorageAws implements BaseModel
@@ -38,6 +41,12 @@ final class StorageAws implements BaseModel
      */
     #[Required]
     public string $id;
+
+    /**
+     * Canonical object-key prefix prepended to every final job output in this customer-owned storage. An empty string means the bucket root.
+     */
+    #[Required('base_prefix')]
+    public string $basePrefix;
 
     /**
      * Bucket is the name of the storage bucket.
@@ -72,12 +81,24 @@ final class StorageAws implements BaseModel
     public string $slug;
 
     /**
+     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     */
+    #[Optional('cdn_base_url', nullable: true)]
+    public ?string $cdnBaseURL;
+
+    /**
      * `new StorageAws()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
      * StorageAws::with(
-     *   id: ..., bucket: ..., createdAt: ..., public: ..., region: ..., slug: ...
+     *   id: ...,
+     *   basePrefix: ...,
+     *   bucket: ...,
+     *   createdAt: ...,
+     *   public: ...,
+     *   region: ...,
+     *   slug: ...,
      * )
      * ```
      *
@@ -86,6 +107,7 @@ final class StorageAws implements BaseModel
      * ```
      * (new StorageAws)
      *   ->withID(...)
+     *   ->withBasePrefix(...)
      *   ->withBucket(...)
      *   ->withCreatedAt(...)
      *   ->withPublic(...)
@@ -107,20 +129,25 @@ final class StorageAws implements BaseModel
      */
     public static function with(
         string $id,
+        string $basePrefix,
         string $bucket,
         \DateTimeInterface $createdAt,
         Region|string $region,
         string $slug,
         bool $public = false,
+        ?string $cdnBaseURL = null,
     ): self {
         $self = new self;
 
         $self['id'] = $id;
+        $self['basePrefix'] = $basePrefix;
         $self['bucket'] = $bucket;
         $self['createdAt'] = $createdAt;
         $self['public'] = $public;
         $self['region'] = $region;
         $self['slug'] = $slug;
+
+        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }
@@ -132,6 +159,17 @@ final class StorageAws implements BaseModel
     {
         $self = clone $this;
         $self['id'] = $id;
+
+        return $self;
+    }
+
+    /**
+     * Canonical object-key prefix prepended to every final job output in this customer-owned storage. An empty string means the bucket root.
+     */
+    public function withBasePrefix(string $basePrefix): self
+    {
+        $self = clone $this;
+        $self['basePrefix'] = $basePrefix;
 
         return $self;
     }
@@ -202,6 +240,17 @@ final class StorageAws implements BaseModel
     {
         $self = clone $this;
         $self['slug'] = $slug;
+
+        return $self;
+    }
+
+    /**
+     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     */
+    public function withCdnBaseURL(?string $cdnBaseURL): self
+    {
+        $self = clone $this;
+        $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }

@@ -21,6 +21,8 @@ use Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams\
  *   provider: 'cloudflare',
  *   region: 'auto',
  *   secretAccessKey: string,
+ *   basePrefix?: string|null,
+ *   cdnBaseURL?: string|null,
  *   public?: bool|null,
  * }
  */
@@ -78,6 +80,18 @@ final class StorageCloudflareCreateParams implements BaseModel
     public string $secretAccessKey;
 
     /**
+     * Object-key prefix for final job outputs. The API normalizes it without a leading slash and with one trailing slash. Omit it or send an empty string to use the bucket root.
+     */
+    #[Optional('base_prefix')]
+    public ?string $basePrefix;
+
+    /**
+     * Optional customer-managed HTTPS delivery origin. It must not contain credentials, a path, query string, or fragment.
+     */
+    #[Optional('cdn_base_url', nullable: true)]
+    public ?string $cdnBaseURL;
+
+    /**
      * Public indicates whether the storage is publicly accessible.
      */
     #[Optional]
@@ -126,6 +140,8 @@ final class StorageCloudflareCreateParams implements BaseModel
         string $endpoint,
         Location|string $location,
         string $secretAccessKey,
+        ?string $basePrefix = null,
+        ?string $cdnBaseURL = null,
         ?bool $public = null,
     ): self {
         $self = new self;
@@ -136,6 +152,8 @@ final class StorageCloudflareCreateParams implements BaseModel
         $self['location'] = $location;
         $self['secretAccessKey'] = $secretAccessKey;
 
+        null !== $basePrefix && $self['basePrefix'] = $basePrefix;
+        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
         null !== $public && $self['public'] = $public;
 
         return $self;
@@ -220,6 +238,28 @@ final class StorageCloudflareCreateParams implements BaseModel
     {
         $self = clone $this;
         $self['secretAccessKey'] = $secretAccessKey;
+
+        return $self;
+    }
+
+    /**
+     * Object-key prefix for final job outputs. The API normalizes it without a leading slash and with one trailing slash. Omit it or send an empty string to use the bucket root.
+     */
+    public function withBasePrefix(string $basePrefix): self
+    {
+        $self = clone $this;
+        $self['basePrefix'] = $basePrefix;
+
+        return $self;
+    }
+
+    /**
+     * Optional customer-managed HTTPS delivery origin. It must not contain credentials, a path, query string, or fragment.
+     */
+    public function withCdnBaseURL(?string $cdnBaseURL): self
+    {
+        $self = clone $this;
+        $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }

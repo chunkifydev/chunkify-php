@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Storages\Storage;
 
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -12,6 +13,7 @@ use Chunkify\Storages\Storage\StorageCloudflare\Location;
 /**
  * @phpstan-type StorageCloudflareShape = array{
  *   id: string,
+ *   basePrefix: string,
  *   bucket: string,
  *   createdAt: \DateTimeInterface,
  *   endpoint: string,
@@ -20,6 +22,7 @@ use Chunkify\Storages\Storage\StorageCloudflare\Location;
  *   public: bool,
  *   region: 'auto',
  *   slug: string,
+ *   cdnBaseURL?: string|null,
  * }
  */
 final class StorageCloudflare implements BaseModel
@@ -48,6 +51,12 @@ final class StorageCloudflare implements BaseModel
      */
     #[Required]
     public string $id;
+
+    /**
+     * Canonical object-key prefix prepended to every final job output in this customer-owned storage. An empty string means the bucket root.
+     */
+    #[Required('base_prefix')]
+    public string $basePrefix;
 
     /**
      * Bucket is the name of the storage bucket.
@@ -88,12 +97,19 @@ final class StorageCloudflare implements BaseModel
     public string $slug;
 
     /**
+     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     */
+    #[Optional('cdn_base_url', nullable: true)]
+    public ?string $cdnBaseURL;
+
+    /**
      * `new StorageCloudflare()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
      * StorageCloudflare::with(
      *   id: ...,
+     *   basePrefix: ...,
      *   bucket: ...,
      *   createdAt: ...,
      *   endpoint: ...,
@@ -108,6 +124,7 @@ final class StorageCloudflare implements BaseModel
      * ```
      * (new StorageCloudflare)
      *   ->withID(...)
+     *   ->withBasePrefix(...)
      *   ->withBucket(...)
      *   ->withCreatedAt(...)
      *   ->withEndpoint(...)
@@ -130,22 +147,27 @@ final class StorageCloudflare implements BaseModel
      */
     public static function with(
         string $id,
+        string $basePrefix,
         string $bucket,
         \DateTimeInterface $createdAt,
         string $endpoint,
         Location|string $location,
         string $slug,
         bool $public = false,
+        ?string $cdnBaseURL = null,
     ): self {
         $self = new self;
 
         $self['id'] = $id;
+        $self['basePrefix'] = $basePrefix;
         $self['bucket'] = $bucket;
         $self['createdAt'] = $createdAt;
         $self['endpoint'] = $endpoint;
         $self['location'] = $location;
         $self['public'] = $public;
         $self['slug'] = $slug;
+
+        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }
@@ -157,6 +179,17 @@ final class StorageCloudflare implements BaseModel
     {
         $self = clone $this;
         $self['id'] = $id;
+
+        return $self;
+    }
+
+    /**
+     * Canonical object-key prefix prepended to every final job output in this customer-owned storage. An empty string means the bucket root.
+     */
+    public function withBasePrefix(string $basePrefix): self
+    {
+        $self = clone $this;
+        $self['basePrefix'] = $basePrefix;
 
         return $self;
     }
@@ -251,6 +284,17 @@ final class StorageCloudflare implements BaseModel
     {
         $self = clone $this;
         $self['slug'] = $slug;
+
+        return $self;
+    }
+
+    /**
+     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     */
+    public function withCdnBaseURL(?string $cdnBaseURL): self
+    {
+        $self = clone $this;
+        $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }

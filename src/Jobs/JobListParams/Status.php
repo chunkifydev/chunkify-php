@@ -18,4 +18,6 @@ enum Status: string
     case CANCELLED = 'cancelled';
 
     case QUEUED = 'queued';
+
+    case PENDING = 'pending';
 }

@@ -27,9 +27,7 @@ final class Storage implements BaseModel
     public ?string $id;
 
     /**
-     * Storage Path specifies a custom storage path where processed files will be stored.
-     * Must be a valid file path with max length of 1024 characters.
-     * Optional if Storage Id is provided.
+     * Storage Path specifies an object path relative to the selected storage connection's base_prefix. Do not include the base_prefix. Leading slashes are accepted for compatibility and removed before the path is stored. The base_prefix and normalized path may contain at most 1024 bytes combined. Optional if Storage Id is provided.
      */
     #[Optional]
     public ?string $path;
@@ -68,9 +66,7 @@ final class Storage implements BaseModel
     }
 
     /**
-     * Storage Path specifies a custom storage path where processed files will be stored.
-     * Must be a valid file path with max length of 1024 characters.
-     * Optional if Storage Id is provided.
+     * Storage Path specifies an object path relative to the selected storage connection's base_prefix. Do not include the base_prefix. Leading slashes are accepted for compatibility and removed before the path is stored. The base_prefix and normalized path may contain at most 1024 bytes combined. Optional if Storage Id is provided.
      */
     public function withPath(string $path): self
     {

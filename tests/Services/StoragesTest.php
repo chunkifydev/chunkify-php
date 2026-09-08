@@ -67,6 +67,8 @@ final class StoragesTest extends TestCase
                 'provider' => 'aws',
                 'region' => 'us-east-1',
                 'secretAccessKey' => '1234567890',
+                'basePrefix' => 'chunkify/',
+                'cdnBaseURL' => 'https://media.example.com',
                 'public' => true,
             ],
         );
