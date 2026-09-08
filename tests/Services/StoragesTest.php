@@ -67,6 +67,8 @@ final class StoragesTest extends TestCase
                 'provider' => 'aws',
                 'region' => 'us-east-1',
                 'secretAccessKey' => '1234567890',
+                'basePrefix' => 'chunkify/',
+                'cdnBaseURL' => 'https://media.example.com',
                 'public' => true,
             ],
         );
@@ -86,6 +88,19 @@ final class StoragesTest extends TestCase
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertNotNull($result);
+    }
+
+    #[Test]
+    public function testUpdate(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->storages->update('storageId');
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertNull($result);
     }
 
     #[Test]
