@@ -10,6 +10,7 @@ use Chunkify\RequestOptions;
 use Chunkify\Storages\Storage\StorageAws;
 use Chunkify\Storages\Storage\StorageChunkify;
 use Chunkify\Storages\Storage\StorageCloudflare;
+use Chunkify\Storages\Storage\StorageS3Compatible;
 use Chunkify\Storages\StorageCreateParams;
 use Chunkify\Storages\StorageListResponse;
 use Chunkify\Storages\StorageUpdateParams;
@@ -25,7 +26,7 @@ interface StoragesRawContract
      * @param array<string,mixed>|StorageCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
-     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws>
+     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible,>
      *
      * @throws APIException
      */
@@ -40,7 +41,7 @@ interface StoragesRawContract
      * @param string $storageID Storage id
      * @param RequestOpts|null $requestOptions
      *
-     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws>
+     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible,>
      *
      * @throws APIException
      */
