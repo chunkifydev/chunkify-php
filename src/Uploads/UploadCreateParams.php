@@ -8,14 +8,19 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Uploads\UploadCreateParams\Storage;
 
 /**
  * Create a new upload with the specified name.
  *
  * @see Chunkify\Services\UploadsService::create()
  *
+ * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
+ *
  * @phpstan-type UploadCreateParamsShape = array{
- *   metadata?: array<string,string>|null, validityTimeout?: int|null
+ *   metadata?: array<string,string>|null,
+ *   storage?: null|Storage|StorageShape,
+ *   validityTimeout?: int|null,
  * }
  */
 final class UploadCreateParams implements BaseModel
@@ -33,7 +38,13 @@ final class UploadCreateParams implements BaseModel
     public ?array $metadata;
 
     /**
-     * The upload URL will be valid for the given timeout in seconds.
+     * Optional Storage override. Omit id to use the Project default. Customer-connected Storage requires path; Chunkify Storage generates its own path.
+     */
+    #[Optional]
+    public ?Storage $storage;
+
+    /**
+     * Both the file PUT and completion POST must finish within this timeout in seconds.
      */
     #[Optional('validity_timeout')]
     public ?int $validityTimeout;
@@ -49,14 +60,17 @@ final class UploadCreateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param array<string,string>|null $metadata
+     * @param Storage|StorageShape|null $storage
      */
     public static function with(
         ?array $metadata = null,
-        ?int $validityTimeout = null
+        Storage|array|null $storage = null,
+        ?int $validityTimeout = null,
     ): self {
         $self = new self;
 
         null !== $metadata && $self['metadata'] = $metadata;
+        null !== $storage && $self['storage'] = $storage;
         null !== $validityTimeout && $self['validityTimeout'] = $validityTimeout;
 
         return $self;
@@ -76,7 +90,20 @@ final class UploadCreateParams implements BaseModel
     }
 
     /**
-     * The upload URL will be valid for the given timeout in seconds.
+     * Optional Storage override. Omit id to use the Project default. Customer-connected Storage requires path; Chunkify Storage generates its own path.
+     *
+     * @param Storage|StorageShape $storage
+     */
+    public function withStorage(Storage|array $storage): self
+    {
+        $self = clone $this;
+        $self['storage'] = $storage;
+
+        return $self;
+    }
+
+    /**
+     * Both the file PUT and completion POST must finish within this timeout in seconds.
      */
     public function withValidityTimeout(int $validityTimeout): self
     {

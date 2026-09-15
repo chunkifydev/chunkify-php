@@ -12,9 +12,11 @@ use Chunkify\ServiceContracts\StoragesContract;
 use Chunkify\Storages\Storage\StorageAws;
 use Chunkify\Storages\Storage\StorageChunkify;
 use Chunkify\Storages\Storage\StorageCloudflare;
+use Chunkify\Storages\Storage\StorageS3Compatible;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageAwsCreateParams;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams;
+use Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams;
 use Chunkify\Storages\StorageListResponse;
 
 /**
@@ -47,9 +49,9 @@ final class StoragesService implements StoragesContract
      * @throws APIException
      */
     public function create(
-        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams $storage,
+        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams|StorageS3CompatibleCreateParams $storage,
         RequestOptions|array|null $requestOptions = null,
-    ): StorageChunkify|StorageCloudflare|StorageAws {
+    ): StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible {
         $params = Util::removeNulls(['storage' => $storage]);
 
         // @phpstan-ignore-next-line argument.type
@@ -71,9 +73,37 @@ final class StoragesService implements StoragesContract
     public function retrieve(
         string $storageID,
         RequestOptions|array|null $requestOptions = null
-    ): StorageChunkify|StorageCloudflare|StorageAws {
+    ): StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->retrieve($storageID, requestOptions: $requestOptions);
+
+        return $response->parse();
+    }
+
+    /**
+     * @api
+     *
+     * Update customer-owned storage settings. Prefix changes apply to final outputs that have not been uploaded yet. Existing files keep their stored object keys.
+     *
+     * @param string $storageID Storage id
+     * @param string $basePrefix Object-key prefix for future final job outputs. Existing files keep their stored object keys. Send an empty string to use the bucket root.
+     * @param string|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function update(
+        string $storageID,
+        ?string $basePrefix = null,
+        ?string $cdnBaseURL = null,
+        RequestOptions|array|null $requestOptions = null,
+    ): mixed {
+        $params = Util::removeNulls(
+            ['basePrefix' => $basePrefix, 'cdnBaseURL' => $cdnBaseURL]
+        );
+
+        // @phpstan-ignore-next-line argument.type
+        $response = $this->raw->update($storageID, params: $params, requestOptions: $requestOptions);
 
         return $response->parse();
     }

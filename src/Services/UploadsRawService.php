@@ -13,11 +13,13 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\UploadsRawContract;
 use Chunkify\Uploads\Upload;
 use Chunkify\Uploads\UploadCreateParams;
+use Chunkify\Uploads\UploadCreateParams\Storage;
 use Chunkify\Uploads\UploadListParams;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
 
 /**
+ * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Uploads\UploadListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -35,7 +37,9 @@ final class UploadsRawService implements UploadsRawContract
      * Create a new upload with the specified name.
      *
      * @param array{
-     *   metadata?: array<string,string>, validityTimeout?: int
+     *   metadata?: array<string,string>,
+     *   storage?: Storage|StorageShape,
+     *   validityTimeout?: int,
      * }|UploadCreateParams $params
      * @param RequestOpts|null $requestOptions
      *

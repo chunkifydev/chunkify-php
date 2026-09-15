@@ -13,8 +13,10 @@ use Chunkify\Storages\Storage;
 use Chunkify\Storages\Storage\StorageAws;
 use Chunkify\Storages\Storage\StorageChunkify;
 use Chunkify\Storages\Storage\StorageCloudflare;
+use Chunkify\Storages\Storage\StorageS3Compatible;
 use Chunkify\Storages\StorageCreateParams;
 use Chunkify\Storages\StorageListResponse;
+use Chunkify\Storages\StorageUpdateParams;
 
 /**
  * @phpstan-import-type StorageShape from \Chunkify\Storages\StorageCreateParams\Storage
@@ -36,7 +38,7 @@ final class StoragesRawService implements StoragesRawContract
      * @param array{storage: StorageShape}|StorageCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
-     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws>
+     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible,>
      *
      * @throws APIException
      */
@@ -69,7 +71,7 @@ final class StoragesRawService implements StoragesRawContract
      * @param string $storageID Storage id
      * @param RequestOpts|null $requestOptions
      *
-     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws>
+     * @return BaseResponse<StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible,>
      *
      * @throws APIException
      */
@@ -84,6 +86,42 @@ final class StoragesRawService implements StoragesRawContract
             unwrap: 'data',
             options: $requestOptions,
             convert: Storage::class,
+            security: ['projectAccessToken' => true],
+        );
+    }
+
+    /**
+     * @api
+     *
+     * Update customer-owned storage settings. Prefix changes apply to final outputs that have not been uploaded yet. Existing files keep their stored object keys.
+     *
+     * @param string $storageID Storage id
+     * @param array{
+     *   basePrefix?: string, cdnBaseURL?: string|null
+     * }|StorageUpdateParams $params
+     * @param RequestOpts|null $requestOptions
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function update(
+        string $storageID,
+        array|StorageUpdateParams $params,
+        RequestOptions|array|null $requestOptions = null,
+    ): BaseResponse {
+        [$parsed, $options] = StorageUpdateParams::parseRequest(
+            $params,
+            $requestOptions,
+        );
+
+        // @phpstan-ignore-next-line return.type
+        return $this->client->request(
+            method: 'patch',
+            path: ['api/storages/%1$s', $storageID],
+            body: (object) $parsed,
+            options: $options,
+            convert: null,
             security: ['projectAccessToken' => true],
         );
     }

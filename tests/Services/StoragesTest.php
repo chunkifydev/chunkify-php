@@ -91,6 +91,19 @@ final class StoragesTest extends TestCase
     }
 
     #[Test]
+    public function testUpdate(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->storages->update('storageId');
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertNull($result);
+    }
+
+    #[Test]
     public function testList(): void
     {
         if (UnsupportedMockTests::$skip) {
