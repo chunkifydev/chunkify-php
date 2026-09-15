@@ -20,10 +20,12 @@ use Chunkify\Uploads\Upload\Status;
  *   expiresAt: \DateTimeInterface,
  *   status: Status|value-of<Status>,
  *   updatedAt: \DateTimeInterface,
- *   uploadURL: string,
+ *   completionURL?: string|null,
  *   error?: null|ChunkifyError|ChunkifyErrorShape,
  *   metadata?: array<string,string>|null,
  *   sourceID?: string|null,
+ *   storageID?: string|null,
+ *   uploadURL?: string|null,
  * }
  */
 final class Upload implements BaseModel
@@ -64,10 +66,10 @@ final class Upload implements BaseModel
     public \DateTimeInterface $updatedAt;
 
     /**
-     * Pre-signed URL where the file should be uploaded to.
+     * Short-lived completion capability, returned only on creation. POST after a successful PUT before expires_at. Requires no API key. Repeated valid calls are idempotent.
      */
-    #[Required('upload_url')]
-    public string $uploadURL;
+    #[Optional('completion_url')]
+    public ?string $completionURL;
 
     /**
      * Error message of the upload.
@@ -90,17 +92,24 @@ final class Upload implements BaseModel
     public ?string $sourceID;
 
     /**
+     * Resolved Storage selected when the Upload was created. Absent for historical uploads.
+     */
+    #[Optional('storage_id')]
+    public ?string $storageID;
+
+    /**
+     * Presigned PUT URL, returned only when creating an Upload session. Call completion_url after the PUT succeeds.
+     */
+    #[Optional('upload_url')]
+    public ?string $uploadURL;
+
+    /**
      * `new Upload()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
      * Upload::with(
-     *   id: ...,
-     *   createdAt: ...,
-     *   expiresAt: ...,
-     *   status: ...,
-     *   updatedAt: ...,
-     *   uploadURL: ...,
+     *   id: ..., createdAt: ..., expiresAt: ..., status: ..., updatedAt: ...
      * )
      * ```
      *
@@ -113,7 +122,6 @@ final class Upload implements BaseModel
      *   ->withExpiresAt(...)
      *   ->withStatus(...)
      *   ->withUpdatedAt(...)
-     *   ->withUploadURL(...)
      * ```
      */
     public function __construct()
@@ -136,10 +144,12 @@ final class Upload implements BaseModel
         \DateTimeInterface $expiresAt,
         Status|string $status,
         \DateTimeInterface $updatedAt,
-        string $uploadURL,
+        ?string $completionURL = null,
         ChunkifyError|array|null $error = null,
         ?array $metadata = null,
         ?string $sourceID = null,
+        ?string $storageID = null,
+        ?string $uploadURL = null,
     ): self {
         $self = new self;
 
@@ -148,11 +158,13 @@ final class Upload implements BaseModel
         $self['expiresAt'] = $expiresAt;
         $self['status'] = $status;
         $self['updatedAt'] = $updatedAt;
-        $self['uploadURL'] = $uploadURL;
 
+        null !== $completionURL && $self['completionURL'] = $completionURL;
         null !== $error && $self['error'] = $error;
         null !== $metadata && $self['metadata'] = $metadata;
         null !== $sourceID && $self['sourceID'] = $sourceID;
+        null !== $storageID && $self['storageID'] = $storageID;
+        null !== $uploadURL && $self['uploadURL'] = $uploadURL;
 
         return $self;
     }
@@ -215,12 +227,12 @@ final class Upload implements BaseModel
     }
 
     /**
-     * Pre-signed URL where the file should be uploaded to.
+     * Short-lived completion capability, returned only on creation. POST after a successful PUT before expires_at. Requires no API key. Repeated valid calls are idempotent.
      */
-    public function withUploadURL(string $uploadURL): self
+    public function withCompletionURL(string $completionURL): self
     {
         $self = clone $this;
-        $self['uploadURL'] = $uploadURL;
+        $self['completionURL'] = $completionURL;
 
         return $self;
     }
@@ -258,6 +270,28 @@ final class Upload implements BaseModel
     {
         $self = clone $this;
         $self['sourceID'] = $sourceID;
+
+        return $self;
+    }
+
+    /**
+     * Resolved Storage selected when the Upload was created. Absent for historical uploads.
+     */
+    public function withStorageID(string $storageID): self
+    {
+        $self = clone $this;
+        $self['storageID'] = $storageID;
+
+        return $self;
+    }
+
+    /**
+     * Presigned PUT URL, returned only when creating an Upload session. Call completion_url after the PUT succeeds.
+     */
+    public function withUploadURL(string $uploadURL): self
+    {
+        $self = clone $this;
+        $self['uploadURL'] = $uploadURL;
 
         return $self;
     }

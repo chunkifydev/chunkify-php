@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Sources;
 
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -19,11 +20,13 @@ use Chunkify\Core\Contracts\BaseModel;
  *   height: int,
  *   metadata: array<string,string>,
  *   size: int,
- *   url: string,
  *   videoBitrate: int,
  *   videoCodec: string,
  *   videoFramerate: float,
  *   width: int,
+ *   path?: string|null,
+ *   storageID?: string|null,
+ *   url?: string|null,
  * }
  */
 final class Source implements BaseModel
@@ -88,12 +91,6 @@ final class Source implements BaseModel
     public int $size;
 
     /**
-     * URL where the source video can be accessed.
-     */
-    #[Required]
-    public string $url;
-
-    /**
      * Video bitrate in bits per second.
      */
     #[Required('video_bitrate')]
@@ -118,6 +115,24 @@ final class Source implements BaseModel
     public int $width;
 
     /**
+     * Exact object key in the configured bucket, 1 to 1024 UTF-8 bytes. The output base_prefix is not added.
+     */
+    #[Optional]
+    public ?string $path;
+
+    /**
+     * Connected Storage belonging to this Project.
+     */
+    #[Optional('storage_id')]
+    public ?string $storageID;
+
+    /**
+     * URL where the source video can be accessed.
+     */
+    #[Optional]
+    public ?string $url;
+
+    /**
      * `new Source()` is missing required properties by the API.
      *
      * To enforce required parameters use
@@ -132,7 +147,6 @@ final class Source implements BaseModel
      *   height: ...,
      *   metadata: ...,
      *   size: ...,
-     *   url: ...,
      *   videoBitrate: ...,
      *   videoCodec: ...,
      *   videoFramerate: ...,
@@ -153,7 +167,6 @@ final class Source implements BaseModel
      *   ->withHeight(...)
      *   ->withMetadata(...)
      *   ->withSize(...)
-     *   ->withURL(...)
      *   ->withVideoBitrate(...)
      *   ->withVideoCodec(...)
      *   ->withVideoFramerate(...)
@@ -182,11 +195,13 @@ final class Source implements BaseModel
         int $height,
         array $metadata,
         int $size,
-        string $url,
         int $videoBitrate,
         string $videoCodec,
         float $videoFramerate,
         int $width,
+        ?string $path = null,
+        ?string $storageID = null,
+        ?string $url = null,
     ): self {
         $self = new self;
 
@@ -199,11 +214,14 @@ final class Source implements BaseModel
         $self['height'] = $height;
         $self['metadata'] = $metadata;
         $self['size'] = $size;
-        $self['url'] = $url;
         $self['videoBitrate'] = $videoBitrate;
         $self['videoCodec'] = $videoCodec;
         $self['videoFramerate'] = $videoFramerate;
         $self['width'] = $width;
+
+        null !== $path && $self['path'] = $path;
+        null !== $storageID && $self['storageID'] = $storageID;
+        null !== $url && $self['url'] = $url;
 
         return $self;
     }
@@ -310,17 +328,6 @@ final class Source implements BaseModel
     }
 
     /**
-     * URL where the source video can be accessed.
-     */
-    public function withURL(string $url): self
-    {
-        $self = clone $this;
-        $self['url'] = $url;
-
-        return $self;
-    }
-
-    /**
      * Video bitrate in bits per second.
      */
     public function withVideoBitrate(int $videoBitrate): self
@@ -360,6 +367,39 @@ final class Source implements BaseModel
     {
         $self = clone $this;
         $self['width'] = $width;
+
+        return $self;
+    }
+
+    /**
+     * Exact object key in the configured bucket, 1 to 1024 UTF-8 bytes. The output base_prefix is not added.
+     */
+    public function withPath(string $path): self
+    {
+        $self = clone $this;
+        $self['path'] = $path;
+
+        return $self;
+    }
+
+    /**
+     * Connected Storage belonging to this Project.
+     */
+    public function withStorageID(string $storageID): self
+    {
+        $self = clone $this;
+        $self['storageID'] = $storageID;
+
+        return $self;
+    }
+
+    /**
+     * URL where the source video can be accessed.
+     */
+    public function withURL(string $url): self
+    {
+        $self = clone $this;
+        $self['url'] = $url;
 
         return $self;
     }

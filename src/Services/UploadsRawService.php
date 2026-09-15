@@ -13,11 +13,13 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\UploadsRawContract;
 use Chunkify\Uploads\Upload;
 use Chunkify\Uploads\UploadCreateParams;
+use Chunkify\Uploads\UploadCreateParams\Storage;
 use Chunkify\Uploads\UploadListParams;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
 
 /**
+ * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Uploads\UploadListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -35,7 +37,9 @@ final class UploadsRawService implements UploadsRawContract
      * Create a new upload with the specified name.
      *
      * @param array{
-     *   metadata?: array<string,string>, validityTimeout?: int
+     *   metadata?: array<string,string>,
+     *   storage?: Storage|StorageShape,
+     *   validityTimeout?: int,
      * }|UploadCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -155,6 +159,32 @@ final class UploadsRawService implements UploadsRawContract
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],
+        );
+    }
+
+    /**
+     * @api
+     *
+     * After a successful PUT, POST the returned completion_url before expires_at. The token authorizes only this Upload; no API key, cookies, or request body is required. Verifies the stored object and commits one Source relationship. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff; never repeat the PUT just to retry completion.
+     *
+     * @param string $token Opaque completion capability from completion_url
+     * @param RequestOpts|null $requestOptions
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function complete(
+        string $token,
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse {
+        // @phpstan-ignore-next-line return.type
+        return $this->client->request(
+            method: 'post',
+            path: ['api/uploads/completion/%1$s', $token],
+            options: $requestOptions,
+            convert: null,
+            security: [],
         );
     }
 }

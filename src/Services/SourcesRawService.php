@@ -13,6 +13,7 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\SourcesRawContract;
 use Chunkify\Sources\Source;
 use Chunkify\Sources\SourceCreateParams;
+use Chunkify\Sources\SourceCreateParams\Storage;
 use Chunkify\Sources\SourceListParams;
 use Chunkify\Sources\SourceListParams\Created;
 use Chunkify\Sources\SourceListParams\Device;
@@ -22,6 +23,7 @@ use Chunkify\Sources\SourceListParams\Size;
 use Chunkify\Sources\SourceListParams\Width;
 
 /**
+ * @phpstan-import-type StorageShape from \Chunkify\Sources\SourceCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Sources\SourceListParams\Created
  * @phpstan-import-type DurationShape from \Chunkify\Sources\SourceListParams\Duration
  * @phpstan-import-type HeightShape from \Chunkify\Sources\SourceListParams\Height
@@ -43,7 +45,7 @@ final class SourcesRawService implements SourcesRawContract
      * Create a new source from a media URL. The source will be analyzed to extract metadata and generate a thumbnail. The source will be automatically deleted after the data retention period.
      *
      * @param array{
-     *   url: string, metadata?: array<string,string>
+     *   metadata?: array<string,string>, storage?: Storage|StorageShape, url?: string
      * }|SourceCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
