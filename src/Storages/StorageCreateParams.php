@@ -12,6 +12,7 @@ use Chunkify\Storages\StorageCreateParams\Storage;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageAwsCreateParams;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams;
+use Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams;
 
 /**
  * Create a new storage configuration for cloud storage providers like AWS S3, Cloudflare R2, etc. The storage credentials will be validated before saving.
@@ -35,7 +36,7 @@ final class StorageCreateParams implements BaseModel
      * @var StorageVariants $storage
      */
     #[Required(union: Storage::class)]
-    public StorageAwsCreateParams|StorageChunkifyCreateParams|StorageCloudflareCreateParams $storage;
+    public StorageAwsCreateParams|StorageChunkifyCreateParams|StorageCloudflareCreateParams|StorageS3CompatibleCreateParams $storage;
 
     /**
      * `new StorageCreateParams()` is missing required properties by the API.
@@ -64,7 +65,7 @@ final class StorageCreateParams implements BaseModel
      * @param StorageShape $storage
      */
     public static function with(
-        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams $storage,
+        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams|StorageS3CompatibleCreateParams $storage,
     ): self {
         $self = new self;
 
@@ -79,7 +80,7 @@ final class StorageCreateParams implements BaseModel
      * @param StorageShape $storage
      */
     public function withStorage(
-        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams $storage,
+        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams|StorageS3CompatibleCreateParams $storage,
     ): self {
         $self = clone $this;
         $self['storage'] = $storage;
