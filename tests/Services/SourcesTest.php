@@ -40,25 +40,7 @@ final class SourcesTest extends TestCase
             $this->markTestSkipped('Mock server tests are disabled');
         }
 
-        $result = $this->client->sources->create(
-            url: 'https://example.com/video.mp4'
-        );
-
-        // @phpstan-ignore-next-line method.alreadyNarrowedType
-        $this->assertInstanceOf(Source::class, $result);
-    }
-
-    #[Test]
-    public function testCreateWithOptionalParams(): void
-    {
-        if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Mock server tests are disabled');
-        }
-
-        $result = $this->client->sources->create(
-            url: 'https://example.com/video.mp4',
-            metadata: ['key' => 'value', 'key2' => 'value2'],
-        );
+        $result = $this->client->sources->create();
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Source::class, $result);

@@ -11,10 +11,12 @@ use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\UploadsContract;
 use Chunkify\Uploads\Upload;
+use Chunkify\Uploads\UploadCreateParams\Storage;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
 
 /**
+ * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Uploads\UploadListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -39,18 +41,24 @@ final class UploadsService implements UploadsContract
      * Create a new upload with the specified name.
      *
      * @param array<string,string> $metadata metadata allows for additional information to be attached to the upload, with a maximum size of 2048 bytes
-     * @param int $validityTimeout The upload URL will be valid for the given timeout in seconds
+     * @param Storage|StorageShape $storage Optional Storage override. Omit id to use the Project default. Customer-connected Storage requires path; Chunkify Storage generates its own path.
+     * @param int $validityTimeout Both the file PUT and completion POST must finish within this timeout in seconds
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
         ?array $metadata = null,
-        int $validityTimeout = 3600,
+        Storage|array|null $storage = null,
+        int $validityTimeout = 7200,
         RequestOptions|array|null $requestOptions = null,
     ): Upload {
         $params = Util::removeNulls(
-            ['metadata' => $metadata, 'validityTimeout' => $validityTimeout]
+            [
+                'metadata' => $metadata,
+                'storage' => $storage,
+                'validityTimeout' => $validityTimeout,
+            ],
         );
 
         // @phpstan-ignore-next-line argument.type
@@ -141,6 +149,26 @@ final class UploadsService implements UploadsContract
     ): mixed {
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->delete($uploadID, requestOptions: $requestOptions);
+
+        return $response->parse();
+    }
+
+    /**
+     * @api
+     *
+     * After a successful PUT, POST the returned completion_url before expires_at. The token authorizes only this Upload; no API key, cookies, or request body is required. Verifies the stored object and commits one Source relationship. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff; never repeat the PUT just to retry completion.
+     *
+     * @param string $token Opaque completion capability from completion_url
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function complete(
+        string $token,
+        RequestOptions|array|null $requestOptions = null
+    ): mixed {
+        // @phpstan-ignore-next-line argument.type
+        $response = $this->raw->complete($token, requestOptions: $requestOptions);
 
         return $response->parse();
     }
