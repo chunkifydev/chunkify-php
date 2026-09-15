@@ -9,9 +9,11 @@ use Chunkify\RequestOptions;
 use Chunkify\Storages\Storage\StorageAws;
 use Chunkify\Storages\Storage\StorageChunkify;
 use Chunkify\Storages\Storage\StorageCloudflare;
+use Chunkify\Storages\Storage\StorageS3Compatible;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageAwsCreateParams;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams;
+use Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams;
 use Chunkify\Storages\StorageListResponse;
 
 /**
@@ -29,9 +31,9 @@ interface StoragesContract
      * @throws APIException
      */
     public function create(
-        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams $storage,
+        StorageAwsCreateParams|array|StorageChunkifyCreateParams|StorageCloudflareCreateParams|StorageS3CompatibleCreateParams $storage,
         RequestOptions|array|null $requestOptions = null,
-    ): StorageChunkify|StorageCloudflare|StorageAws;
+    ): StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible;
 
     /**
      * @api
@@ -44,7 +46,7 @@ interface StoragesContract
     public function retrieve(
         string $storageID,
         RequestOptions|array|null $requestOptions = null
-    ): StorageChunkify|StorageCloudflare|StorageAws;
+    ): StorageChunkify|StorageCloudflare|StorageAws|StorageS3Compatible;
 
     /**
      * @api

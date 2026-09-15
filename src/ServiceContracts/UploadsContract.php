@@ -8,10 +8,12 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\Uploads\Upload;
+use Chunkify\Uploads\UploadCreateParams\Storage;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
 
 /**
+ * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Uploads\UploadListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -21,14 +23,16 @@ interface UploadsContract
      * @api
      *
      * @param array<string,string> $metadata metadata allows for additional information to be attached to the upload, with a maximum size of 2048 bytes
-     * @param int $validityTimeout The upload URL will be valid for the given timeout in seconds
+     * @param Storage|StorageShape $storage Optional Storage override. Omit id to use the Project default. Customer-connected Storage requires path; Chunkify Storage generates its own path.
+     * @param int $validityTimeout Both the file PUT and completion POST must finish within this timeout in seconds
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
         ?array $metadata = null,
-        int $validityTimeout = 3600,
+        Storage|array|null $storage = null,
+        int $validityTimeout = 7200,
         RequestOptions|array|null $requestOptions = null,
     ): Upload;
 
@@ -82,6 +86,19 @@ interface UploadsContract
      */
     public function delete(
         string $uploadID,
+        RequestOptions|array|null $requestOptions = null
+    ): mixed;
+
+    /**
+     * @api
+     *
+     * @param string $token Opaque completion capability from completion_url
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function complete(
+        string $token,
         RequestOptions|array|null $requestOptions = null
     ): mixed;
 }

@@ -76,4 +76,19 @@ interface UploadsRawContract
         string $uploadID,
         RequestOptions|array|null $requestOptions = null
     ): BaseResponse;
+
+    /**
+     * @api
+     *
+     * @param string $token Opaque completion capability from completion_url
+     * @param RequestOpts|null $requestOptions
+     *
+     * @return BaseResponse<mixed>
+     *
+     * @throws APIException
+     */
+    public function complete(
+        string $token,
+        RequestOptions|array|null $requestOptions = null
+    ): BaseResponse;
 }
