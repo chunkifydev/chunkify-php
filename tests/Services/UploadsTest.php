@@ -89,4 +89,17 @@ final class UploadsTest extends TestCase
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertNull($result);
     }
+
+    #[Test]
+    public function testComplete(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->uploads->complete('token');
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertNull($result);
+    }
 }

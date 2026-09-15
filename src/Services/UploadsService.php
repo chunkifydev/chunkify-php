@@ -152,4 +152,24 @@ final class UploadsService implements UploadsContract
 
         return $response->parse();
     }
+
+    /**
+     * @api
+     *
+     * After a successful PUT, POST the returned completion_url before expires_at. The token authorizes only this Upload; no API key, cookies, or request body is required. Verifies the stored object and commits one Source relationship. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff; never repeat the PUT just to retry completion.
+     *
+     * @param string $token Opaque completion capability from completion_url
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function complete(
+        string $token,
+        RequestOptions|array|null $requestOptions = null
+    ): mixed {
+        // @phpstan-ignore-next-line argument.type
+        $response = $this->raw->complete($token, requestOptions: $requestOptions);
+
+        return $response->parse();
+    }
 }

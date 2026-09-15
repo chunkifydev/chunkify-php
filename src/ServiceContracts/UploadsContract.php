@@ -88,4 +88,17 @@ interface UploadsContract
         string $uploadID,
         RequestOptions|array|null $requestOptions = null
     ): mixed;
+
+    /**
+     * @api
+     *
+     * @param string $token Opaque completion capability from completion_url
+     * @param RequestOpts|null $requestOptions
+     *
+     * @throws APIException
+     */
+    public function complete(
+        string $token,
+        RequestOptions|array|null $requestOptions = null
+    ): mixed;
 }
