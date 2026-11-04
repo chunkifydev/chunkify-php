@@ -8,6 +8,7 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Core\Omit;
 use Chunkify\Storages\Storage\StorageCloudflare\Location;
 
 /**
@@ -154,7 +155,7 @@ final class StorageCloudflare implements BaseModel
         Location|string $location,
         string $slug,
         bool $public = false,
-        ?string $cdnBaseURL = null,
+        string|Omit|null $cdnBaseURL = Omit::Value,
     ): self {
         $self = new self;
 
@@ -167,7 +168,7 @@ final class StorageCloudflare implements BaseModel
         $self['public'] = $public;
         $self['slug'] = $slug;
 
-        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
+        Omit::Value !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }

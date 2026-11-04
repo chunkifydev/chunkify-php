@@ -8,6 +8,7 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Core\Omit;
 use Chunkify\Storages\Storage\StorageS3Compatible\AddressingStyle;
 use Chunkify\Storages\Storage\StorageS3Compatible\Location;
 
@@ -171,7 +172,7 @@ final class StorageS3Compatible implements BaseModel
         bool $public,
         string $region,
         string $slug,
-        ?string $cdnBaseURL = null,
+        string|Omit|null $cdnBaseURL = Omit::Value,
     ): self {
         $self = new self;
 
@@ -186,7 +187,7 @@ final class StorageS3Compatible implements BaseModel
         $self['region'] = $region;
         $self['slug'] = $slug;
 
-        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
+        Omit::Value !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }

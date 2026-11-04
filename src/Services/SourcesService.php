@@ -61,9 +61,10 @@ final class SourcesService implements SourcesContract
         ?string $url = null,
         RequestOptions|array|null $requestOptions = null,
     ): Source {
-        $params = Util::removeNulls(
-            ['metadata' => $metadata, 'storage' => $storage, 'url' => $url]
-        );
+        $params = [];
+        null !== $metadata && $params['metadata'] = $metadata;
+        null !== $storage && $params['storage'] = $storage;
+        null !== $url && $params['url'] = $url;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);
