@@ -53,13 +53,10 @@ final class UploadsService implements UploadsContract
         int $validityTimeout = 7200,
         RequestOptions|array|null $requestOptions = null,
     ): Upload {
-        $params = Util::removeNulls(
-            [
-                'metadata' => $metadata,
-                'storage' => $storage,
-                'validityTimeout' => $validityTimeout,
-            ],
-        );
+        $params = [];
+        null !== $metadata && $params['metadata'] = $metadata;
+        null !== $storage && $params['storage'] = $storage;
+        $params['validityTimeout'] = $validityTimeout;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);

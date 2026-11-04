@@ -53,9 +53,10 @@ final class WebhooksService implements WebhooksContract
         ?array $events = null,
         RequestOptions|array|null $requestOptions = null,
     ): \Chunkify\Webhooks\Webhook {
-        $params = Util::removeNulls(
-            ['url' => $url, 'enabled' => $enabled, 'events' => $events]
-        );
+        $params = [];
+        $params['url'] = $url;
+        null !== $enabled && $params['enabled'] = $enabled;
+        null !== $events && $params['events'] = $events;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);
@@ -101,7 +102,9 @@ final class WebhooksService implements WebhooksContract
         ?array $events = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed {
-        $params = Util::removeNulls(['enabled' => $enabled, 'events' => $events]);
+        $params = [];
+        null !== $enabled && $params['enabled'] = $enabled;
+        null !== $events && $params['events'] = $events;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->update($webhookID, params: $params, requestOptions: $requestOptions);

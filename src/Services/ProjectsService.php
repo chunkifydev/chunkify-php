@@ -6,7 +6,6 @@ namespace Chunkify\Services;
 
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
-use Chunkify\Core\Util;
 use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectListResponse;
 use Chunkify\RequestOptions;
@@ -44,7 +43,8 @@ final class ProjectsService implements ProjectsContract
         string $name,
         RequestOptions|array|null $requestOptions = null
     ): Project {
-        $params = Util::removeNulls(['name' => $name]);
+        $params = [];
+        $params['name'] = $name;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);
@@ -90,7 +90,9 @@ final class ProjectsService implements ProjectsContract
         ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed {
-        $params = Util::removeNulls(['name' => $name, 'storageID' => $storageID]);
+        $params = [];
+        null !== $name && $params['name'] = $name;
+        null !== $storageID && $params['storageID'] = $storageID;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->update($projectID, params: $params, requestOptions: $requestOptions);

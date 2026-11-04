@@ -8,6 +8,7 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Core\Omit;
 
 /**
  * Update customer-owned storage settings. Prefix changes apply to final outputs that have not been uploaded yet. Existing files keep their stored object keys.
@@ -48,12 +49,12 @@ final class StorageUpdateParams implements BaseModel
      */
     public static function with(
         ?string $basePrefix = null,
-        ?string $cdnBaseURL = null
+        string|Omit|null $cdnBaseURL = Omit::Value
     ): self {
         $self = new self;
 
         null !== $basePrefix && $self['basePrefix'] = $basePrefix;
-        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
+        Omit::Value !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
 
         return $self;
     }

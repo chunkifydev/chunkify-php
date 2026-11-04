@@ -8,6 +8,7 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Core\Omit;
 
 /**
  * @phpstan-type JobFileShape = array{
@@ -211,7 +212,7 @@ final class JobFile implements BaseModel
         string $videoCodec,
         float $videoFramerate,
         int $width,
-        ?string $cdnURL = null,
+        string|Omit|null $cdnURL = Omit::Value,
     ): self {
         $self = new self;
 
@@ -232,7 +233,7 @@ final class JobFile implements BaseModel
         $self['videoFramerate'] = $videoFramerate;
         $self['width'] = $width;
 
-        null !== $cdnURL && $self['cdnURL'] = $cdnURL;
+        Omit::Value !== $cdnURL && $self['cdnURL'] = $cdnURL;
 
         return $self;
     }
