@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chunkify\ServiceContracts;
 
 use Chunkify\Core\Exceptions\APIException;
+use Chunkify\Core\Omit;
 use Chunkify\RequestOptions;
 use Chunkify\Storages\Storage\StorageAws;
 use Chunkify\Storages\Storage\StorageChunkify;
@@ -53,7 +54,7 @@ interface StoragesContract
      *
      * @param string $storageID Storage id
      * @param string $basePrefix Object-key prefix for future final job outputs. Existing files keep their stored object keys. Send an empty string to use the bucket root.
-     * @param string|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param string|Omit|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
@@ -61,7 +62,7 @@ interface StoragesContract
     public function update(
         string $storageID,
         ?string $basePrefix = null,
-        ?string $cdnBaseURL = null,
+        string|Omit|null $cdnBaseURL = Omit::Value,
         RequestOptions|array|null $requestOptions = null,
     ): mixed;
 

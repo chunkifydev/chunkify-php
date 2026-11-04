@@ -97,16 +97,13 @@ final class JobsService implements JobsContract
         Transcoder|array|null $transcoder = null,
         RequestOptions|array|null $requestOptions = null,
     ): Job {
-        $params = Util::removeNulls(
-            [
-                'format' => $format,
-                'sourceID' => $sourceID,
-                'hlsManifestID' => $hlsManifestID,
-                'metadata' => $metadata,
-                'storage' => $storage,
-                'transcoder' => $transcoder,
-            ],
-        );
+        $params = [];
+        $params['format'] = $format;
+        $params['sourceID'] = $sourceID;
+        null !== $hlsManifestID && $params['hlsManifestID'] = $hlsManifestID;
+        null !== $metadata && $params['metadata'] = $metadata;
+        null !== $storage && $params['storage'] = $storage;
+        null !== $transcoder && $params['transcoder'] = $transcoder;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);

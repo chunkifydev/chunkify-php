@@ -53,9 +53,10 @@ final class NotificationsService implements NotificationsContract
         string $webhookID,
         RequestOptions|array|null $requestOptions = null,
     ): Notification {
-        $params = Util::removeNulls(
-            ['event' => $event, 'objectID' => $objectID, 'webhookID' => $webhookID]
-        );
+        $params = [];
+        $params['event'] = $event;
+        $params['objectID'] = $objectID;
+        $params['webhookID'] = $webhookID;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);
