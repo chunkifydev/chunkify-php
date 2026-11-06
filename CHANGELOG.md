@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/chunkifydev/chunkify-php/compare/v0.2.2...v0.2.3) (2026-11-06)
+
+
+### Bug Fixes
+
+* include nullable request serialization fixes ([108fe6b](https://github.com/chunkifydev/chunkify-php/commit/108fe6b37703e5b446e988c76e4173c208db4fe2))
+
 ## [0.2.2](https://github.com/chunkifydev/chunkify-php/compare/v0.2.1...v0.2.2) (2026-09-15)
 
 
