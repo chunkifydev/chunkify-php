@@ -12,7 +12,7 @@ use Chunkify\Projects\ProjectListResponse;
 use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ProjectsContract;
-use Chunkify\Services\Projects\AnalyticsConnectionsService;
+use Chunkify\Services\Projects\AnalyticsService;
 
 /**
  * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
@@ -28,7 +28,7 @@ final class ProjectsService implements ProjectsContract
     /**
      * @api
      */
-    public AnalyticsConnectionsService $analyticsConnections;
+    public AnalyticsService $analytics;
 
     /**
      * @internal
@@ -36,7 +36,7 @@ final class ProjectsService implements ProjectsContract
     public function __construct(private Client $client)
     {
         $this->raw = new ProjectsRawService($client);
-        $this->analyticsConnections = new AnalyticsConnectionsService($client);
+        $this->analytics = new AnalyticsService($client);
     }
 
     /**

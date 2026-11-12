@@ -26,7 +26,6 @@ use Chunkify\ServiceContracts\Assets\OutputsRawContract;
 /**
  * Automatic video-on-demand Assets and independent H.264 MP4 static renditions.
  *
- * @phpstan-import-type OutputShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class OutputsRawService implements OutputsRawContract
@@ -43,7 +42,7 @@ final class OutputsRawService implements OutputsRawContract
      * Create one caption, static rendition or additional thumbnail output. The accepted output processes asynchronously and is returned in the same envelope as output reads.
      *
      * @param string $assetID assetId identifies the Asset that owns the output within the authenticated Project
-     * @param array{output: OutputShape}|OutputCreateParams $params
+     * @param array{params: mixed, type?: 'transcript'}|OutputCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AssetCaptionOutput|AssetStaticRenditionOutput|AssetThumbnailOutput|AssetTranscriptOutput,>
@@ -64,7 +63,7 @@ final class OutputsRawService implements OutputsRawContract
         return $this->client->request(
             method: 'post',
             path: ['assets/%1$s/outputs', $assetID],
-            body: (object) $parsed['output'],
+            body: (object) $parsed,
             unwrap: 'data',
             options: $options,
             convert: AssetOutput::class,
