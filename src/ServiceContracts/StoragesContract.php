@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chunkify\ServiceContracts;
 
 use Chunkify\Core\Exceptions\APIException;
+use Chunkify\Core\Omit;
 use Chunkify\RequestOptions;
 use Chunkify\Storages\Storage\StorageAws;
 use Chunkify\Storages\Storage\StorageChunkify;
@@ -52,16 +53,20 @@ interface StoragesContract
      * @api
      *
      * @param string $storageID Storage id
+     * @param string $accessKeyID Replacement access key ID for customer-managed storage. Send with a non-empty secret_access_key. Omit both credential fields to keep the saved pair. Null and empty values are rejected. Credentials are validated before either value is saved and are never returned.
      * @param string $basePrefix Object-key prefix for future final job outputs. Existing files keep their stored object keys. Send an empty string to use the bucket root.
-     * @param string|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param string|Omit|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param string $secretAccessKey Replacement secret access key. Required with access_key_id; cannot be null or empty. The pair is encrypted and saved atomically only after validation succeeds.
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function update(
         string $storageID,
+        ?string $accessKeyID = null,
         ?string $basePrefix = null,
-        ?string $cdnBaseURL = null,
+        string|Omit|null $cdnBaseURL = Omit::Value,
+        ?string $secretAccessKey = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed;
 

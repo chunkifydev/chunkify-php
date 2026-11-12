@@ -15,6 +15,8 @@ use Chunkify\RequestOptions;
 interface FilesRawContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job ID

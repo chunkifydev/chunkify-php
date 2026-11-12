@@ -16,8 +16,9 @@ use Chunkify\Files\FileListParams\Size;
 use Chunkify\Files\FileListParams\Width;
 
 /**
- * Retrieve a list of files with optional filtering and pagination.
+ * Retrieve a list of files with optional filtering and pagination. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
  *
+ * @deprecated
  * @see Chunkify\Services\FilesService::list()
  *
  * @phpstan-import-type CreatedShape from \Chunkify\Files\FileListParams\Created

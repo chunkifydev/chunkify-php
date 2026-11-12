@@ -8,6 +8,7 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Core\Omit;
 use Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams\Location;
 
 /**
@@ -142,7 +143,7 @@ final class StorageS3CompatibleCreateParams implements BaseModel
         string $region,
         string $secretAccessKey,
         ?string $basePrefix = null,
-        ?string $cdnBaseURL = null,
+        string|Omit|null $cdnBaseURL = Omit::Value,
         ?bool $public = null,
     ): self {
         $self = new self;
@@ -155,7 +156,7 @@ final class StorageS3CompatibleCreateParams implements BaseModel
         $self['secretAccessKey'] = $secretAccessKey;
 
         null !== $basePrefix && $self['basePrefix'] = $basePrefix;
-        null !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
+        Omit::Value !== $cdnBaseURL && $self['cdnBaseURL'] = $cdnBaseURL;
         null !== $public && $self['public'] = $public;
 
         return $self;

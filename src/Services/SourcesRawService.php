@@ -65,7 +65,7 @@ final class SourcesRawService implements SourcesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/sources',
+            path: 'sources',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -93,7 +93,7 @@ final class SourcesRawService implements SourcesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/sources/%1$s', $sourceID],
+            path: ['sources/%1$s', $sourceID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Source::class,
@@ -138,7 +138,7 @@ final class SourcesRawService implements SourcesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/sources',
+            path: 'sources',
             query: Util::array_transform_keys(
                 $parsed,
                 ['audioCodec' => 'audio_codec', 'videoCodec' => 'video_codec']
@@ -169,7 +169,7 @@ final class SourcesRawService implements SourcesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/sources/%1$s', $sourceID],
+            path: ['sources/%1$s', $sourceID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],

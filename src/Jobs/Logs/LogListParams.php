@@ -12,8 +12,9 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Jobs\Logs\LogListParams\Service;
 
 /**
- * Retrieve logs for a specific job, either from the transcoder or manager service.
+ * Retrieve logs for a specific job, either from the transcoder or manager service. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
  *
+ * @deprecated
  * @see Chunkify\Services\Jobs\LogsService::list()
  *
  * @phpstan-type LogListParamsShape = array{

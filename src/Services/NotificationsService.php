@@ -38,10 +38,10 @@ final class NotificationsService implements NotificationsContract
     /**
      * @api
      *
-     * Create a new notification for a job event
+     * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
      *
      * @param Event|value-of<Event> $event event specifies the type of event that triggered the notification
-     * @param string $objectID objectId specifies the object that triggered this notification
+     * @param string $objectID ID of the resource that triggered the event. Use the caption, static rendition, or thumbnail ID for their Asset child events. Replaying asset events, job.created, or source.created requires a retained snapshot. Resource deletion does not prevent replay.
      * @param string $webhookID webhookId specifies the webhook endpoint that will receive the notification
      * @param RequestOpts|null $requestOptions
      *
@@ -53,9 +53,10 @@ final class NotificationsService implements NotificationsContract
         string $webhookID,
         RequestOptions|array|null $requestOptions = null,
     ): Notification {
-        $params = Util::removeNulls(
-            ['event' => $event, 'objectID' => $objectID, 'webhookID' => $webhookID]
-        );
+        $params = [];
+        $params['event'] = $event;
+        $params['objectID'] = $objectID;
+        $params['webhookID'] = $webhookID;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);
@@ -89,6 +90,7 @@ final class NotificationsService implements NotificationsContract
      * Retrieve a list of notifications with optional filtering and pagination
      *
      * @param Created|CreatedShape $created
+     * @param string $eventID filter deliveries by their originating event ID
      * @param list<\Chunkify\Notifications\NotificationListParams\Event|value-of<\Chunkify\Notifications\NotificationListParams\Event>> $events Filter by events
      * @param int $limit Pagination limit (max 100)
      * @param string $objectID Filter by object ID
@@ -103,6 +105,7 @@ final class NotificationsService implements NotificationsContract
      */
     public function list(
         Created|array|null $created = null,
+        ?string $eventID = null,
         ?array $events = null,
         int $limit = 100,
         ?string $objectID = null,
@@ -114,6 +117,7 @@ final class NotificationsService implements NotificationsContract
         $params = Util::removeNulls(
             [
                 'created' => $created,
+                'eventID' => $eventID,
                 'events' => $events,
                 'limit' => $limit,
                 'objectID' => $objectID,

@@ -14,8 +14,9 @@ use Chunkify\Jobs\JobListParams\FormatID;
 use Chunkify\Jobs\JobListParams\Status;
 
 /**
- * Retrieve a list of jobs with optional filtering and pagination.
+ * Retrieve a list of jobs with optional filtering and pagination. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
  *
+ * @deprecated
  * @see Chunkify\Services\JobsService::list()
  *
  * @phpstan-import-type CreatedShape from \Chunkify\Jobs\JobListParams\Created

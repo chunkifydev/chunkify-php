@@ -6,7 +6,6 @@ namespace Chunkify\Services;
 
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
-use Chunkify\Core\Util;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\TokensContract;
 use Chunkify\Tokens\Token;
@@ -49,9 +48,10 @@ final class TokensService implements TokensContract
         ?string $projectID = null,
         RequestOptions|array|null $requestOptions = null,
     ): Token {
-        $params = Util::removeNulls(
-            ['scope' => $scope, 'name' => $name, 'projectID' => $projectID]
-        );
+        $params = [];
+        $params['scope'] = $scope;
+        null !== $name && $params['name'] = $name;
+        null !== $projectID && $params['projectID'] = $projectID;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->create(params: $params, requestOptions: $requestOptions);

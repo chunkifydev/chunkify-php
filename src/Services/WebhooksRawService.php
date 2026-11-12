@@ -52,7 +52,7 @@ final class WebhooksRawService implements WebhooksRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/webhooks',
+            path: 'webhooks',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -80,7 +80,7 @@ final class WebhooksRawService implements WebhooksRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/webhooks/%1$s', $webhookID],
+            path: ['webhooks/%1$s', $webhookID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Webhook::class,
@@ -117,7 +117,7 @@ final class WebhooksRawService implements WebhooksRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'patch',
-            path: ['api/webhooks/%1$s', $webhookID],
+            path: ['webhooks/%1$s', $webhookID],
             body: (object) $parsed,
             options: $options,
             convert: null,
@@ -142,7 +142,7 @@ final class WebhooksRawService implements WebhooksRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/webhooks',
+            path: 'webhooks',
             options: $requestOptions,
             convert: WebhookListResponse::class,
             security: ['projectAccessToken' => true],
@@ -168,7 +168,7 @@ final class WebhooksRawService implements WebhooksRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/webhooks/%1$s', $webhookID],
+            path: ['webhooks/%1$s', $webhookID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],

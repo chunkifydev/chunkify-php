@@ -23,9 +23,11 @@ final class FilesRawService implements FilesRawContract
     public function __construct(private Client $client) {}
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve all files associated with a specific job
+     * Retrieve all files associated with a specific job. Deprecated: Job files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $jobID Job ID
      * @param RequestOpts|null $requestOptions
@@ -41,7 +43,7 @@ final class FilesRawService implements FilesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/jobs/%1$s/files', $jobID],
+            path: ['jobs/%1$s/files', $jobID],
             options: $requestOptions,
             convert: FileListResponse::class,
             security: ['projectAccessToken' => true],
