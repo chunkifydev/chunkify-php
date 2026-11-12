@@ -54,7 +54,7 @@ final class StoragesRawService implements StoragesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/storages',
+            path: 'storages',
             body: (object) $parsed['storage'],
             unwrap: 'data',
             options: $options,
@@ -82,7 +82,7 @@ final class StoragesRawService implements StoragesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/storages/%1$s', $storageID],
+            path: ['storages/%1$s', $storageID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Storage::class,
@@ -93,11 +93,14 @@ final class StoragesRawService implements StoragesRawContract
     /**
      * @api
      *
-     * Update customer-owned storage settings. Prefix changes apply to final outputs that have not been uploaded yet. Existing files keep their stored object keys.
+     * Update customer-owned storage settings. Send access_key_id and secret_access_key together to rotate credentials for AWS S3, Cloudflare R2, or S3-compatible storage. Both values must be non-empty and non-null. Omitting both preserves the saved pair and skips connection validation. Replacement credentials are checked against the saved bucket, endpoint, region, and addressing style using the creation upload, metadata, and download checks with best-effort probe cleanup. A prefix changed in the same request is used for validation. Both credentials are encrypted and saved atomically with other settings; a failed update preserves the previous values. Credential-only updates keep the Storage ID, resource associations, object paths, and Project default. Subsequent storage lookups use the new pair; running work may retain an existing client or signed URL. Rotation does not renew issued URLs, and revoking old keys can invalidate them. Prefix changes apply to final outputs that have not been uploaded yet. Existing files keep their stored object keys.
      *
      * @param string $storageID Storage id
      * @param array{
-     *   basePrefix?: string, cdnBaseURL?: string|null
+     *   accessKeyID?: string,
+     *   basePrefix?: string,
+     *   cdnBaseURL?: string|null,
+     *   secretAccessKey?: string,
      * }|StorageUpdateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -118,7 +121,7 @@ final class StoragesRawService implements StoragesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'patch',
-            path: ['api/storages/%1$s', $storageID],
+            path: ['storages/%1$s', $storageID],
             body: (object) $parsed,
             options: $options,
             convert: null,
@@ -143,7 +146,7 @@ final class StoragesRawService implements StoragesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/storages',
+            path: 'storages',
             options: $requestOptions,
             convert: StorageListResponse::class,
             security: ['projectAccessToken' => true],
@@ -169,7 +172,7 @@ final class StoragesRawService implements StoragesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/storages/%1$s', $storageID],
+            path: ['storages/%1$s', $storageID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],

@@ -41,8 +41,8 @@ final class NotificationsTest extends TestCase
         }
 
         $result = $this->client->notifications->create(
-            event: 'job.completed',
-            objectID: 'job_A1cce6120E56e7Tu9ioP09Nhjk9',
+            event: 'asset.playback_ready',
+            objectID: 'ast_A1cce6120E56e7Tu9ioP09Nhjk9',
             webhookID: 'wh_A1cce6120E56e7Tu9ioP09Nhjk9',
         );
 
@@ -58,8 +58,8 @@ final class NotificationsTest extends TestCase
         }
 
         $result = $this->client->notifications->create(
-            event: 'job.completed',
-            objectID: 'job_A1cce6120E56e7Tu9ioP09Nhjk9',
+            event: 'asset.playback_ready',
+            objectID: 'ast_A1cce6120E56e7Tu9ioP09Nhjk9',
             webhookID: 'wh_A1cce6120E56e7Tu9ioP09Nhjk9',
         );
 

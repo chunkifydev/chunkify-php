@@ -38,9 +38,11 @@ final class FilesRawService implements FilesRawContract
     public function __construct(private Client $client) {}
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve details of a specific file by its ID, including metadata, media properties, and associated jobs.
+     * Retrieve details of a specific file by its ID, including metadata, media properties, and associated jobs. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $fileID File ID
      * @param RequestOpts|null $requestOptions
@@ -56,7 +58,7 @@ final class FilesRawService implements FilesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/files/%1$s', $fileID],
+            path: ['files/%1$s', $fileID],
             unwrap: 'data',
             options: $requestOptions,
             convert: JobFile::class,
@@ -65,9 +67,11 @@ final class FilesRawService implements FilesRawContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve a list of files with optional filtering and pagination
+     * Retrieve a list of files with optional filtering and pagination. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param array{
      *   id?: string,
@@ -103,7 +107,7 @@ final class FilesRawService implements FilesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/files',
+            path: 'files',
             query: Util::array_transform_keys(
                 $parsed,
                 [
@@ -122,9 +126,11 @@ final class FilesRawService implements FilesRawContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Delete a file. It will fail if there are processing jobs using this file.
+     * Delete a file. It will fail if there are processing jobs using this file. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $fileID File id
      * @param RequestOpts|null $requestOptions
@@ -140,7 +146,7 @@ final class FilesRawService implements FilesRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/files/%1$s', $fileID],
+            path: ['files/%1$s', $fileID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],

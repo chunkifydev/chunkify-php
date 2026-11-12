@@ -11,7 +11,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Notifications\NotificationCreateParams\Event;
 
 /**
- * Create a new notification for a job event.
+ * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
  *
  * @see Chunkify\Services\NotificationsService::create()
  *
@@ -34,7 +34,7 @@ final class NotificationCreateParams implements BaseModel
     public string $event;
 
     /**
-     * ObjectId specifies the object that triggered this notification.
+     * ID of the resource that triggered the event. Use the caption, static rendition, or thumbnail ID for their Asset child events. Replaying asset events, job.created, or source.created requires a retained snapshot. Resource deletion does not prevent replay.
      */
     #[Required('object_id')]
     public string $objectID;
@@ -102,7 +102,7 @@ final class NotificationCreateParams implements BaseModel
     }
 
     /**
-     * ObjectId specifies the object that triggered this notification.
+     * ID of the resource that triggered the event. Use the caption, static rendition, or thumbnail ID for their Asset child events. Replaying asset events, job.created, or source.created requires a retained snapshot. Resource deletion does not prevent replay.
      */
     public function withObjectID(string $objectID): self
     {

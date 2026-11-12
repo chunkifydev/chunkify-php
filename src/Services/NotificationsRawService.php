@@ -34,7 +34,7 @@ final class NotificationsRawService implements NotificationsRawContract
     /**
      * @api
      *
-     * Create a new notification for a job event
+     * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
      *
      * @param array{
      *   event: value-of<Event>, objectID: string, webhookID: string
@@ -57,7 +57,7 @@ final class NotificationsRawService implements NotificationsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/notifications',
+            path: 'notifications',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -85,7 +85,7 @@ final class NotificationsRawService implements NotificationsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/notifications/%1$s', $notificationID],
+            path: ['notifications/%1$s', $notificationID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Notification::class,
@@ -100,6 +100,7 @@ final class NotificationsRawService implements NotificationsRawContract
      *
      * @param array{
      *   created?: Created|CreatedShape,
+     *   eventID?: string,
      *   events?: list<NotificationListParams\Event|value-of<NotificationListParams\Event>>,
      *   limit?: int,
      *   objectID?: string,
@@ -125,10 +126,11 @@ final class NotificationsRawService implements NotificationsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/notifications',
+            path: 'notifications',
             query: Util::array_transform_keys(
                 $parsed,
                 [
+                    'eventID' => 'event_id',
                     'objectID' => 'object_id',
                     'responseStatusCode' => 'response_status_code',
                     'webhookID' => 'webhook_id',
@@ -160,7 +162,7 @@ final class NotificationsRawService implements NotificationsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/notifications/%1$s', $notificationID],
+            path: ['notifications/%1$s', $notificationID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],

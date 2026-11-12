@@ -43,9 +43,11 @@ final class FilesService implements FilesContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve details of a specific file by its ID, including metadata, media properties, and associated jobs.
+     * Retrieve details of a specific file by its ID, including metadata, media properties, and associated jobs. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $fileID File ID
      * @param RequestOpts|null $requestOptions
@@ -63,9 +65,11 @@ final class FilesService implements FilesContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve a list of files with optional filtering and pagination
+     * Retrieve a list of files with optional filtering and pagination. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $id Filter by file ID
      * @param string $audioCodec Filter by audio codec
@@ -130,9 +134,11 @@ final class FilesService implements FilesContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Delete a file. It will fail if there are processing jobs using this file.
+     * Delete a file. It will fail if there are processing jobs using this file. Deprecated: Files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $fileID File id
      * @param RequestOpts|null $requestOptions

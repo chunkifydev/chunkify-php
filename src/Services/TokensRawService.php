@@ -51,7 +51,7 @@ final class TokensRawService implements TokensRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/tokens',
+            path: 'tokens',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -77,7 +77,7 @@ final class TokensRawService implements TokensRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/tokens',
+            path: 'tokens',
             options: $requestOptions,
             convert: TokenListResponse::class,
             security: ['teamAccessToken' => true],
@@ -103,7 +103,7 @@ final class TokensRawService implements TokensRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/tokens/%1$s', $tokenID],
+            path: ['tokens/%1$s', $tokenID],
             options: $requestOptions,
             convert: null,
             security: ['teamAccessToken' => true],

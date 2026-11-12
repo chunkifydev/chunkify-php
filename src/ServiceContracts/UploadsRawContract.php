@@ -9,6 +9,7 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\Uploads\Upload;
+use Chunkify\Uploads\UploadCompleteParams;
 use Chunkify\Uploads\UploadCreateParams;
 use Chunkify\Uploads\UploadListParams;
 
@@ -81,6 +82,7 @@ interface UploadsRawContract
      * @api
      *
      * @param string $token Opaque completion capability from completion_url
+     * @param array<string,mixed>|UploadCompleteParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
@@ -89,6 +91,7 @@ interface UploadsRawContract
      */
     public function complete(
         string $token,
-        RequestOptions|array|null $requestOptions = null
+        array|UploadCompleteParams $params,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

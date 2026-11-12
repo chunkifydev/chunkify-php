@@ -32,13 +32,11 @@ $client = new Client(
   projectAccessToken: getenv('CHUNKIFY_TOKEN') ?: 'My Project Access Token'
 );
 
-$job = $client->jobs->create(
-  format: ['id' => 'mp4_h264', 'width' => 1920, 'height' => 1080, 'crf' => 21],
-  sourceID: 'src_2G6MJiNz71bHQGNzGwKx5cJwPFS',
-  transcoder: ['quantity' => 4, 'type' => '8vCPU'],
+$asset = $client->assets->create(
+  sourceID: 'src_2G6MJiNz71bHQGNzGwKx5cJwPFS', title: 'Launch video'
 );
 
-var_dump($job->id);
+var_dump($asset->id);
 ```
 
 ### Value Objects
@@ -89,7 +87,7 @@ use Chunkify\Core\Exceptions\RateLimitException;
 use Chunkify\Core\Exceptions\APIStatusException;
 
 try {
-  $page = $client->files->list();
+  $page = $client->assets->list();
 } catch (APIConnectionException $e) {
   echo "The server could not be reached", PHP_EOL;
   var_dump($e->getPrevious());
@@ -134,7 +132,7 @@ use Chunkify\Client;
 $client = new Client(requestOptions: ['maxRetries' => 0]);
 
 // Or, configure per-request:
-$result = $client->files->list(requestOptions: ['maxRetries' => 5]);
+$result = $client->assets->list(requestOptions: ['maxRetries' => 5]);
 ```
 
 ## Advanced concepts
@@ -150,7 +148,7 @@ Note: the `extra*` parameters of the same name overrides the documented paramete
 ```php
 <?php
 
-$page = $client->files->list(
+$page = $client->assets->list(
   requestOptions: [
     'extraQueryParams' => ['my_query_parameter' => 'value'],
     'extraBodyParams' => ['my_body_parameter' => 'value'],
