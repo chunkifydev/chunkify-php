@@ -8,8 +8,10 @@ use Chunkify\Core\Contracts\BaseResponse;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Projects\Analytics\Connections\AnalyticsConnection;
 use Chunkify\Projects\Analytics\Connections\ConnectionCreateParams;
+use Chunkify\Projects\Analytics\Connections\ConnectionDeleteParams;
 use Chunkify\Projects\Analytics\Connections\ConnectionListResponse;
 use Chunkify\Projects\Analytics\Connections\ConnectionNewResponse;
+use Chunkify\Projects\Analytics\Connections\ConnectionRetrieveParams;
 use Chunkify\Projects\Analytics\Connections\ConnectionUpdateParams;
 use Chunkify\RequestOptions;
 
@@ -38,8 +40,8 @@ interface ConnectionsRawContract
     /**
      * @api
      *
-     * @param string $projectID the owning Chunkify project ID
      * @param string $connectionID the saved analytics connection ID
+     * @param array<string,mixed>|ConnectionRetrieveParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<AnalyticsConnection>
@@ -47,16 +49,15 @@ interface ConnectionsRawContract
      * @throws APIException
      */
     public function retrieve(
-        string $projectID,
         string $connectionID,
+        array|ConnectionRetrieveParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
-     * @param string $projectID the owning Chunkify project ID
-     * @param string $connectionID the saved analytics connection ID
+     * @param string $connectionID path param: The saved analytics connection ID
      * @param array<string,mixed>|ConnectionUpdateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -65,7 +66,6 @@ interface ConnectionsRawContract
      * @throws APIException
      */
     public function update(
-        string $projectID,
         string $connectionID,
         array|ConnectionUpdateParams $params,
         RequestOptions|array|null $requestOptions = null,
@@ -89,8 +89,8 @@ interface ConnectionsRawContract
     /**
      * @api
      *
-     * @param string $projectID the owning Chunkify project ID
      * @param string $connectionID the saved analytics connection ID
+     * @param array<string,mixed>|ConnectionDeleteParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
@@ -98,8 +98,8 @@ interface ConnectionsRawContract
      * @throws APIException
      */
     public function delete(
-        string $projectID,
         string $connectionID,
+        array|ConnectionDeleteParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }

@@ -6,6 +6,7 @@ namespace Chunkify\Services\Projects\Analytics\Connections;
 
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
+use Chunkify\Core\Util;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyCreateParams\Purpose;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyListResponse;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyNewResponse;
@@ -36,24 +37,25 @@ final class KeysService implements KeysContract
      *
      * Generate a public key for players to send events, or a read-only secret key for a dashboard or MCP client to query a hosted Chunkify Analytics server. Save secret keys when returned. Requires a team owner and a Team Access Key.
      *
-     * @param string $projectID the owning Chunkify project ID
-     * @param string $connectionID the saved analytics connection ID
-     * @param Purpose|value-of<Purpose> $purpose Purpose distinguishes player ingestion, read-only API access and a separate read-only MCP credential. Read and MCP keys have the same collector permissions.
+     * @param string $connectionID path param: The saved analytics connection ID
+     * @param string $projectID path param: The owning Chunkify project ID
+     * @param Purpose|value-of<Purpose> $purpose Body param: Purpose distinguishes player ingestion, read-only API access and a separate read-only MCP credential. Read and MCP keys have the same collector permissions.
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
-        string $projectID,
         string $connectionID,
+        string $projectID,
         Purpose|string $purpose,
         RequestOptions|array|null $requestOptions = null,
     ): KeyNewResponse {
-        $params = [];
+        /** @var array<string, mixed> $params */
+        $params = Util::removeNulls(['projectID' => $projectID]);
         $params['purpose'] = $purpose;
 
         // @phpstan-ignore-next-line argument.type
-        $response = $this->raw->create($projectID, $connectionID, params: $params, requestOptions: $requestOptions);
+        $response = $this->raw->create($connectionID, params: $params, requestOptions: $requestOptions);
 
         return $response->parse();
     }
@@ -63,19 +65,21 @@ final class KeysService implements KeysContract
      *
      * List keys for a hosted Chunkify Analytics server: the public key used by players to send events, and read-only secret key records for dashboard and MCP access. Secret values are not returned. Requires a team owner and a Team Access Key.
      *
-     * @param string $projectID the owning Chunkify project ID
      * @param string $connectionID the saved analytics connection ID
+     * @param string $projectID the owning Chunkify project ID
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function list(
-        string $projectID,
         string $connectionID,
+        string $projectID,
         RequestOptions|array|null $requestOptions = null,
     ): KeyListResponse {
+        $params = Util::removeNulls(['projectID' => $projectID]);
+
         // @phpstan-ignore-next-line argument.type
-        $response = $this->raw->list($projectID, $connectionID, requestOptions: $requestOptions);
+        $response = $this->raw->list($connectionID, params: $params, requestOptions: $requestOptions);
 
         return $response->parse();
     }
@@ -85,21 +89,25 @@ final class KeysService implements KeysContract
      *
      * Rotate a public or read-only secret key for a hosted Chunkify Analytics server. Update the player, dashboard, or MCP client with the new key; the old key stops working immediately. Requires a team owner and a Team Access Key.
      *
+     * @param string $keyID the analytics key ID
      * @param string $projectID the owning Chunkify project ID
      * @param string $connectionID the saved analytics connection ID
-     * @param string $keyID the analytics key ID
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function rotate(
+        string $keyID,
         string $projectID,
         string $connectionID,
-        string $keyID,
         RequestOptions|array|null $requestOptions = null,
     ): KeyRotateResponse {
+        $params = Util::removeNulls(
+            ['projectID' => $projectID, 'connectionID' => $connectionID]
+        );
+
         // @phpstan-ignore-next-line argument.type
-        $response = $this->raw->rotate($projectID, $connectionID, $keyID, requestOptions: $requestOptions);
+        $response = $this->raw->rotate($keyID, params: $params, requestOptions: $requestOptions);
 
         return $response->parse();
     }

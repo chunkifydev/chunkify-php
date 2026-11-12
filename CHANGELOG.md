@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/chunkifydev/chunkify-php/compare/v0.2.2...v0.3.0) (2026-11-12)
+
+
+### Features
+
+* sync OpenAPI schema from Chunkify v2.0.0 ([73ab1b8](https://github.com/chunkifydev/chunkify-php/commit/73ab1b8804e9f97d6b7307e9c06c240e75fc98d6))
+
+
+### Bug Fixes
+
+* align SDK method names with the API reference ([aba64c5](https://github.com/chunkifydev/chunkify-php/commit/aba64c544631e4e2f3065f73285af5836e207772))
+* include nullable request serialization fixes ([108fe6b](https://github.com/chunkifydev/chunkify-php/commit/108fe6b37703e5b446e988c76e4173c208db4fe2))
+
 ## [0.2.2](https://github.com/chunkifydev/chunkify-php/compare/v0.2.1...v0.2.2) (2026-09-15)
 
 
