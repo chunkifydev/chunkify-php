@@ -42,8 +42,8 @@ final class KeysTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->keys->create(
-            'projectId',
             'connectionId',
+            projectID: 'projectId',
             purpose: 'player'
         );
 
@@ -59,8 +59,8 @@ final class KeysTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->keys->create(
-            'projectId',
             'connectionId',
+            projectID: 'projectId',
             purpose: 'player'
         );
 
@@ -76,8 +76,24 @@ final class KeysTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->keys->list(
-            'projectId',
-            'connectionId'
+            'connectionId',
+            projectID: 'projectId'
+        );
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertInstanceOf(KeyListResponse::class, $result);
+    }
+
+    #[Test]
+    public function testListWithOptionalParams(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->projects->analytics->connections->keys->list(
+            'connectionId',
+            projectID: 'projectId'
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -92,9 +108,26 @@ final class KeysTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->keys->rotate(
-            'projectId',
-            'connectionId',
-            'keyId'
+            'keyId',
+            projectID: 'projectId',
+            connectionID: 'connectionId'
+        );
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertInstanceOf(KeyRotateResponse::class, $result);
+    }
+
+    #[Test]
+    public function testRotateWithOptionalParams(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->projects->analytics->connections->keys->rotate(
+            'keyId',
+            projectID: 'projectId',
+            connectionID: 'connectionId'
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

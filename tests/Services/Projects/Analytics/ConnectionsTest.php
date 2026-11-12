@@ -79,8 +79,24 @@ final class ConnectionsTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->retrieve(
-            'projectId',
-            'connectionId'
+            'connectionId',
+            projectID: 'projectId'
+        );
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertInstanceOf(AnalyticsConnection::class, $result);
+    }
+
+    #[Test]
+    public function testRetrieveWithOptionalParams(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->projects->analytics->connections->retrieve(
+            'connectionId',
+            projectID: 'projectId'
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -95,8 +111,30 @@ final class ConnectionsTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->update(
-            'projectId',
-            'connectionId'
+            'connectionId',
+            projectID: 'projectId'
+        );
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertInstanceOf(AnalyticsConnection::class, $result);
+    }
+
+    #[Test]
+    public function testUpdateWithOptionalParams(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->projects->analytics->connections->update(
+            'connectionId',
+            projectID: 'projectId',
+            allowedOrigins: ['string'],
+            defaultForDashboard: true,
+            endpoint: 'endpoint',
+            name: 'Production analytics',
+            publicIngestKey: 'ck_public_de90a6057194afc9913a4adcd7ef960db1a91a48d2a13b6b2f7dfe671fd5be36',
+            readKey: 'x',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -126,8 +164,24 @@ final class ConnectionsTest extends TestCase
         }
 
         $result = $this->client->projects->analytics->connections->delete(
-            'projectId',
-            'connectionId'
+            'connectionId',
+            projectID: 'projectId'
+        );
+
+        // @phpstan-ignore-next-line method.alreadyNarrowedType
+        $this->assertNull($result);
+    }
+
+    #[Test]
+    public function testDeleteWithOptionalParams(): void
+    {
+        if (UnsupportedMockTests::$skip) {
+            $this->markTestSkipped('Mock server tests are disabled');
+        }
+
+        $result = $this->client->projects->analytics->connections->delete(
+            'connectionId',
+            projectID: 'projectId'
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

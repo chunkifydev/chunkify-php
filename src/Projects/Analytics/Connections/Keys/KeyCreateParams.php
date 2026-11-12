@@ -15,13 +15,18 @@ use Chunkify\Projects\Analytics\Connections\Keys\KeyCreateParams\Purpose;
  *
  * @see Chunkify\Services\Projects\Analytics\Connections\KeysService::create()
  *
- * @phpstan-type KeyCreateParamsShape = array{purpose: Purpose|value-of<Purpose>}
+ * @phpstan-type KeyCreateParamsShape = array{
+ *   projectID: string, purpose: Purpose|value-of<Purpose>
+ * }
  */
 final class KeyCreateParams implements BaseModel
 {
     /** @use SdkModel<KeyCreateParamsShape> */
     use SdkModel;
     use SdkParams;
+
+    #[Required]
+    public string $projectID;
 
     /**
      * Purpose distinguishes player ingestion, read-only API access and a separate read-only MCP credential. Read and MCP keys have the same collector permissions.
@@ -36,13 +41,13 @@ final class KeyCreateParams implements BaseModel
      *
      * To enforce required parameters use
      * ```
-     * KeyCreateParams::with(purpose: ...)
+     * KeyCreateParams::with(projectID: ..., purpose: ...)
      * ```
      *
      * Otherwise ensure the following setters are called
      *
      * ```
-     * (new KeyCreateParams)->withPurpose(...)
+     * (new KeyCreateParams)->withProjectID(...)->withPurpose(...)
      * ```
      */
     public function __construct()
@@ -57,11 +62,22 @@ final class KeyCreateParams implements BaseModel
      *
      * @param Purpose|value-of<Purpose> $purpose
      */
-    public static function with(Purpose|string $purpose): self
-    {
+    public static function with(
+        string $projectID,
+        Purpose|string $purpose
+    ): self {
         $self = new self;
 
+        $self['projectID'] = $projectID;
         $self['purpose'] = $purpose;
+
+        return $self;
+    }
+
+    public function withProjectID(string $projectID): self
+    {
+        $self = clone $this;
+        $self['projectID'] = $projectID;
 
         return $self;
     }

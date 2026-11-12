@@ -9,8 +9,10 @@ use Chunkify\Core\Contracts\BaseResponse;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyCreateParams;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyCreateParams\Purpose;
+use Chunkify\Projects\Analytics\Connections\Keys\KeyListParams;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyListResponse;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyNewResponse;
+use Chunkify\Projects\Analytics\Connections\Keys\KeyRotateParams;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyRotateResponse;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\Projects\Analytics\Connections\KeysRawContract;
@@ -31,9 +33,10 @@ final class KeysRawService implements KeysRawContract
      *
      * Generate a public key for players to send events, or a read-only secret key for a dashboard or MCP client to query a hosted Chunkify Analytics server. Save secret keys when returned. Requires a team owner and a Team Access Key.
      *
-     * @param string $projectID the owning Chunkify project ID
-     * @param string $connectionID the saved analytics connection ID
-     * @param array{purpose: Purpose|value-of<Purpose>}|KeyCreateParams $params
+     * @param string $connectionID path param: The saved analytics connection ID
+     * @param array{
+     *   projectID: string, purpose: Purpose|value-of<Purpose>
+     * }|KeyCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<KeyNewResponse>
@@ -41,7 +44,6 @@ final class KeysRawService implements KeysRawContract
      * @throws APIException
      */
     public function create(
-        string $projectID,
         string $connectionID,
         array|KeyCreateParams $params,
         RequestOptions|array|null $requestOptions = null,
@@ -50,6 +52,8 @@ final class KeysRawService implements KeysRawContract
             $params,
             $requestOptions,
         );
+        $projectID = $parsed['projectID'];
+        unset($parsed['projectID']);
 
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
@@ -59,7 +63,7 @@ final class KeysRawService implements KeysRawContract
                 $projectID,
                 $connectionID,
             ],
-            body: (object) $parsed,
+            body: (object) array_diff_key($parsed, array_flip(['projectID'])),
             options: $options,
             convert: KeyNewResponse::class,
             security: ['teamAccessToken' => true],
@@ -71,8 +75,8 @@ final class KeysRawService implements KeysRawContract
      *
      * List keys for a hosted Chunkify Analytics server: the public key used by players to send events, and read-only secret key records for dashboard and MCP access. Secret values are not returned. Requires a team owner and a Team Access Key.
      *
-     * @param string $projectID the owning Chunkify project ID
      * @param string $connectionID the saved analytics connection ID
+     * @param array{projectID: string}|KeyListParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<KeyListResponse>
@@ -80,10 +84,17 @@ final class KeysRawService implements KeysRawContract
      * @throws APIException
      */
     public function list(
-        string $projectID,
         string $connectionID,
+        array|KeyListParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
+        [$parsed, $options] = KeyListParams::parseRequest(
+            $params,
+            $requestOptions,
+        );
+        $projectID = $parsed['projectID'];
+        unset($parsed['projectID']);
+
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
@@ -92,7 +103,7 @@ final class KeysRawService implements KeysRawContract
                 $projectID,
                 $connectionID,
             ],
-            options: $requestOptions,
+            options: $options,
             convert: KeyListResponse::class,
             security: ['teamAccessToken' => true],
         );
@@ -103,9 +114,8 @@ final class KeysRawService implements KeysRawContract
      *
      * Rotate a public or read-only secret key for a hosted Chunkify Analytics server. Update the player, dashboard, or MCP client with the new key; the old key stops working immediately. Requires a team owner and a Team Access Key.
      *
-     * @param string $projectID the owning Chunkify project ID
-     * @param string $connectionID the saved analytics connection ID
      * @param string $keyID the analytics key ID
+     * @param array{projectID: string, connectionID: string}|KeyRotateParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<KeyRotateResponse>
@@ -113,11 +123,19 @@ final class KeysRawService implements KeysRawContract
      * @throws APIException
      */
     public function rotate(
-        string $projectID,
-        string $connectionID,
         string $keyID,
+        array|KeyRotateParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
+        [$parsed, $options] = KeyRotateParams::parseRequest(
+            $params,
+            $requestOptions,
+        );
+        $projectID = $parsed['projectID'];
+        unset($parsed['projectID']);
+        $connectionID = $parsed['connectionID'];
+        unset($parsed['connectionID']);
+
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
@@ -127,7 +145,7 @@ final class KeysRawService implements KeysRawContract
                 $connectionID,
                 $keyID,
             ],
-            options: $requestOptions,
+            options: $options,
             convert: KeyRotateResponse::class,
             security: ['teamAccessToken' => true],
         );
