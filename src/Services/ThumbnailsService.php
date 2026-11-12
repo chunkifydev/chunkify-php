@@ -14,13 +14,13 @@ use Chunkify\Thumbnails\Thumbnail;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Format;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Output;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Range;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
+use Chunkify\Thumbnails\ThumbnailCreateStorage;
 use Chunkify\Thumbnails\ThumbnailListParams\Created;
 use Chunkify\Thumbnails\ThumbnailListParams\Status;
 
 /**
  * @phpstan-import-type RangeShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Range
- * @phpstan-import-type StorageShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Storage
+ * @phpstan-import-type ThumbnailCreateStorageShape from \Chunkify\Thumbnails\ThumbnailCreateStorage
  * @phpstan-import-type CreatedShape from \Chunkify\Thumbnails\ThumbnailListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -51,7 +51,7 @@ final class ThumbnailsService implements ThumbnailsContract
      * @param Output|value-of<Output> $output Output selects images or sprites. Defaults to images.
      * @param Range|RangeShape $range Range limits sampling to part of the Source. Defaults to the whole Source duration.
      * @param int $size Size specifies the maximum image or tile edge in pixels, from 64 to 1920. Defaults to 320. Odd sizes are supported. Preserves display aspect ratio without cropping or upscaling.
-     * @param Storage|StorageShape $storage Storage overrides the Project output destination and names the output files. Source storage remains independent.
+     * @param ThumbnailCreateStorage|ThumbnailCreateStorageShape $storage Storage overrides the Project output destination and names the output files. Source storage remains independent.
      * @param list<float> $timestamps Timestamps specifies 1 to 100 Source-relative target times in seconds. Every time must be within the selected range. Repeated targets produce separate outputs.
      * @param RequestOpts|null $requestOptions
      *
@@ -65,7 +65,7 @@ final class ThumbnailsService implements ThumbnailsContract
         Output|string $output = 'images',
         Range|array|null $range = null,
         int $size = 320,
-        Storage|array|null $storage = null,
+        ThumbnailCreateStorage|array|null $storage = null,
         ?array $timestamps = null,
         RequestOptions|array|null $requestOptions = null,
     ): Thumbnail {

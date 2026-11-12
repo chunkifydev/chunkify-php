@@ -8,10 +8,6 @@ use Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput;
 use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput;
 use Chunkify\Assets\Outputs\AssetOutput\AssetThumbnailOutput;
 use Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams;
 use Chunkify\Assets\Outputs\OutputListParams\Status;
 use Chunkify\Assets\Outputs\OutputListParams\Type;
 use Chunkify\Core\Exceptions\APIException;
@@ -19,7 +15,6 @@ use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 
 /**
- * @phpstan-import-type OutputShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 interface OutputsContract
@@ -28,14 +23,16 @@ interface OutputsContract
      * @api
      *
      * @param string $assetID assetId identifies the Asset that owns the output within the authenticated Project
-     * @param OutputShape $output Create one output for an Asset. Type selects its required, strictly validated parameters.
+     * @param mixed $params Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
+     * @param 'transcript' $type type specifies the output kind
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
         string $assetID,
-        AssetCaptionOutputCreateParams|array|AssetStaticRenditionOutputCreateParams|AssetThumbnailOutputCreateParams|AssetTranscriptOutputCreateParams $output,
+        mixed $params,
+        string $type = 'transcript',
         RequestOptions|array|null $requestOptions = null,
     ): AssetCaptionOutput|AssetStaticRenditionOutput|AssetThumbnailOutput|AssetTranscriptOutput;
 
