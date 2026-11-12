@@ -2,10 +2,8 @@
 
 namespace Tests\Services\Assets;
 
-use Chunkify\Assets\Workflow\AssetActionRun;
 use Chunkify\Client;
 use Chunkify\Core\Util;
-use Chunkify\PaginatedResults;
 use Chunkify\Workflows\Runs\WorkflowRun;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
@@ -45,23 +43,5 @@ final class WorkflowTest extends TestCase
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(WorkflowRun::class, $result);
-    }
-
-    #[Test]
-    public function testListActions(): void
-    {
-        if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Mock server tests are disabled');
-        }
-
-        $page = $this->client->assets->workflow->listActions('assetId');
-
-        // @phpstan-ignore-next-line method.alreadyNarrowedType
-        $this->assertInstanceOf(PaginatedResults::class, $page);
-
-        if ($item = $page->getItems()[0] ?? null) {
-            // @phpstan-ignore-next-line method.alreadyNarrowedType
-            $this->assertInstanceOf(AssetActionRun::class, $item);
-        }
     }
 }

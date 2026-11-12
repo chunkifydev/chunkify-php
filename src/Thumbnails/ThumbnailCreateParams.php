@@ -12,7 +12,6 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Format;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Output;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Range;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
 
 /**
  * Generate individual images or sprite sheets from a Source. Each accepted request creates a new resource. Processing continues after the response.
@@ -20,7 +19,7 @@ use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
  * @see Chunkify\Services\ThumbnailsService::create()
  *
  * @phpstan-import-type RangeShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Range
- * @phpstan-import-type StorageShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Storage
+ * @phpstan-import-type ThumbnailCreateStorageShape from \Chunkify\Thumbnails\ThumbnailCreateStorage
  *
  * @phpstan-type ThumbnailCreateParamsShape = array{
  *   sourceID: string,
@@ -30,7 +29,7 @@ use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
  *   output?: null|Output|value-of<Output>,
  *   range?: null|Range|RangeShape,
  *   size?: int|null,
- *   storage?: null|Storage|StorageShape,
+ *   storage?: null|ThumbnailCreateStorage|ThumbnailCreateStorageShape,
  *   timestamps?: list<float>|null,
  * }
  */
@@ -92,7 +91,7 @@ final class ThumbnailCreateParams implements BaseModel
      * Storage overrides the Project output destination and names the output files. Source storage remains independent.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?ThumbnailCreateStorage $storage;
 
     /**
      * Timestamps specifies 1 to 100 Source-relative target times in seconds. Every time must be within the selected range. Repeated targets produce separate outputs.
@@ -130,7 +129,7 @@ final class ThumbnailCreateParams implements BaseModel
      * @param array<string,string>|null $metadata
      * @param Output|value-of<Output>|null $output
      * @param Range|RangeShape|null $range
-     * @param Storage|StorageShape|null $storage
+     * @param ThumbnailCreateStorage|ThumbnailCreateStorageShape|null $storage
      * @param list<float>|null $timestamps
      */
     public static function with(
@@ -141,7 +140,7 @@ final class ThumbnailCreateParams implements BaseModel
         Output|string|null $output = null,
         Range|array|null $range = null,
         ?int $size = null,
-        Storage|array|null $storage = null,
+        ThumbnailCreateStorage|array|null $storage = null,
         ?array $timestamps = null,
     ): self {
         $self = new self;
@@ -248,9 +247,9 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Storage overrides the Project output destination and names the output files. Source storage remains independent.
      *
-     * @param Storage|StorageShape $storage
+     * @param ThumbnailCreateStorage|ThumbnailCreateStorageShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(ThumbnailCreateStorage|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;

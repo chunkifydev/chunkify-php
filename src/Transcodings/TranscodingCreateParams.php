@@ -10,11 +10,6 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Transcodings\TranscodingCreateParams\Format;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\M4aAac;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4Av1;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H264;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H265;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\WebmVp9;
 use Chunkify\Transcodings\TranscodingCreateParams\Storage;
 
 /**
@@ -45,7 +40,7 @@ final class TranscodingCreateParams implements BaseModel
      * @var FormatVariants $format
      */
     #[Required(union: Format::class)]
-    public MP4H264|MP4H265|MP4Av1|WebmVp9|M4aAac $format;
+    public TranscodingMP4H264|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format;
 
     /**
      * SourceId identifies a Source in this Project.
@@ -96,7 +91,7 @@ final class TranscodingCreateParams implements BaseModel
      * @param Storage|StorageShape|null $storage
      */
     public static function with(
-        MP4H264|array|MP4H265|MP4Av1|WebmVp9|M4aAac $format,
+        TranscodingMP4H264|array|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format,
         string $sourceID,
         ?array $metadata = null,
         Storage|array|null $storage = null,
@@ -118,7 +113,7 @@ final class TranscodingCreateParams implements BaseModel
      * @param FormatShape $format
      */
     public function withFormat(
-        MP4H264|array|MP4H265|MP4Av1|WebmVp9|M4aAac $format
+        TranscodingMP4H264|array|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format,
     ): self {
         $self = clone $this;
         $self['format'] = $format;
