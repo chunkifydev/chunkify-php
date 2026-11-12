@@ -180,11 +180,11 @@ final class UploadsService implements UploadsContract
      */
     public function complete(
         string $token,
-        array $parts,
+        ?array $parts = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed {
         $params = [];
-        $params['parts'] = $parts;
+        null !== $parts && $params['parts'] = $parts;
 
         // @phpstan-ignore-next-line argument.type
         $response = $this->raw->complete($token, params: $params, requestOptions: $requestOptions);

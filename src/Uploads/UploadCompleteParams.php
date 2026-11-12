@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Uploads;
 
-use Chunkify\Core\Attributes\Required;
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
@@ -17,7 +17,9 @@ use Chunkify\Uploads\UploadCompleteParams\Part;
  *
  * @phpstan-import-type PartShape from \Chunkify\Uploads\UploadCompleteParams\Part
  *
- * @phpstan-type UploadCompleteParamsShape = array{parts: list<Part|PartShape>}
+ * @phpstan-type UploadCompleteParamsShape = array{
+ *   parts?: list<Part|PartShape>|null
+ * }
  */
 final class UploadCompleteParams implements BaseModel
 {
@@ -28,25 +30,11 @@ final class UploadCompleteParams implements BaseModel
     /**
      * All uploaded parts in ascending part_number order, with the ETags returned by storage.
      *
-     * @var list<Part> $parts
+     * @var list<Part>|null $parts
      */
-    #[Required(list: Part::class)]
-    public array $parts;
+    #[Optional(list: Part::class)]
+    public ?array $parts;
 
-    /**
-     * `new UploadCompleteParams()` is missing required properties by the API.
-     *
-     * To enforce required parameters use
-     * ```
-     * UploadCompleteParams::with(parts: ...)
-     * ```
-     *
-     * Otherwise ensure the following setters are called
-     *
-     * ```
-     * (new UploadCompleteParams)->withParts(...)
-     * ```
-     */
     public function __construct()
     {
         $this->initialize();
@@ -57,13 +45,13 @@ final class UploadCompleteParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Part|PartShape> $parts
+     * @param list<Part|PartShape>|null $parts
      */
-    public static function with(array $parts): self
+    public static function with(?array $parts = null): self
     {
         $self = new self;
 
-        $self['parts'] = $parts;
+        null !== $parts && $self['parts'] = $parts;
 
         return $self;
     }
