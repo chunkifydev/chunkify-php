@@ -11,13 +11,13 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Output Storage selection, independent of Source storage.
  *
- * @phpstan-type ThumbnailCreateStorageShape = array{
+ * @phpstan-type ThumbnailCreateStorageParamsShape = array{
  *   id?: string|null, path?: string|null
  * }
  */
-final class ThumbnailCreateStorage implements BaseModel
+final class ThumbnailCreateStorageParams implements BaseModel
 {
-    /** @use SdkModel<ThumbnailCreateStorageShape> */
+    /** @use SdkModel<ThumbnailCreateStorageParamsShape> */
     use SdkModel;
 
     /**

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chunkify\Projects\Analytics\Connections;
 
 use Chunkify\Core\Attributes\Optional;
+use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
@@ -15,6 +16,7 @@ use Chunkify\Core\Contracts\BaseModel;
  * @see Chunkify\Services\Projects\Analytics\ConnectionsService::update()
  *
  * @phpstan-type ConnectionUpdateParamsShape = array{
+ *   projectID: string,
  *   allowedOrigins?: list<string>|null,
  *   defaultForDashboard?: bool|null,
  *   endpoint?: string|null,
@@ -28,6 +30,9 @@ final class ConnectionUpdateParams implements BaseModel
     /** @use SdkModel<ConnectionUpdateParamsShape> */
     use SdkModel;
     use SdkParams;
+
+    #[Required]
+    public string $projectID;
 
     /**
      * AllowedOrigins lists additional website origins permitted to ingest events for a hosted connection. Shared installation origins remain allowed. An empty list clears project-specific origins. Custom servers manage origins on their own infrastructure.
@@ -67,6 +72,20 @@ final class ConnectionUpdateParams implements BaseModel
     #[Optional('read_key')]
     public ?string $readKey;
 
+    /**
+     * `new ConnectionUpdateParams()` is missing required properties by the API.
+     *
+     * To enforce required parameters use
+     * ```
+     * ConnectionUpdateParams::with(projectID: ...)
+     * ```
+     *
+     * Otherwise ensure the following setters are called
+     *
+     * ```
+     * (new ConnectionUpdateParams)->withProjectID(...)
+     * ```
+     */
     public function __construct()
     {
         $this->initialize();
@@ -80,6 +99,7 @@ final class ConnectionUpdateParams implements BaseModel
      * @param list<string>|null $allowedOrigins
      */
     public static function with(
+        string $projectID,
         ?array $allowedOrigins = null,
         ?bool $defaultForDashboard = null,
         ?string $endpoint = null,
@@ -89,12 +109,22 @@ final class ConnectionUpdateParams implements BaseModel
     ): self {
         $self = new self;
 
+        $self['projectID'] = $projectID;
+
         null !== $allowedOrigins && $self['allowedOrigins'] = $allowedOrigins;
         null !== $defaultForDashboard && $self['defaultForDashboard'] = $defaultForDashboard;
         null !== $endpoint && $self['endpoint'] = $endpoint;
         null !== $name && $self['name'] = $name;
         null !== $publicIngestKey && $self['publicIngestKey'] = $publicIngestKey;
         null !== $readKey && $self['readKey'] = $readKey;
+
+        return $self;
+    }
+
+    public function withProjectID(string $projectID): self
+    {
+        $self = clone $this;
+        $self['projectID'] = $projectID;
 
         return $self;
     }
