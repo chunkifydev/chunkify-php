@@ -18,6 +18,8 @@ use Chunkify\RequestOptions;
 interface JobsRawContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param array<string,mixed>|JobCreateParams $params
@@ -33,6 +35,8 @@ interface JobsRawContract
     ): BaseResponse;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job ID
@@ -48,6 +52,8 @@ interface JobsRawContract
     ): BaseResponse;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param array<string,mixed>|JobListParams $params
@@ -63,6 +69,8 @@ interface JobsRawContract
     ): BaseResponse;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job id
@@ -78,6 +86,8 @@ interface JobsRawContract
     ): BaseResponse;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job id

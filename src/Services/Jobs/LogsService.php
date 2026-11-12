@@ -31,9 +31,11 @@ final class LogsService implements LogsContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve logs for a specific job, either from the transcoder or manager service
+     * Retrieve logs for a specific job, either from the transcoder or manager service. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job ID
      * @param Service|value-of<Service> $service Service type (transcoder or manager)

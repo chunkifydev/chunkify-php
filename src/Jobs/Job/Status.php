@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chunkify\Jobs\Job;
 
 /**
- * Current status of the job. New jobs start as pending while waiting for scheduler admission, then become queued when admitted for processing.
+ * Current status of the job.
  */
 enum Status: string
 {

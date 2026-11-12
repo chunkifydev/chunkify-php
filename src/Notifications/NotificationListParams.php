@@ -22,6 +22,7 @@ use Chunkify\Notifications\NotificationListParams\ResponseStatusCode;
  *
  * @phpstan-type NotificationListParamsShape = array{
  *   created?: null|Created|CreatedShape,
+ *   eventID?: string|null,
  *   events?: list<Event|value-of<Event>>|null,
  *   limit?: int|null,
  *   objectID?: string|null,
@@ -38,6 +39,12 @@ final class NotificationListParams implements BaseModel
 
     #[Optional]
     public ?Created $created;
+
+    /**
+     * Filter deliveries by their originating event ID.
+     */
+    #[Optional]
+    public ?string $eventID;
 
     /**
      * Filter by events.
@@ -90,6 +97,7 @@ final class NotificationListParams implements BaseModel
      */
     public static function with(
         Created|array|null $created = null,
+        ?string $eventID = null,
         ?array $events = null,
         ?int $limit = null,
         ?string $objectID = null,
@@ -100,6 +108,7 @@ final class NotificationListParams implements BaseModel
         $self = new self;
 
         null !== $created && $self['created'] = $created;
+        null !== $eventID && $self['eventID'] = $eventID;
         null !== $events && $self['events'] = $events;
         null !== $limit && $self['limit'] = $limit;
         null !== $objectID && $self['objectID'] = $objectID;
@@ -117,6 +126,17 @@ final class NotificationListParams implements BaseModel
     {
         $self = clone $this;
         $self['created'] = $created;
+
+        return $self;
+    }
+
+    /**
+     * Filter deliveries by their originating event ID.
+     */
+    public function withEventID(string $eventID): self
+    {
+        $self = clone $this;
+        $self['eventID'] = $eventID;
 
         return $self;
     }

@@ -12,8 +12,11 @@ use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\UploadsRawContract;
 use Chunkify\Uploads\Upload;
+use Chunkify\Uploads\UploadCompleteParams;
+use Chunkify\Uploads\UploadCompleteParams\Part;
 use Chunkify\Uploads\UploadCreateParams;
 use Chunkify\Uploads\UploadCreateParams\Storage;
+use Chunkify\Uploads\UploadCreateParams\UploadMode;
 use Chunkify\Uploads\UploadListParams;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
@@ -21,6 +24,7 @@ use Chunkify\Uploads\UploadListParams\Status;
 /**
  * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Uploads\UploadListParams\Created
+ * @phpstan-import-type PartShape from \Chunkify\Uploads\UploadCompleteParams\Part
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class UploadsRawService implements UploadsRawContract
@@ -34,12 +38,16 @@ final class UploadsRawService implements UploadsRawContract
     /**
      * @api
      *
-     * Create a new upload with the specified name.
+     * Create an Upload session for a direct transfer to storage. Multipart creation returns every signed part URL. Retry parts with their original URLs and complete before expiry. Customer storage requires long-lived credentials and an incomplete-multipart lifecycle rule. Start a new Upload after abandoning a session.
      *
      * @param array{
+     *   createAsset?: bool,
+     *   fileSizeBytes?: int,
      *   metadata?: array<string,string>,
      *   storage?: Storage|StorageShape,
+     *   uploadMode?: UploadMode|value-of<UploadMode>,
      *   validityTimeout?: int,
+     *   workflowID?: string|null,
      * }|UploadCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -59,7 +67,7 @@ final class UploadsRawService implements UploadsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/uploads',
+            path: 'uploads',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -87,7 +95,7 @@ final class UploadsRawService implements UploadsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/uploads/%1$s', $uploadID],
+            path: ['uploads/%1$s', $uploadID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Upload::class,
@@ -127,7 +135,7 @@ final class UploadsRawService implements UploadsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/uploads',
+            path: 'uploads',
             query: Util::array_transform_keys($parsed, ['sourceID' => 'source_id']),
             options: $options,
             convert: Upload::class,
@@ -155,7 +163,7 @@ final class UploadsRawService implements UploadsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/uploads/%1$s', $uploadID],
+            path: ['uploads/%1$s', $uploadID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],
@@ -165,9 +173,10 @@ final class UploadsRawService implements UploadsRawContract
     /**
      * @api
      *
-     * After a successful PUT, POST the returned completion_url before expires_at. The token authorizes only this Upload; no API key, cookies, or request body is required. Verifies the stored object and commits one Source relationship. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff; never repeat the PUT just to retry completion.
+     * POST the returned completion_url before expires_at. Single-PUT Uploads send no body; multipart Uploads send every part number and storage ETag. Chunkify verifies the assembled object and atomically creates the Source and optional Asset. An Asset destination conflict returns 409 and fails the Upload without committing Source, Asset, or usage changes. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff.
      *
      * @param string $token Opaque completion capability from completion_url
+     * @param array{parts: list<Part|PartShape>}|UploadCompleteParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
@@ -176,13 +185,20 @@ final class UploadsRawService implements UploadsRawContract
      */
     public function complete(
         string $token,
-        RequestOptions|array|null $requestOptions = null
+        array|UploadCompleteParams $params,
+        RequestOptions|array|null $requestOptions = null,
     ): BaseResponse {
+        [$parsed, $options] = UploadCompleteParams::parseRequest(
+            $params,
+            $requestOptions,
+        );
+
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: ['api/uploads/completion/%1$s', $token],
-            options: $requestOptions,
+            path: ['uploads/completion/%1$s', $token],
+            body: (object) $parsed,
+            options: $options,
             convert: null,
             security: [],
         );

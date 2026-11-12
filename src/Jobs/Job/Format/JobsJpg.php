@@ -22,7 +22,6 @@ use Chunkify\Core\Contracts\BaseModel;
  *   seek?: int|null,
  *   sprite?: bool|null,
  *   width?: int|null,
- *   perTitle: bool,
  * }
  */
 final class JobsJpg implements BaseModel
@@ -35,8 +34,7 @@ final class JobsJpg implements BaseModel
     public string $id = 'jpg';
 
     /**
-     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.).
-     * Must be between 1 and 60 seconds.
+     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.). Must be between 1 and 3600 seconds.
      */
     #[Required]
     public int $interval;
@@ -71,23 +69,17 @@ final class JobsJpg implements BaseModel
     public ?int $width;
 
     /**
-     * Whether per-title optimization was enabled for this job.
-     */
-    #[Required('per_title')]
-    public bool $perTitle;
-
-    /**
      * `new JobsJpg()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
-     * JobsJpg::with(interval: ..., perTitle: ...)
+     * JobsJpg::with(interval: ...)
      * ```
      *
      * Otherwise ensure the following setters are called
      *
      * ```
-     * (new JobsJpg)->withInterval(...)->withPerTitle(...)
+     * (new JobsJpg)->withInterval(...)
      * ```
      */
     public function __construct()
@@ -102,7 +94,6 @@ final class JobsJpg implements BaseModel
      */
     public static function with(
         int $interval,
-        bool $perTitle,
         ?int $chunkDuration = null,
         ?int $duration = null,
         ?int $frames = null,
@@ -114,7 +105,6 @@ final class JobsJpg implements BaseModel
         $self = new self;
 
         $self['interval'] = $interval;
-        $self['perTitle'] = $perTitle;
 
         null !== $chunkDuration && $self['chunkDuration'] = $chunkDuration;
         null !== $duration && $self['duration'] = $duration;
@@ -139,8 +129,7 @@ final class JobsJpg implements BaseModel
     }
 
     /**
-     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.).
-     * Must be between 1 and 60 seconds.
+     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.). Must be between 1 and 3600 seconds.
      */
     public function withInterval(int $interval): self
     {
@@ -210,17 +199,6 @@ final class JobsJpg implements BaseModel
     {
         $self = clone $this;
         $self['width'] = $width;
-
-        return $self;
-    }
-
-    /**
-     * Whether per-title optimization was enabled for this job.
-     */
-    public function withPerTitle(bool $perTitle): self
-    {
-        $self = clone $this;
-        $self['perTitle'] = $perTitle;
 
         return $self;
     }

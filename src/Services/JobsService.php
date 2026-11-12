@@ -69,9 +69,11 @@ final class JobsService implements JobsContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available.
+     * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param FormatShape $format Required format configuration, one and only one valid format configuration must be provided.
      * If you want to use a format without specifying any configuration, use an empty object in the corresponding field.
@@ -112,9 +114,11 @@ final class JobsService implements JobsContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve details of a specific job
+     * Retrieve details of a specific job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job ID
      * @param RequestOpts|null $requestOptions
@@ -132,9 +136,11 @@ final class JobsService implements JobsContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve a list of jobs with optional filtering and pagination
+     * Retrieve a list of jobs with optional filtering and pagination. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $id Filter by job ID
      * @param Created|CreatedShape $created
@@ -184,9 +190,11 @@ final class JobsService implements JobsContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Delete a job.
+     * Delete a job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job id
      * @param RequestOpts|null $requestOptions
@@ -204,9 +212,11 @@ final class JobsService implements JobsContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Cancel a job.
+     * Cancel a job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job id
      * @param RequestOpts|null $requestOptions

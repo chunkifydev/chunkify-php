@@ -23,9 +23,11 @@ final class TranscodersRawService implements TranscodersRawContract
     public function __construct(private Client $client) {}
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve all the transcoders statuses for a specific job
+     * Retrieve all the transcoders statuses for a specific job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job ID to get status for
      * @param RequestOpts|null $requestOptions
@@ -41,7 +43,7 @@ final class TranscodersRawService implements TranscodersRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/jobs/%1$s/transcoders', $jobID],
+            path: ['jobs/%1$s/transcoders', $jobID],
             options: $requestOptions,
             convert: TranscoderListResponse::class,
             security: ['projectAccessToken' => true],

@@ -7,15 +7,21 @@ namespace Chunkify;
 use Chunkify\Core\BaseClient;
 use Chunkify\Core\Implementation\StreamingHttpClient;
 use Chunkify\Core\Util;
+use Chunkify\Services\AssetsService;
+use Chunkify\Services\EventsService;
 use Chunkify\Services\FilesService;
 use Chunkify\Services\JobsService;
+use Chunkify\Services\MetricsService;
 use Chunkify\Services\NotificationsService;
 use Chunkify\Services\ProjectsService;
 use Chunkify\Services\SourcesService;
 use Chunkify\Services\StoragesService;
+use Chunkify\Services\ThumbnailsService;
 use Chunkify\Services\TokensService;
+use Chunkify\Services\TranscodingsService;
 use Chunkify\Services\UploadsService;
 use Chunkify\Services\WebhooksService;
+use Chunkify\Services\WorkflowsService;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 
@@ -34,12 +40,27 @@ class Client extends BaseClient
     /**
      * @api
      */
+    public AssetsService $assets;
+
+    /**
+     * @api
+     */
+    public EventsService $events;
+
+    /**
+     * @api
+     */
     public FilesService $files;
 
     /**
      * @api
      */
     public JobsService $jobs;
+
+    /**
+     * @api
+     */
+    public MetricsService $metrics;
 
     /**
      * @api
@@ -64,7 +85,17 @@ class Client extends BaseClient
     /**
      * @api
      */
+    public ThumbnailsService $thumbnails;
+
+    /**
+     * @api
+     */
     public TokensService $tokens;
+
+    /**
+     * @api
+     */
+    public TranscodingsService $transcodings;
 
     /**
      * @api
@@ -75,6 +106,11 @@ class Client extends BaseClient
      * @api
      */
     public WebhooksService $webhooks;
+
+    /**
+     * @api
+     */
+    public WorkflowsService $workflows;
 
     /**
      * @param RequestOpts|null $requestOptions
@@ -144,15 +180,21 @@ class Client extends BaseClient
             options: $options
         );
 
+        $this->assets = new AssetsService($this);
+        $this->events = new EventsService($this);
         $this->files = new FilesService($this);
         $this->jobs = new JobsService($this);
+        $this->metrics = new MetricsService($this);
         $this->notifications = new NotificationsService($this);
         $this->projects = new ProjectsService($this);
         $this->sources = new SourcesService($this);
         $this->storages = new StoragesService($this);
+        $this->thumbnails = new ThumbnailsService($this);
         $this->tokens = new TokensService($this);
+        $this->transcodings = new TranscodingsService($this);
         $this->uploads = new UploadsService($this);
         $this->webhooks = new WebhooksService($this);
+        $this->workflows = new WorkflowsService($this);
     }
 
     /**
