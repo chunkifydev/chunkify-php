@@ -6,12 +6,16 @@ namespace Chunkify\Services;
 
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
+use Chunkify\Core\Omit;
 use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectListResponse;
+use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ProjectsContract;
+use Chunkify\Services\Projects\AnalyticsConnectionsService;
 
 /**
+ * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class ProjectsService implements ProjectsContract
@@ -22,11 +26,17 @@ final class ProjectsService implements ProjectsContract
     public ProjectsRawService $raw;
 
     /**
+     * @api
+     */
+    public AnalyticsConnectionsService $analyticsConnections;
+
+    /**
      * @internal
      */
     public function __construct(private Client $client)
     {
         $this->raw = new ProjectsRawService($client);
+        $this->analyticsConnections = new AnalyticsConnectionsService($client);
     }
 
     /**
@@ -78,19 +88,25 @@ final class ProjectsService implements ProjectsContract
      * Update a project's name or storage settings. Only team owners can update projects.
      *
      * @param string $projectID Project Id
-     * @param string $name Name is the name of the project. Required when storage_id is not provided.
-     * @param string $storageID StorageId is the storage id of the project. Required when name is not provided.
+     * @param AssetDefaults|AssetDefaultsShape $assetDefaults Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
+     * @param string|Omit|null $defaultWorkflowID DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
+     * @param string $name project name
+     * @param string $storageID ID of this Project's default Storage
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function update(
         string $projectID,
+        AssetDefaults|array|null $assetDefaults = null,
+        string|Omit|null $defaultWorkflowID = Omit::Value,
         ?string $name = null,
         ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed {
         $params = [];
+        null !== $assetDefaults && $params['assetDefaults'] = $assetDefaults;
+        Omit::Value !== $defaultWorkflowID && $params['defaultWorkflowID'] = $defaultWorkflowID;
         null !== $name && $params['name'] = $name;
         null !== $storageID && $params['storageID'] = $storageID;
 
@@ -121,7 +137,7 @@ final class ProjectsService implements ProjectsContract
     /**
      * @api
      *
-     * Delete a project and revoke all associated access tokens. Only team owners can delete projects.
+     * Delete a project and revoke all associated access tokens. Only team owners can delete projects. Customer output files remain in Storage; managed temporary files retain their original expiry.
      *
      * @param string $projectID Project Id
      * @param RequestOpts|null $requestOptions

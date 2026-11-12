@@ -26,9 +26,11 @@ final class LogsRawService implements LogsRawContract
     public function __construct(private Client $client) {}
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve logs for a specific job, either from the transcoder or manager service
+     * Retrieve logs for a specific job, either from the transcoder or manager service. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job ID
      * @param array{
@@ -53,7 +55,7 @@ final class LogsRawService implements LogsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/jobs/%1$s/logs', $jobID],
+            path: ['jobs/%1$s/logs', $jobID],
             query: Util::array_transform_keys(
                 $parsed,
                 ['transcoderID' => 'transcoder_id']

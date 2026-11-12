@@ -11,10 +11,12 @@ use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectCreateParams;
 use Chunkify\Projects\ProjectListResponse;
 use Chunkify\Projects\ProjectUpdateParams;
+use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ProjectsRawContract;
 
 /**
+ * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class ProjectsRawService implements ProjectsRawContract
@@ -49,7 +51,7 @@ final class ProjectsRawService implements ProjectsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/projects',
+            path: 'projects',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -77,7 +79,7 @@ final class ProjectsRawService implements ProjectsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/projects/%1$s', $projectID],
+            path: ['projects/%1$s', $projectID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Project::class,
@@ -91,7 +93,12 @@ final class ProjectsRawService implements ProjectsRawContract
      * Update a project's name or storage settings. Only team owners can update projects.
      *
      * @param string $projectID Project Id
-     * @param array{name?: string, storageID?: string}|ProjectUpdateParams $params
+     * @param array{
+     *   assetDefaults?: AssetDefaults|AssetDefaultsShape,
+     *   defaultWorkflowID?: string|null,
+     *   name?: string,
+     *   storageID?: string,
+     * }|ProjectUpdateParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
@@ -111,7 +118,7 @@ final class ProjectsRawService implements ProjectsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'patch',
-            path: ['api/projects/%1$s', $projectID],
+            path: ['projects/%1$s', $projectID],
             body: (object) $parsed,
             options: $options,
             convert: null,
@@ -136,7 +143,7 @@ final class ProjectsRawService implements ProjectsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/projects',
+            path: 'projects',
             options: $requestOptions,
             convert: ProjectListResponse::class,
             security: ['teamAccessToken' => true],
@@ -146,7 +153,7 @@ final class ProjectsRawService implements ProjectsRawContract
     /**
      * @api
      *
-     * Delete a project and revoke all associated access tokens. Only team owners can delete projects.
+     * Delete a project and revoke all associated access tokens. Only team owners can delete projects. Customer output files remain in Storage; managed temporary files retain their original expiry.
      *
      * @param string $projectID Project Id
      * @param RequestOpts|null $requestOptions
@@ -162,7 +169,7 @@ final class ProjectsRawService implements ProjectsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/projects/%1$s', $projectID],
+            path: ['projects/%1$s', $projectID],
             options: $requestOptions,
             convert: null,
             security: ['teamAccessToken' => true],

@@ -17,7 +17,7 @@ use Chunkify\Jobs\Job\Format\JobsMP4H265;
 use Chunkify\Jobs\Job\Format\JobsWebmVp9;
 
 /**
- * A template defines the transcoding parameters and settings for a job.
+ * The format parameters and settings for a job.
  *
  * @phpstan-import-type JobsMP4Av1Shape from \Chunkify\Jobs\Job\Format\JobsMP4Av1
  * @phpstan-import-type JobsMP4H264Shape from \Chunkify\Jobs\Job\Format\JobsMP4H264

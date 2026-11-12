@@ -16,6 +16,8 @@ use Chunkify\RequestOptions;
 interface LogsRawContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job ID

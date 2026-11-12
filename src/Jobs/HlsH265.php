@@ -33,6 +33,7 @@ use Chunkify\Jobs\HlsH265\Profilev;
  *   hlsEncKey?: string|null,
  *   hlsEncKeyURL?: string|null,
  *   hlsSegmentType?: null|HlsSegmentType|value-of<HlsSegmentType>,
+ *   hlsSingleFile?: bool|null,
  *   hlsTime?: int|null,
  *   level?: null|Level|value-of<Level>,
  *   maxrate?: int|null,
@@ -108,22 +109,19 @@ final class HlsH265 implements BaseModel
     public ?int $duration;
 
     /**
-     * Framerate specifies the output video frame rate.
-     * Must be between 15 and 120 fps.
+     * Framerate specifies the output video frame rate. Must be greater than zero and at most 240 fps.
      */
     #[Optional]
     public ?float $framerate;
 
     /**
-     * Gop specifies the Group of Pictures (GOP) size.
-     * Must be between 1 and 300.
+     * Gop specifies the Group of Pictures (GOP) size. Must be between 1 and 960 frames.
      */
     #[Optional]
     public ?int $gop;
 
     /**
-     * Height specifies the output video height in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Height specifies the output video height in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     #[Optional]
     public ?int $height;
@@ -164,6 +162,12 @@ final class HlsH265 implements BaseModel
      */
     #[Optional('hls_segment_type', enum: HlsSegmentType::class)]
     public ?string $hlsSegmentType;
+
+    /**
+     * HlsSingleFile specifies whether to store HLS segments in one file using byte ranges. Defaults to true. Set to false to create separate segment files.
+     */
+    #[Optional('hls_single_file')]
+    public ?bool $hlsSingleFile;
 
     /**
      * HlsTime specifies the duration of each HLS segment in seconds. Range: 1 to 10.
@@ -246,15 +250,13 @@ final class HlsH265 implements BaseModel
     public ?int $seek;
 
     /**
-     * VideoBitrate specifies the video bitrate in bits per second.
-     * Must be between 100Kbps and 50Mbps.
+     * VideoBitrate specifies the video bitrate in bits per second. Must be between 1 bps and 100 Mbps.
      */
     #[Optional('video_bitrate')]
     public ?int $videoBitrate;
 
     /**
-     * Width specifies the output video width in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Width specifies the output video width in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     #[Optional]
     public ?int $width;
@@ -299,6 +301,7 @@ final class HlsH265 implements BaseModel
         ?string $hlsEncKey = null,
         ?string $hlsEncKeyURL = null,
         HlsSegmentType|string|null $hlsSegmentType = null,
+        ?bool $hlsSingleFile = null,
         ?int $hlsTime = null,
         Level|int|null $level = null,
         ?int $maxrate = null,
@@ -330,6 +333,7 @@ final class HlsH265 implements BaseModel
         null !== $hlsEncKey && $self['hlsEncKey'] = $hlsEncKey;
         null !== $hlsEncKeyURL && $self['hlsEncKeyURL'] = $hlsEncKeyURL;
         null !== $hlsSegmentType && $self['hlsSegmentType'] = $hlsSegmentType;
+        null !== $hlsSingleFile && $self['hlsSingleFile'] = $hlsSingleFile;
         null !== $hlsTime && $self['hlsTime'] = $hlsTime;
         null !== $level && $self['level'] = $level;
         null !== $maxrate && $self['maxrate'] = $maxrate;
@@ -444,8 +448,7 @@ final class HlsH265 implements BaseModel
     }
 
     /**
-     * Framerate specifies the output video frame rate.
-     * Must be between 15 and 120 fps.
+     * Framerate specifies the output video frame rate. Must be greater than zero and at most 240 fps.
      */
     public function withFramerate(float $framerate): self
     {
@@ -456,8 +459,7 @@ final class HlsH265 implements BaseModel
     }
 
     /**
-     * Gop specifies the Group of Pictures (GOP) size.
-     * Must be between 1 and 300.
+     * Gop specifies the Group of Pictures (GOP) size. Must be between 1 and 960 frames.
      */
     public function withGop(int $gop): self
     {
@@ -468,8 +470,7 @@ final class HlsH265 implements BaseModel
     }
 
     /**
-     * Height specifies the output video height in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Height specifies the output video height in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     public function withHeight(int $height): self
     {
@@ -538,6 +539,17 @@ final class HlsH265 implements BaseModel
     ): self {
         $self = clone $this;
         $self['hlsSegmentType'] = $hlsSegmentType;
+
+        return $self;
+    }
+
+    /**
+     * HlsSingleFile specifies whether to store HLS segments in one file using byte ranges. Defaults to true. Set to false to create separate segment files.
+     */
+    public function withHlsSingleFile(bool $hlsSingleFile): self
+    {
+        $self = clone $this;
+        $self['hlsSingleFile'] = $hlsSingleFile;
 
         return $self;
     }
@@ -673,8 +685,7 @@ final class HlsH265 implements BaseModel
     }
 
     /**
-     * VideoBitrate specifies the video bitrate in bits per second.
-     * Must be between 100Kbps and 50Mbps.
+     * VideoBitrate specifies the video bitrate in bits per second. Must be between 1 bps and 100 Mbps.
      */
     public function withVideoBitrate(int $videoBitrate): self
     {
@@ -685,8 +696,7 @@ final class HlsH265 implements BaseModel
     }
 
     /**
-     * Width specifies the output video width in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Width specifies the output video width in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     public function withWidth(int $width): self
     {

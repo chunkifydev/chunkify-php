@@ -15,6 +15,8 @@ use Chunkify\RequestOptions;
 interface TranscodersRawContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job ID to get status for

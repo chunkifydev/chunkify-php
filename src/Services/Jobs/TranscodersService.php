@@ -29,9 +29,11 @@ final class TranscodersService implements TranscodersContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve all the transcoders statuses for a specific job
+     * Retrieve all the transcoders statuses for a specific job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job ID to get status for
      * @param RequestOpts|null $requestOptions
