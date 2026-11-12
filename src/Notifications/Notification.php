@@ -21,6 +21,7 @@ use Chunkify\Webhooks\Webhook;
  *   objectID: string,
  *   payload: string,
  *   webhook: Webhook|WebhookShape,
+ *   eventID?: string|null,
  *   responseStatusCode?: int|null,
  * }
  */
@@ -66,6 +67,12 @@ final class Notification implements BaseModel
      */
     #[Required]
     public Webhook $webhook;
+
+    /**
+     * Originating event ID, when recorded by the event log.
+     */
+    #[Optional('event_id')]
+    public ?string $eventID;
 
     /**
      * HTTP status code received from the webhook endpoint.
@@ -115,6 +122,7 @@ final class Notification implements BaseModel
         string $objectID,
         string $payload,
         Webhook|array $webhook,
+        ?string $eventID = null,
         ?int $responseStatusCode = null,
     ): self {
         $self = new self;
@@ -126,6 +134,7 @@ final class Notification implements BaseModel
         $self['payload'] = $payload;
         $self['webhook'] = $webhook;
 
+        null !== $eventID && $self['eventID'] = $eventID;
         null !== $responseStatusCode && $self['responseStatusCode'] = $responseStatusCode;
 
         return $self;
@@ -197,6 +206,17 @@ final class Notification implements BaseModel
     {
         $self = clone $this;
         $self['webhook'] = $webhook;
+
+        return $self;
+    }
+
+    /**
+     * Originating event ID, when recorded by the event log.
+     */
+    public function withEventID(string $eventID): self
+    {
+        $self = clone $this;
+        $self['eventID'] = $eventID;
 
         return $self;
     }

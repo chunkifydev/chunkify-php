@@ -26,8 +26,8 @@ use Chunkify\Jobs\Job\Transcoder;
  * @phpstan-import-type FormatVariants from \Chunkify\Jobs\Job\Format
  * @phpstan-import-type FormatShape from \Chunkify\Jobs\Job\Format
  * @phpstan-import-type StorageShape from \Chunkify\Jobs\Job\Storage
- * @phpstan-import-type TranscoderShape from \Chunkify\Jobs\Job\Transcoder
  * @phpstan-import-type ChunkifyErrorShape from \Chunkify\ChunkifyError
+ * @phpstan-import-type TranscoderShape from \Chunkify\Jobs\Job\Transcoder
  *
  * @phpstan-type JobShape = array{
  *   id: string,
@@ -38,12 +38,12 @@ use Chunkify\Jobs\Job\Transcoder;
  *   sourceID: string,
  *   status: Status|value-of<Status>,
  *   storage: Storage|StorageShape,
- *   transcoder: Transcoder|TranscoderShape,
  *   updatedAt: \DateTimeInterface,
  *   error?: null|ChunkifyError|ChunkifyErrorShape,
  *   hlsManifestID?: string|null,
  *   metadata?: array<string,string>|null,
  *   startedAt?: \DateTimeInterface|null,
+ *   transcoder?: null|Transcoder|TranscoderShape,
  * }
  */
 final class Job implements BaseModel
@@ -70,7 +70,7 @@ final class Job implements BaseModel
     public \DateTimeInterface $createdAt;
 
     /**
-     * A template defines the transcoding parameters and settings for a job.
+     * The format parameters and settings for a job.
      *
      * @var FormatVariants $format
      */
@@ -84,13 +84,13 @@ final class Job implements BaseModel
     public float $progress;
 
     /**
-     * ID of the source video being transcoded.
+     * ID of the source media being processed.
      */
     #[Required('source_id')]
     public string $sourceID;
 
     /**
-     * Current status of the job. New jobs start as pending while waiting for scheduler admission, then become queued when admitted for processing.
+     * Current status of the job.
      *
      * @var value-of<Status> $status
      */
@@ -102,12 +102,6 @@ final class Job implements BaseModel
      */
     #[Required]
     public Storage $storage;
-
-    /**
-     * The transcoder configuration for a job.
-     */
-    #[Required]
-    public Transcoder $transcoder;
 
     /**
      * Last update timestamp.
@@ -142,6 +136,12 @@ final class Job implements BaseModel
     public ?\DateTimeInterface $startedAt;
 
     /**
+     * The transcoder configuration for a job.
+     */
+    #[Optional]
+    public ?Transcoder $transcoder;
+
+    /**
      * `new Job()` is missing required properties by the API.
      *
      * To enforce required parameters use
@@ -155,7 +155,6 @@ final class Job implements BaseModel
      *   sourceID: ...,
      *   status: ...,
      *   storage: ...,
-     *   transcoder: ...,
      *   updatedAt: ...,
      * )
      * ```
@@ -172,7 +171,6 @@ final class Job implements BaseModel
      *   ->withSourceID(...)
      *   ->withStatus(...)
      *   ->withStorage(...)
-     *   ->withTranscoder(...)
      *   ->withUpdatedAt(...)
      * ```
      */
@@ -188,10 +186,10 @@ final class Job implements BaseModel
      *
      * @param FormatShape $format
      * @param Storage|StorageShape $storage
-     * @param Transcoder|TranscoderShape $transcoder
      * @param Status|value-of<Status> $status
      * @param ChunkifyError|ChunkifyErrorShape|null $error
      * @param array<string,string>|null $metadata
+     * @param Transcoder|TranscoderShape|null $transcoder
      */
     public static function with(
         string $id,
@@ -201,13 +199,13 @@ final class Job implements BaseModel
         float $progress,
         string $sourceID,
         Storage|array $storage,
-        Transcoder|array $transcoder,
         \DateTimeInterface $updatedAt,
         Status|string $status = 'pending',
         ChunkifyError|array|null $error = null,
         ?string $hlsManifestID = null,
         ?array $metadata = null,
         ?\DateTimeInterface $startedAt = null,
+        Transcoder|array|null $transcoder = null,
     ): self {
         $self = new self;
 
@@ -219,13 +217,13 @@ final class Job implements BaseModel
         $self['sourceID'] = $sourceID;
         $self['status'] = $status;
         $self['storage'] = $storage;
-        $self['transcoder'] = $transcoder;
         $self['updatedAt'] = $updatedAt;
 
         null !== $error && $self['error'] = $error;
         null !== $hlsManifestID && $self['hlsManifestID'] = $hlsManifestID;
         null !== $metadata && $self['metadata'] = $metadata;
         null !== $startedAt && $self['startedAt'] = $startedAt;
+        null !== $transcoder && $self['transcoder'] = $transcoder;
 
         return $self;
     }
@@ -264,7 +262,7 @@ final class Job implements BaseModel
     }
 
     /**
-     * A template defines the transcoding parameters and settings for a job.
+     * The format parameters and settings for a job.
      *
      * @param FormatShape $format
      */
@@ -289,7 +287,7 @@ final class Job implements BaseModel
     }
 
     /**
-     * ID of the source video being transcoded.
+     * ID of the source media being processed.
      */
     public function withSourceID(string $sourceID): self
     {
@@ -300,7 +298,7 @@ final class Job implements BaseModel
     }
 
     /**
-     * Current status of the job. New jobs start as pending while waiting for scheduler admission, then become queued when admitted for processing.
+     * Current status of the job.
      *
      * @param Status|value-of<Status> $status
      */
@@ -321,19 +319,6 @@ final class Job implements BaseModel
     {
         $self = clone $this;
         $self['storage'] = $storage;
-
-        return $self;
-    }
-
-    /**
-     * The transcoder configuration for a job.
-     *
-     * @param Transcoder|TranscoderShape $transcoder
-     */
-    public function withTranscoder(Transcoder|array $transcoder): self
-    {
-        $self = clone $this;
-        $self['transcoder'] = $transcoder;
 
         return $self;
     }
@@ -393,6 +378,19 @@ final class Job implements BaseModel
     {
         $self = clone $this;
         $self['startedAt'] = $startedAt;
+
+        return $self;
+    }
+
+    /**
+     * The transcoder configuration for a job.
+     *
+     * @param Transcoder|TranscoderShape $transcoder
+     */
+    public function withTranscoder(Transcoder|array $transcoder): self
+    {
+        $self = clone $this;
+        $self['transcoder'] = $transcoder;
 
         return $self;
     }

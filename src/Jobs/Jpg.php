@@ -34,8 +34,7 @@ final class Jpg implements BaseModel
     public string $id = 'jpg';
 
     /**
-     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.).
-     * Must be between 1 and 60 seconds.
+     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.). Must be between 1 and 3600 seconds.
      */
     #[Required]
     public int $interval;
@@ -130,8 +129,7 @@ final class Jpg implements BaseModel
     }
 
     /**
-     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.).
-     * Must be between 1 and 60 seconds.
+     * Time interval in seconds at which frames are extracted from the video (e.g., interval=10 extracts frames at 0s, 10s, 20s, etc.). Must be between 1 and 3600 seconds.
      */
     public function withInterval(int $interval): self
     {

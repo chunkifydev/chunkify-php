@@ -29,9 +29,11 @@ final class FilesService implements FilesContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve all files associated with a specific job
+     * Retrieve all files associated with a specific job. Deprecated: Job files are a legacy resource. Transcodings and Thumbnails include their output files, and List Asset outputs returns an Asset's outputs.
      *
      * @param string $jobID Job ID
      * @param RequestOpts|null $requestOptions

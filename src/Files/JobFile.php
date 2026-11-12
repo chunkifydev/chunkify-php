@@ -29,6 +29,7 @@ use Chunkify\Core\Omit;
  *   videoFramerate: float,
  *   width: int,
  *   cdnURL?: string|null,
+ *   packageSize?: int|null,
  * }
  */
 final class JobFile implements BaseModel
@@ -91,7 +92,7 @@ final class JobFile implements BaseModel
     public string $path;
 
     /**
-     * Size of the file in bytes.
+     * Size of the object at this File's path in bytes.
      */
     #[Required]
     public int $size;
@@ -137,6 +138,12 @@ final class JobFile implements BaseModel
      */
     #[Optional('cdn_url', nullable: true)]
     public ?string $cdnURL;
+
+    /**
+     * PackageSize specifies the media playlist and every media object it references in bytes. Present only for HLS video media playlists; it excludes the shared master playlist.
+     */
+    #[Optional('package_size')]
+    public ?int $packageSize;
 
     /**
      * `new JobFile()` is missing required properties by the API.
@@ -213,6 +220,7 @@ final class JobFile implements BaseModel
         float $videoFramerate,
         int $width,
         string|Omit|null $cdnURL = Omit::Value,
+        ?int $packageSize = null,
     ): self {
         $self = new self;
 
@@ -234,6 +242,7 @@ final class JobFile implements BaseModel
         $self['width'] = $width;
 
         Omit::Value !== $cdnURL && $self['cdnURL'] = $cdnURL;
+        null !== $packageSize && $self['packageSize'] = $packageSize;
 
         return $self;
     }
@@ -338,7 +347,7 @@ final class JobFile implements BaseModel
     }
 
     /**
-     * Size of the file in bytes.
+     * Size of the object at this File's path in bytes.
      */
     public function withSize(int $size): self
     {
@@ -421,6 +430,17 @@ final class JobFile implements BaseModel
     {
         $self = clone $this;
         $self['cdnURL'] = $cdnURL;
+
+        return $self;
+    }
+
+    /**
+     * PackageSize specifies the media playlist and every media object it references in bytes. Present only for HLS video media playlists; it excludes the shared master playlist.
+     */
+    public function withPackageSize(int $packageSize): self
+    {
+        $self = clone $this;
+        $self['packageSize'] = $packageSize;
 
         return $self;
     }

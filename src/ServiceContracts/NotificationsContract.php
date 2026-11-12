@@ -23,7 +23,7 @@ interface NotificationsContract
      * @api
      *
      * @param Event|value-of<Event> $event event specifies the type of event that triggered the notification
-     * @param string $objectID objectId specifies the object that triggered this notification
+     * @param string $objectID ID of the resource that triggered the event. Use the caption, static rendition, or thumbnail ID for their Asset child events. Replaying asset events, job.created, or source.created requires a retained snapshot. Resource deletion does not prevent replay.
      * @param string $webhookID webhookId specifies the webhook endpoint that will receive the notification
      * @param RequestOpts|null $requestOptions
      *
@@ -53,6 +53,7 @@ interface NotificationsContract
      * @api
      *
      * @param Created|CreatedShape $created
+     * @param string $eventID filter deliveries by their originating event ID
      * @param list<\Chunkify\Notifications\NotificationListParams\Event|value-of<\Chunkify\Notifications\NotificationListParams\Event>> $events Filter by events
      * @param int $limit Pagination limit (max 100)
      * @param string $objectID Filter by object ID
@@ -67,6 +68,7 @@ interface NotificationsContract
      */
     public function list(
         Created|array|null $created = null,
+        ?string $eventID = null,
         ?array $events = null,
         int $limit = 100,
         ?string $objectID = null,

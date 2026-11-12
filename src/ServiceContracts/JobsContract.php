@@ -32,6 +32,8 @@ use Chunkify\RequestOptions;
 interface JobsContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param FormatShape $format Required format configuration, one and only one valid format configuration must be provided.
@@ -60,6 +62,8 @@ interface JobsContract
     ): Job;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job ID
@@ -73,6 +77,8 @@ interface JobsContract
     ): Job;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $id Filter by job ID
@@ -104,6 +110,8 @@ interface JobsContract
     ): PaginatedResults;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job id
@@ -117,6 +125,8 @@ interface JobsContract
     ): mixed;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $jobID Job id

@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace Chunkify\Projects;
 
+use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Core\Omit;
+use Chunkify\Projects\Project\AssetDefaults;
 
 /**
+ * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\Project\AssetDefaults
+ *
  * @phpstan-type ProjectShape = array{
  *   id: string,
+ *   assetDefaults: AssetDefaults|AssetDefaultsShape,
  *   createdAt: \DateTimeInterface,
  *   name: string,
  *   slug: string,
  *   storageID: string,
+ *   defaultWorkflowID?: string|null,
  * }
  */
 final class Project implements BaseModel
@@ -27,6 +34,12 @@ final class Project implements BaseModel
      */
     #[Required]
     public string $id;
+
+    /**
+     * Defaults for new Assets, including Assets created from Uploads.
+     */
+    #[Required('asset_defaults')]
+    public AssetDefaults $assetDefaults;
 
     /**
      * Timestamp when the project was created.
@@ -53,11 +66,24 @@ final class Project implements BaseModel
     public string $storageID;
 
     /**
+     * DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
+     */
+    #[Optional('default_workflow_id', nullable: true)]
+    public ?string $defaultWorkflowID;
+
+    /**
      * `new Project()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
-     * Project::with(id: ..., createdAt: ..., name: ..., slug: ..., storageID: ...)
+     * Project::with(
+     *   id: ...,
+     *   assetDefaults: ...,
+     *   createdAt: ...,
+     *   name: ...,
+     *   slug: ...,
+     *   storageID: ...,
+     * )
      * ```
      *
      * Otherwise ensure the following setters are called
@@ -65,6 +91,7 @@ final class Project implements BaseModel
      * ```
      * (new Project)
      *   ->withID(...)
+     *   ->withAssetDefaults(...)
      *   ->withCreatedAt(...)
      *   ->withName(...)
      *   ->withSlug(...)
@@ -80,21 +107,28 @@ final class Project implements BaseModel
      * Construct an instance from the required parameters.
      *
      * You must use named parameters to construct any parameters with a default value.
+     *
+     * @param AssetDefaults|AssetDefaultsShape $assetDefaults
      */
     public static function with(
         string $id,
+        AssetDefaults|array $assetDefaults,
         \DateTimeInterface $createdAt,
         string $name,
         string $slug,
         string $storageID,
+        string|Omit|null $defaultWorkflowID = Omit::Value,
     ): self {
         $self = new self;
 
         $self['id'] = $id;
+        $self['assetDefaults'] = $assetDefaults;
         $self['createdAt'] = $createdAt;
         $self['name'] = $name;
         $self['slug'] = $slug;
         $self['storageID'] = $storageID;
+
+        Omit::Value !== $defaultWorkflowID && $self['defaultWorkflowID'] = $defaultWorkflowID;
 
         return $self;
     }
@@ -106,6 +140,19 @@ final class Project implements BaseModel
     {
         $self = clone $this;
         $self['id'] = $id;
+
+        return $self;
+    }
+
+    /**
+     * Defaults for new Assets, including Assets created from Uploads.
+     *
+     * @param AssetDefaults|AssetDefaultsShape $assetDefaults
+     */
+    public function withAssetDefaults(AssetDefaults|array $assetDefaults): self
+    {
+        $self = clone $this;
+        $self['assetDefaults'] = $assetDefaults;
 
         return $self;
     }
@@ -150,6 +197,17 @@ final class Project implements BaseModel
     {
         $self = clone $this;
         $self['storageID'] = $storageID;
+
+        return $self;
+    }
+
+    /**
+     * DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
+     */
+    public function withDefaultWorkflowID(?string $defaultWorkflowID): self
+    {
+        $self = clone $this;
+        $self['defaultWorkflowID'] = $defaultWorkflowID;
 
         return $self;
     }

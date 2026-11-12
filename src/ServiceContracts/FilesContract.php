@@ -27,6 +27,8 @@ use Chunkify\RequestOptions;
 interface FilesContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $fileID File ID
@@ -40,6 +42,8 @@ interface FilesContract
     ): JobFile;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $id Filter by file ID
@@ -81,6 +85,8 @@ interface FilesContract
     ): PaginatedResults;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $fileID File id
