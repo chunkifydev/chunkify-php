@@ -109,22 +109,19 @@ final class JobsWebmVp9 implements BaseModel
     public ?int $duration;
 
     /**
-     * Framerate specifies the output video frame rate.
-     * Must be between 15 and 120 fps.
+     * Framerate specifies the output video frame rate. Must be greater than zero and at most 240 fps.
      */
     #[Optional]
     public ?float $framerate;
 
     /**
-     * Gop specifies the Group of Pictures (GOP) size.
-     * Must be between 1 and 300.
+     * Gop specifies the Group of Pictures (GOP) size. Must be between 1 and 960 frames.
      */
     #[Optional]
     public ?int $gop;
 
     /**
-     * Height specifies the output video height in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Height specifies the output video height in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     #[Optional]
     public ?int $height;
@@ -177,15 +174,13 @@ final class JobsWebmVp9 implements BaseModel
     public ?int $seek;
 
     /**
-     * VideoBitrate specifies the video bitrate in bits per second.
-     * Must be between 100Kbps and 50Mbps.
+     * VideoBitrate specifies the video bitrate in bits per second. Must be between 1 bps and 100 Mbps.
      */
     #[Optional('video_bitrate')]
     public ?int $videoBitrate;
 
     /**
-     * Width specifies the output video width in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Width specifies the output video width in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     #[Optional]
     public ?int $width;
@@ -363,8 +358,7 @@ final class JobsWebmVp9 implements BaseModel
     }
 
     /**
-     * Framerate specifies the output video frame rate.
-     * Must be between 15 and 120 fps.
+     * Framerate specifies the output video frame rate. Must be greater than zero and at most 240 fps.
      */
     public function withFramerate(float $framerate): self
     {
@@ -375,8 +369,7 @@ final class JobsWebmVp9 implements BaseModel
     }
 
     /**
-     * Gop specifies the Group of Pictures (GOP) size.
-     * Must be between 1 and 300.
+     * Gop specifies the Group of Pictures (GOP) size. Must be between 1 and 960 frames.
      */
     public function withGop(int $gop): self
     {
@@ -387,8 +380,7 @@ final class JobsWebmVp9 implements BaseModel
     }
 
     /**
-     * Height specifies the output video height in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Height specifies the output video height in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     public function withHeight(int $height): self
     {
@@ -476,8 +468,7 @@ final class JobsWebmVp9 implements BaseModel
     }
 
     /**
-     * VideoBitrate specifies the video bitrate in bits per second.
-     * Must be between 100Kbps and 50Mbps.
+     * VideoBitrate specifies the video bitrate in bits per second. Must be between 1 bps and 100 Mbps.
      */
     public function withVideoBitrate(int $videoBitrate): self
     {
@@ -488,8 +479,7 @@ final class JobsWebmVp9 implements BaseModel
     }
 
     /**
-     * Width specifies the output video width in pixels.
-     * Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
+     * Width specifies the output video width in pixels. Must be between -2 and 7680. Use -2 for automatic calculation while maintaining aspect ratio.
      */
     public function withWidth(int $width): self
     {

@@ -17,6 +17,8 @@ use Chunkify\RequestOptions;
 interface FilesRawContract
 {
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $fileID File ID
@@ -32,6 +34,8 @@ interface FilesRawContract
     ): BaseResponse;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param array<string,mixed>|FileListParams $params
@@ -47,6 +51,8 @@ interface FilesRawContract
     ): BaseResponse;
 
     /**
+     * @deprecated
+     *
      * @api
      *
      * @param string $fileID File id

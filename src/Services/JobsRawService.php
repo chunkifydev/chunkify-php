@@ -36,9 +36,11 @@ final class JobsRawService implements JobsRawContract
     public function __construct(private Client $client) {}
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available.
+     * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param array{
      *   format: FormatShape,
@@ -66,7 +68,7 @@ final class JobsRawService implements JobsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: 'api/jobs',
+            path: 'jobs',
             body: (object) $parsed,
             unwrap: 'data',
             options: $options,
@@ -76,9 +78,11 @@ final class JobsRawService implements JobsRawContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve details of a specific job
+     * Retrieve details of a specific job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job ID
      * @param RequestOpts|null $requestOptions
@@ -94,7 +98,7 @@ final class JobsRawService implements JobsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: ['api/jobs/%1$s', $jobID],
+            path: ['jobs/%1$s', $jobID],
             unwrap: 'data',
             options: $requestOptions,
             convert: Job::class,
@@ -103,9 +107,11 @@ final class JobsRawService implements JobsRawContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Retrieve a list of jobs with optional filtering and pagination
+     * Retrieve a list of jobs with optional filtering and pagination. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param array{
      *   id?: string,
@@ -136,7 +142,7 @@ final class JobsRawService implements JobsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'get',
-            path: 'api/jobs',
+            path: 'jobs',
             query: Util::array_transform_keys(
                 $parsed,
                 [
@@ -153,9 +159,11 @@ final class JobsRawService implements JobsRawContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Delete a job.
+     * Delete a job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job id
      * @param RequestOpts|null $requestOptions
@@ -171,7 +179,7 @@ final class JobsRawService implements JobsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'delete',
-            path: ['api/jobs/%1$s', $jobID],
+            path: ['jobs/%1$s', $jobID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],
@@ -179,9 +187,11 @@ final class JobsRawService implements JobsRawContract
     }
 
     /**
+     * @deprecated
+     *
      * @api
      *
-     * Cancel a job.
+     * Cancel a job. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param string $jobID Job id
      * @param RequestOpts|null $requestOptions
@@ -197,7 +207,7 @@ final class JobsRawService implements JobsRawContract
         // @phpstan-ignore-next-line return.type
         return $this->client->request(
             method: 'post',
-            path: ['api/jobs/%1$s/cancel', $jobID],
+            path: ['jobs/%1$s/cancel', $jobID],
             options: $requestOptions,
             convert: null,
             security: ['projectAccessToken' => true],
