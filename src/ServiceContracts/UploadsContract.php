@@ -113,7 +113,7 @@ interface UploadsContract
      */
     public function complete(
         string $token,
-        array $parts,
+        ?array $parts = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed;
 }

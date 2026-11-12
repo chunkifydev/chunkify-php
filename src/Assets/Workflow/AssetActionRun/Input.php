@@ -6,21 +6,21 @@ namespace Chunkify\Assets\Workflow\AssetActionRun;
 
 use Chunkify\Assets\Workflow\AssetActionRun\Input\LanguageCode;
 use Chunkify\Assets\Workflow\AssetActionRun\Input\Resolution;
-use Chunkify\Assets\Workflow\AssetActionRun\Input\Thumbnails;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Workflows\WorkflowThumbnailParams;
 
 /**
  * Resolved parameters and input references for this execution.
  *
- * @phpstan-import-type ThumbnailsShape from \Chunkify\Assets\Workflow\AssetActionRun\Input\Thumbnails
+ * @phpstan-import-type WorkflowThumbnailParamsShape from \Chunkify\Workflows\WorkflowThumbnailParams
  *
  * @phpstan-type InputShape = array{
  *   languageCode?: null|LanguageCode|value-of<LanguageCode>,
  *   resolution?: null|Resolution|value-of<Resolution>,
  *   sourceCaptionID?: string|null,
- *   thumbnails?: null|Thumbnails|ThumbnailsShape,
+ *   thumbnails?: null|WorkflowThumbnailParams|WorkflowThumbnailParamsShape,
  *   transcriptID?: string|null,
  * }
  */
@@ -56,7 +56,7 @@ final class Input implements BaseModel
      * Thumbnail settings. Included only for create_thumbnails actions.
      */
     #[Optional]
-    public ?Thumbnails $thumbnails;
+    public ?WorkflowThumbnailParams $thumbnails;
 
     /**
      * TranscriptId specifies the original transcript consumed by caption publication. Omitted for actions without a transcript input.
@@ -76,13 +76,13 @@ final class Input implements BaseModel
      *
      * @param LanguageCode|value-of<LanguageCode>|null $languageCode
      * @param Resolution|value-of<Resolution>|null $resolution
-     * @param Thumbnails|ThumbnailsShape|null $thumbnails
+     * @param WorkflowThumbnailParams|WorkflowThumbnailParamsShape|null $thumbnails
      */
     public static function with(
         LanguageCode|string|null $languageCode = null,
         Resolution|string|null $resolution = null,
         ?string $sourceCaptionID = null,
-        Thumbnails|array|null $thumbnails = null,
+        WorkflowThumbnailParams|array|null $thumbnails = null,
         ?string $transcriptID = null,
     ): self {
         $self = new self;
@@ -137,10 +137,11 @@ final class Input implements BaseModel
     /**
      * Thumbnail settings. Included only for create_thumbnails actions.
      *
-     * @param Thumbnails|ThumbnailsShape $thumbnails
+     * @param WorkflowThumbnailParams|WorkflowThumbnailParamsShape $thumbnails
      */
-    public function withThumbnails(Thumbnails|array $thumbnails): self
-    {
+    public function withThumbnails(
+        WorkflowThumbnailParams|array $thumbnails
+    ): self {
         $self = clone $this;
         $self['thumbnails'] = $thumbnails;
 

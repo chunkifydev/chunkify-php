@@ -8,7 +8,6 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Workflows\WorkflowUpdateParams\Rule;
 use Chunkify\Workflows\WorkflowUpdateParams\SchemaVersion;
 
 /**
@@ -16,12 +15,12 @@ use Chunkify\Workflows\WorkflowUpdateParams\SchemaVersion;
  *
  * @see Chunkify\Services\WorkflowsService::update()
  *
- * @phpstan-import-type RuleShape from \Chunkify\Workflows\WorkflowUpdateParams\Rule
+ * @phpstan-import-type WorkflowRuleShape from \Chunkify\Workflows\WorkflowRule
  *
  * @phpstan-type WorkflowUpdateParamsShape = array{
  *   expectedRevision?: int|null,
  *   name?: string|null,
- *   rules?: list<Rule|RuleShape>|null,
+ *   rules?: list<WorkflowRule|WorkflowRuleShape>|null,
  *   schemaVersion?: null|SchemaVersion|value-of<SchemaVersion>,
  * }
  */
@@ -50,9 +49,9 @@ final class WorkflowUpdateParams implements BaseModel
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      * Replaces the complete definition and requires schema_version and expected_revision. Existing Assets and Uploads keep their pinned revision.
      *
-     * @var list<Rule>|null $rules
+     * @var list<WorkflowRule>|null $rules
      */
-    #[Optional(list: Rule::class)]
+    #[Optional(list: WorkflowRule::class)]
     public ?array $rules;
 
     /**
@@ -73,7 +72,7 @@ final class WorkflowUpdateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Rule|RuleShape>|null $rules
+     * @param list<WorkflowRule|WorkflowRuleShape>|null $rules
      * @param SchemaVersion|value-of<SchemaVersion>|null $schemaVersion
      */
     public static function with(
@@ -121,7 +120,7 @@ final class WorkflowUpdateParams implements BaseModel
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      * Replaces the complete definition and requires schema_version and expected_revision. Existing Assets and Uploads keep their pinned revision.
      *
-     * @param list<Rule|RuleShape> $rules
+     * @param list<WorkflowRule|WorkflowRuleShape> $rules
      */
     public function withRules(array $rules): self
     {
