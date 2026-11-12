@@ -7,23 +7,23 @@ namespace Chunkify\Transcodings\TranscodingCreateParams;
 use Chunkify\Core\Concerns\SdkUnion;
 use Chunkify\Core\Conversion\Contracts\Converter;
 use Chunkify\Core\Conversion\Contracts\ConverterSource;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\M4aAac;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4Av1;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H264;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H265;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\WebmVp9;
+use Chunkify\Transcodings\TranscodingM4aAac;
+use Chunkify\Transcodings\TranscodingMP4Av1;
+use Chunkify\Transcodings\TranscodingMP4H264;
+use Chunkify\Transcodings\TranscodingMP4H265;
+use Chunkify\Transcodings\TranscodingWebmVp9;
 
 /**
  * Format specifies the requested encoding settings.
  *
- * @phpstan-import-type MP4H264Shape from \Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H264
- * @phpstan-import-type MP4H265Shape from \Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H265
- * @phpstan-import-type MP4Av1Shape from \Chunkify\Transcodings\TranscodingCreateParams\Format\MP4Av1
- * @phpstan-import-type WebmVp9Shape from \Chunkify\Transcodings\TranscodingCreateParams\Format\WebmVp9
- * @phpstan-import-type M4aAacShape from \Chunkify\Transcodings\TranscodingCreateParams\Format\M4aAac
+ * @phpstan-import-type TranscodingMP4H264Shape from \Chunkify\Transcodings\TranscodingMP4H264
+ * @phpstan-import-type TranscodingMP4H265Shape from \Chunkify\Transcodings\TranscodingMP4H265
+ * @phpstan-import-type TranscodingMP4Av1Shape from \Chunkify\Transcodings\TranscodingMP4Av1
+ * @phpstan-import-type TranscodingWebmVp9Shape from \Chunkify\Transcodings\TranscodingWebmVp9
+ * @phpstan-import-type TranscodingM4aAacShape from \Chunkify\Transcodings\TranscodingM4aAac
  *
- * @phpstan-type FormatVariants = MP4H264|MP4H265|MP4Av1|WebmVp9|M4aAac
- * @phpstan-type FormatShape = FormatVariants|MP4H264Shape|MP4H265Shape|MP4Av1Shape|WebmVp9Shape|M4aAacShape
+ * @phpstan-type FormatVariants = TranscodingMP4H264|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac
+ * @phpstan-type FormatShape = FormatVariants|TranscodingMP4H264Shape|TranscodingMP4H265Shape|TranscodingMP4Av1Shape|TranscodingWebmVp9Shape|TranscodingM4aAacShape
  */
 final class Format implements ConverterSource
 {
@@ -40,11 +40,11 @@ final class Format implements ConverterSource
     public static function variants(): array
     {
         return [
-            'mp4_h264' => MP4H264::class,
-            'mp4_h265' => MP4H265::class,
-            'mp4_av1' => MP4Av1::class,
-            'webm_vp9' => WebmVp9::class,
-            'm4a_aac' => M4aAac::class,
+            'mp4_h264' => TranscodingMP4H264::class,
+            'mp4_h265' => TranscodingMP4H265::class,
+            'mp4_av1' => TranscodingMP4Av1::class,
+            'webm_vp9' => TranscodingWebmVp9::class,
+            'm4a_aac' => TranscodingM4aAac::class,
         ];
     }
 }
