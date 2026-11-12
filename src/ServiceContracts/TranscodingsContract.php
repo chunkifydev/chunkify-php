@@ -8,14 +8,14 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\Transcodings\Transcoding;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\M4aAac;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4Av1;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H264;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\MP4H265;
-use Chunkify\Transcodings\TranscodingCreateParams\Format\WebmVp9;
 use Chunkify\Transcodings\TranscodingCreateParams\Storage;
 use Chunkify\Transcodings\TranscodingListParams\Created;
 use Chunkify\Transcodings\TranscodingListParams\Status;
+use Chunkify\Transcodings\TranscodingM4aAac;
+use Chunkify\Transcodings\TranscodingMP4Av1;
+use Chunkify\Transcodings\TranscodingMP4H264;
+use Chunkify\Transcodings\TranscodingMP4H265;
+use Chunkify\Transcodings\TranscodingWebmVp9;
 
 /**
  * @phpstan-import-type FormatShape from \Chunkify\Transcodings\TranscodingCreateParams\Format
@@ -37,7 +37,7 @@ interface TranscodingsContract
      * @throws APIException
      */
     public function create(
-        MP4H264|array|MP4H265|MP4Av1|WebmVp9|M4aAac $format,
+        TranscodingMP4H264|array|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format,
         string $sourceID,
         ?array $metadata = null,
         Storage|array|null $storage = null,

@@ -41,9 +41,7 @@ final class OutputsTest extends TestCase
 
         $result = $this->client->assets->outputs->create(
             'assetId',
-            output: [
-                'params' => ['resolution' => '1080p'], 'type' => 'static_rendition',
-            ],
+            params: (object) []
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -59,9 +57,8 @@ final class OutputsTest extends TestCase
 
         $result = $this->client->assets->outputs->create(
             'assetId',
-            output: [
-                'params' => ['resolution' => '1080p'], 'type' => 'static_rendition',
-            ],
+            params: (object) [],
+            type: 'transcript'
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
