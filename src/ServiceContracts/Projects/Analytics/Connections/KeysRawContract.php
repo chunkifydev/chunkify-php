@@ -7,8 +7,10 @@ namespace Chunkify\ServiceContracts\Projects\Analytics\Connections;
 use Chunkify\Core\Contracts\BaseResponse;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyCreateParams;
+use Chunkify\Projects\Analytics\Connections\Keys\KeyListParams;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyListResponse;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyNewResponse;
+use Chunkify\Projects\Analytics\Connections\Keys\KeyRotateParams;
 use Chunkify\Projects\Analytics\Connections\Keys\KeyRotateResponse;
 use Chunkify\RequestOptions;
 
@@ -20,8 +22,7 @@ interface KeysRawContract
     /**
      * @api
      *
-     * @param string $projectID the owning Chunkify project ID
-     * @param string $connectionID the saved analytics connection ID
+     * @param string $connectionID path param: The saved analytics connection ID
      * @param array<string,mixed>|KeyCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -30,7 +31,6 @@ interface KeysRawContract
      * @throws APIException
      */
     public function create(
-        string $projectID,
         string $connectionID,
         array|KeyCreateParams $params,
         RequestOptions|array|null $requestOptions = null,
@@ -39,8 +39,8 @@ interface KeysRawContract
     /**
      * @api
      *
-     * @param string $projectID the owning Chunkify project ID
      * @param string $connectionID the saved analytics connection ID
+     * @param array<string,mixed>|KeyListParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<KeyListResponse>
@@ -48,17 +48,16 @@ interface KeysRawContract
      * @throws APIException
      */
     public function list(
-        string $projectID,
         string $connectionID,
+        array|KeyListParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 
     /**
      * @api
      *
-     * @param string $projectID the owning Chunkify project ID
-     * @param string $connectionID the saved analytics connection ID
      * @param string $keyID the analytics key ID
+     * @param array<string,mixed>|KeyRotateParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<KeyRotateResponse>
@@ -66,9 +65,8 @@ interface KeysRawContract
      * @throws APIException
      */
     public function rotate(
-        string $projectID,
-        string $connectionID,
         string $keyID,
+        array|KeyRotateParams $params,
         RequestOptions|array|null $requestOptions = null,
     ): BaseResponse;
 }
