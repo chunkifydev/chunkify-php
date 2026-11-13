@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput;
 
-use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput\Details\Error;
+use Chunkify\AssetOutputError;
 use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput\Details\Progress;
 use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput\Details\RequestedResolution;
 use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput\Details\Status;
@@ -16,7 +16,7 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Details contains the canonical typed output resource, including its available delivery fields.
  *
- * @phpstan-import-type ErrorShape from \Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput\Details\Error
+ * @phpstan-import-type AssetOutputErrorShape from \Chunkify\AssetOutputError
  * @phpstan-import-type ProgressShape from \Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput\Details\Progress
  *
  * @phpstan-type DetailsShape = array{
@@ -38,7 +38,7 @@ use Chunkify\Core\Contracts\BaseModel;
  *   audioSamplerate?: int|null,
  *   cdnURL?: string|null,
  *   duration?: float|null,
- *   error?: null|Error|ErrorShape,
+ *   error?: null|AssetOutputError|AssetOutputErrorShape,
  *   progress?: null|Progress|ProgressShape,
  *   readyAt?: \DateTimeInterface|null,
  *   size?: int|null,
@@ -170,8 +170,11 @@ final class Details implements BaseModel
     #[Optional]
     public ?float $duration;
 
+    /**
+     * A customer-facing Asset output processing failure.
+     */
     #[Optional]
-    public ?Error $error;
+    public ?AssetOutputError $error;
 
     /**
      * Progress specifies the current processing stage and encoding percentage. Omitted after processing ends.
@@ -258,7 +261,7 @@ final class Details implements BaseModel
      *
      * @param RequestedResolution|value-of<RequestedResolution> $requestedResolution
      * @param Status|value-of<Status> $status
-     * @param Error|ErrorShape|null $error
+     * @param AssetOutputError|AssetOutputErrorShape|null $error
      * @param Progress|ProgressShape|null $progress
      */
     public static function with(
@@ -278,7 +281,7 @@ final class Details implements BaseModel
         ?int $audioSamplerate = null,
         ?string $cdnURL = null,
         ?float $duration = null,
-        Error|array|null $error = null,
+        AssetOutputError|array|null $error = null,
         Progress|array|null $progress = null,
         ?\DateTimeInterface $readyAt = null,
         ?int $size = null,
@@ -525,9 +528,11 @@ final class Details implements BaseModel
     }
 
     /**
-     * @param Error|ErrorShape $error
+     * A customer-facing Asset output processing failure.
+     *
+     * @param AssetOutputError|AssetOutputErrorShape $error
      */
-    public function withError(Error|array $error): self
+    public function withError(AssetOutputError|array $error): self
     {
         $self = clone $this;
         $self['error'] = $error;

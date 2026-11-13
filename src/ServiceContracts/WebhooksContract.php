@@ -7,7 +7,21 @@ namespace Chunkify\ServiceContracts;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Exceptions\WebhookException;
 use Chunkify\RequestOptions;
-use Chunkify\Webhooks\UnwrapWebhookEvent;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAsset;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAssetDeleted;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAssetOutput;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAssetOutputDeleted;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadJobCompleted;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadJobCreated;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadJobFailed;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadSourceCreated;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadSourceDeleted;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadThumbnail;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadTranscoding;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadUploadCompleted;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadUploadCreated;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadUploadFailed;
+use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadWorkflowRun;
 use Chunkify\Webhooks\Webhook;
 use Chunkify\Webhooks\WebhookCreateParams\Event;
 use Chunkify\Webhooks\WebhookListResponse;
@@ -101,5 +115,5 @@ interface WebhooksContract
         string $body,
         ?array $headers = null,
         ?string $secret = null
-    ): UnwrapWebhookEvent;
+    ): NotificationPayloadJobCompleted|NotificationPayloadJobFailed|NotificationPayloadJobCreated|NotificationPayloadSourceCreated|NotificationPayloadSourceDeleted|NotificationPayloadUploadCreated|NotificationPayloadUploadCompleted|NotificationPayloadUploadFailed|NotificationPayloadAsset|NotificationPayloadAssetOutput|NotificationPayloadAssetOutputDeleted|NotificationPayloadAssetDeleted|NotificationPayloadWorkflowRun|NotificationPayloadTranscoding|NotificationPayloadThumbnail;
 }

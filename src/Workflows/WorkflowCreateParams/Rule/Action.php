@@ -7,23 +7,23 @@ namespace Chunkify\Workflows\WorkflowCreateParams\Rule;
 use Chunkify\Core\Concerns\SdkUnion;
 use Chunkify\Core\Conversion\Contracts\Converter;
 use Chunkify\Core\Conversion\Contracts\ConverterSource;
-use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowCaptionAction;
-use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowStaticAction;
-use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowThumbnailAction;
-use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranscriptAction;
-use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranslationAction;
+use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowCaptionActionParams;
+use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowStaticActionParams;
+use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowThumbnailActionParams;
+use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranscriptActionParams;
+use Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranslationActionParams;
 
 /**
  * One action to perform when a rule matches. The type determines the required parameters.
  *
- * @phpstan-import-type WorkflowStaticActionShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowStaticAction
- * @phpstan-import-type WorkflowCaptionActionShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowCaptionAction
- * @phpstan-import-type WorkflowTranslationActionShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranslationAction
- * @phpstan-import-type WorkflowThumbnailActionShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowThumbnailAction
- * @phpstan-import-type WorkflowTranscriptActionShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranscriptAction
+ * @phpstan-import-type WorkflowStaticActionParamsShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowStaticActionParams
+ * @phpstan-import-type WorkflowCaptionActionParamsShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowCaptionActionParams
+ * @phpstan-import-type WorkflowTranslationActionParamsShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranslationActionParams
+ * @phpstan-import-type WorkflowThumbnailActionParamsShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowThumbnailActionParams
+ * @phpstan-import-type WorkflowTranscriptActionParamsShape from \Chunkify\Workflows\WorkflowCreateParams\Rule\Action\WorkflowTranscriptActionParams
  *
- * @phpstan-type ActionVariants = WorkflowStaticAction|WorkflowCaptionAction|WorkflowTranslationAction|WorkflowThumbnailAction|WorkflowTranscriptAction
- * @phpstan-type ActionShape = ActionVariants|WorkflowStaticActionShape|WorkflowCaptionActionShape|WorkflowTranslationActionShape|WorkflowThumbnailActionShape|WorkflowTranscriptActionShape
+ * @phpstan-type ActionVariants = WorkflowStaticActionParams|WorkflowCaptionActionParams|WorkflowTranslationActionParams|WorkflowThumbnailActionParams|WorkflowTranscriptActionParams
+ * @phpstan-type ActionShape = ActionVariants|WorkflowStaticActionParamsShape|WorkflowCaptionActionParamsShape|WorkflowTranslationActionParamsShape|WorkflowThumbnailActionParamsShape|WorkflowTranscriptActionParamsShape
  */
 final class Action implements ConverterSource
 {
@@ -40,11 +40,11 @@ final class Action implements ConverterSource
     public static function variants(): array
     {
         return [
-            'create_static_rendition' => WorkflowStaticAction::class,
-            'create_caption' => WorkflowCaptionAction::class,
-            'translate_caption' => WorkflowTranslationAction::class,
-            'create_thumbnails' => WorkflowThumbnailAction::class,
-            'create_transcript' => WorkflowTranscriptAction::class,
+            'create_static_rendition' => WorkflowStaticActionParams::class,
+            'create_caption' => WorkflowCaptionActionParams::class,
+            'translate_caption' => WorkflowTranslationActionParams::class,
+            'create_thumbnails' => WorkflowThumbnailActionParams::class,
+            'create_transcript' => WorkflowTranscriptActionParams::class,
         ];
     }
 }
