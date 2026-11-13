@@ -8,6 +8,10 @@ use Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput;
 use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput;
 use Chunkify\Assets\Outputs\AssetOutput\AssetThumbnailOutput;
 use Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams;
 use Chunkify\Assets\Outputs\OutputListParams\Status;
 use Chunkify\Assets\Outputs\OutputListParams\Type;
 use Chunkify\Client;
@@ -20,6 +24,7 @@ use Chunkify\ServiceContracts\Assets\OutputsContract;
 /**
  * Automatic video-on-demand Assets and independent H.264 MP4 static renditions.
  *
+ * @phpstan-import-type OutputShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class OutputsService implements OutputsContract
@@ -43,24 +48,21 @@ final class OutputsService implements OutputsContract
      * Create one caption, static rendition or additional thumbnail output. The accepted output processes asynchronously and is returned in the same envelope as output reads.
      *
      * @param string $assetID assetId identifies the Asset that owns the output within the authenticated Project
-     * @param mixed $params Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
-     * @param 'transcript' $type type specifies the output kind
+     * @param OutputShape $output Create one output for an Asset. Type selects its required, strictly validated parameters.
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
      */
     public function create(
         string $assetID,
-        mixed $params,
-        string $type = 'transcript',
+        AssetCaptionOutputCreateParams|array|AssetStaticRenditionOutputCreateParams|AssetThumbnailOutputCreateParams|AssetTranscriptOutputCreateParams $output,
         RequestOptions|array|null $requestOptions = null,
     ): AssetCaptionOutput|AssetStaticRenditionOutput|AssetThumbnailOutput|AssetTranscriptOutput {
-        $params1 = [];
-        null !== $params && $params1['params'] = $params;
-        $params1['type'] = $type;
+        $params = [];
+        $params['output'] = $output;
 
         // @phpstan-ignore-next-line argument.type
-        $response = $this->raw->create($assetID, params: $params1, requestOptions: $requestOptions);
+        $response = $this->raw->create($assetID, params: $params, requestOptions: $requestOptions);
 
         return $response->parse();
     }

@@ -7,7 +7,7 @@ namespace Chunkify\Services\Assets\Workflow;
 use Chunkify\Assets\Workflow\Actions\ActionListParams\Created;
 use Chunkify\Assets\Workflow\Actions\ActionListParams\Status;
 use Chunkify\Assets\Workflow\Actions\ActionListParams\Type;
-use Chunkify\Assets\Workflow\AssetActionRun;
+use Chunkify\Assets\Workflow\Actions\AssetActionRun;
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Util;
