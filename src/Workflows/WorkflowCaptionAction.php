@@ -12,11 +12,12 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Generates or reuses original captions and their transcript from the Asset's speech.
  *
+ * @phpstan-import-type WorkflowCaptionShape from \Chunkify\Workflows\WorkflowCaption
  * @phpstan-import-type WorkflowOutputBindingShape from \Chunkify\Workflows\WorkflowOutputBinding
  *
  * @phpstan-type WorkflowCaptionActionShape = array{
  *   id: string,
- *   params: mixed,
+ *   params: WorkflowCaption|WorkflowCaptionShape,
  *   type: 'create_caption',
  *   transcriptID?: null|WorkflowOutputBinding|WorkflowOutputBindingShape,
  * }
@@ -45,7 +46,7 @@ final class WorkflowCaptionAction implements BaseModel
      * Params specifies caption generation settings. Pass an empty object.
      */
     #[Required]
-    public mixed $params;
+    public WorkflowCaption $params;
 
     /**
      * TranscriptId binds caption publication to the transcript in the triggering event. Use it only when connected to create_transcript. When omitted, creates or reuses the Asset’s original transcript.
@@ -77,12 +78,13 @@ final class WorkflowCaptionAction implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
+     * @param WorkflowCaption|WorkflowCaptionShape $params
      * @param WorkflowOutputBinding|WorkflowOutputBindingShape|null $transcriptID
      */
     public static function with(
         string $id,
-        mixed $params,
-        WorkflowOutputBinding|array|null $transcriptID = null
+        WorkflowCaption|array $params,
+        WorkflowOutputBinding|array|null $transcriptID = null,
     ): self {
         $self = new self;
 
@@ -108,8 +110,10 @@ final class WorkflowCaptionAction implements BaseModel
 
     /**
      * Params specifies caption generation settings. Pass an empty object.
+     *
+     * @param WorkflowCaption|WorkflowCaptionShape $params
      */
-    public function withParams(mixed $params): self
+    public function withParams(WorkflowCaption|array $params): self
     {
         $self = clone $this;
         $self['params'] = $params;

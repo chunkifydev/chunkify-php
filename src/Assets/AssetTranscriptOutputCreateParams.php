@@ -11,8 +11,11 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Create or reuse the original-language transcript for an Asset. Caption generation shares this transcript and its speech-recognition charge.
  *
+ * @phpstan-import-type AssetTranscriptOutputParamsShape from \Chunkify\Assets\AssetTranscriptOutputParams
+ *
  * @phpstan-type AssetTranscriptOutputCreateParamsShape = array{
- *   params: mixed, type: 'transcript'
+ *   params: AssetTranscriptOutputParams|AssetTranscriptOutputParamsShape,
+ *   type: 'transcript',
  * }
  */
 final class AssetTranscriptOutputCreateParams implements BaseModel
@@ -32,7 +35,7 @@ final class AssetTranscriptOutputCreateParams implements BaseModel
      * Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
      */
     #[Required]
-    public mixed $params;
+    public AssetTranscriptOutputParams $params;
 
     /**
      * `new AssetTranscriptOutputCreateParams()` is missing required properties by the API.
@@ -57,8 +60,10 @@ final class AssetTranscriptOutputCreateParams implements BaseModel
      * Construct an instance from the required parameters.
      *
      * You must use named parameters to construct any parameters with a default value.
+     *
+     * @param AssetTranscriptOutputParams|AssetTranscriptOutputParamsShape $params
      */
-    public static function with(mixed $params): self
+    public static function with(AssetTranscriptOutputParams|array $params): self
     {
         $self = new self;
 
@@ -69,8 +74,10 @@ final class AssetTranscriptOutputCreateParams implements BaseModel
 
     /**
      * Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
+     *
+     * @param AssetTranscriptOutputParams|AssetTranscriptOutputParamsShape $params
      */
-    public function withParams(mixed $params): self
+    public function withParams(AssetTranscriptOutputParams|array $params): self
     {
         $self = clone $this;
         $self['params'] = $params;

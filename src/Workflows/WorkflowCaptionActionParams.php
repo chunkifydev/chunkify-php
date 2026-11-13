@@ -12,11 +12,12 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Generates or reuses original captions and their transcript from the Asset's speech.
  *
+ * @phpstan-import-type WorkflowCaptionParamsShape from \Chunkify\Workflows\WorkflowCaptionParams
  * @phpstan-import-type WorkflowOutputBindingParamsShape from \Chunkify\Workflows\WorkflowOutputBindingParams
  *
  * @phpstan-type WorkflowCaptionActionParamsShape = array{
  *   id: string,
- *   params: mixed,
+ *   params: WorkflowCaptionParams|WorkflowCaptionParamsShape,
  *   type: 'create_caption',
  *   transcriptID?: null|WorkflowOutputBindingParams|WorkflowOutputBindingParamsShape,
  * }
@@ -45,7 +46,7 @@ final class WorkflowCaptionActionParams implements BaseModel
      * Params specifies caption generation settings. Pass an empty object.
      */
     #[Required]
-    public mixed $params;
+    public WorkflowCaptionParams $params;
 
     /**
      * TranscriptId binds caption publication to the transcript in the triggering event. Use it only when connected to create_transcript. When omitted, creates or reuses the Asset’s original transcript.
@@ -77,11 +78,12 @@ final class WorkflowCaptionActionParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
+     * @param WorkflowCaptionParams|WorkflowCaptionParamsShape $params
      * @param WorkflowOutputBindingParams|WorkflowOutputBindingParamsShape|null $transcriptID
      */
     public static function with(
         string $id,
-        mixed $params,
+        WorkflowCaptionParams|array $params,
         WorkflowOutputBindingParams|array|null $transcriptID = null,
     ): self {
         $self = new self;
@@ -108,8 +110,10 @@ final class WorkflowCaptionActionParams implements BaseModel
 
     /**
      * Params specifies caption generation settings. Pass an empty object.
+     *
+     * @param WorkflowCaptionParams|WorkflowCaptionParamsShape $params
      */
-    public function withParams(mixed $params): self
+    public function withParams(WorkflowCaptionParams|array $params): self
     {
         $self = clone $this;
         $self['params'] = $params;
