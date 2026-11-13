@@ -7,7 +7,6 @@ namespace Chunkify\Tokens;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Tokens\Token\Scope;
 
 /**
  * @phpstan-type TokenShape = array{
@@ -16,7 +15,7 @@ use Chunkify\Tokens\Token\Scope;
  *   createdAt: \DateTimeInterface,
  *   name: string,
  *   projectID: string,
- *   scope: Scope|value-of<Scope>,
+ *   scope: TokenScope|value-of<TokenScope>,
  * }
  */
 final class Token implements BaseModel
@@ -57,9 +56,9 @@ final class Token implements BaseModel
     /**
      * Access scope of the token.
      *
-     * @var value-of<Scope> $scope
+     * @var value-of<TokenScope> $scope
      */
-    #[Required(enum: Scope::class)]
+    #[Required(enum: TokenScope::class)]
     public string $scope;
 
     /**
@@ -94,7 +93,7 @@ final class Token implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Scope|value-of<Scope> $scope
+     * @param TokenScope|value-of<TokenScope> $scope
      */
     public static function with(
         string $id,
@@ -102,7 +101,7 @@ final class Token implements BaseModel
         \DateTimeInterface $createdAt,
         string $name,
         string $projectID,
-        Scope|string $scope,
+        TokenScope|string $scope,
     ): self {
         $self = new self;
 
@@ -174,9 +173,9 @@ final class Token implements BaseModel
     /**
      * Access scope of the token.
      *
-     * @param Scope|value-of<Scope> $scope
+     * @param TokenScope|value-of<TokenScope> $scope
      */
-    public function withScope(Scope|string $scope): self
+    public function withScope(TokenScope|string $scope): self
     {
         $self = clone $this;
         $self['scope'] = $scope;

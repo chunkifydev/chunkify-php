@@ -9,7 +9,6 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Omit;
-use Chunkify\Uploads\UploadCreateParams\Storage;
 use Chunkify\Uploads\UploadCreateParams\UploadMode;
 
 /**
@@ -17,13 +16,13 @@ use Chunkify\Uploads\UploadCreateParams\UploadMode;
  *
  * @see Chunkify\Services\UploadsService::create()
  *
- * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
+ * @phpstan-import-type UploadCreateStorageParamsShape from \Chunkify\Uploads\UploadCreateStorageParams
  *
  * @phpstan-type UploadCreateParamsShape = array{
  *   createAsset?: bool|null,
  *   fileSizeBytes?: int|null,
  *   metadata?: array<string,string>|null,
- *   storage?: null|Storage|StorageShape,
+ *   storage?: null|UploadCreateStorageParams|UploadCreateStorageParamsShape,
  *   uploadMode?: null|UploadMode|value-of<UploadMode>,
  *   validityTimeout?: int|null,
  *   workflowID?: string|null,
@@ -60,7 +59,7 @@ final class UploadCreateParams implements BaseModel
      * Optional Storage override. Omit id to use the Project default. Customer-connected Storage requires path; Chunkify Storage generates its own path.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?UploadCreateStorageParams $storage;
 
     /**
      * UploadMode specifies the transfer method. Defaults to auto. Auto chooses multipart above 100 MiB and single PUT at or below 100 MiB for every Storage provider. Multipart requires a provider that supports the required multipart operations and signed part URLs. Provider failures return an error without falling back to single PUT.
@@ -93,14 +92,14 @@ final class UploadCreateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param array<string,string>|null $metadata
-     * @param Storage|StorageShape|null $storage
+     * @param UploadCreateStorageParams|UploadCreateStorageParamsShape|null $storage
      * @param UploadMode|value-of<UploadMode>|null $uploadMode
      */
     public static function with(
         ?bool $createAsset = null,
         ?int $fileSizeBytes = null,
         ?array $metadata = null,
-        Storage|array|null $storage = null,
+        UploadCreateStorageParams|array|null $storage = null,
         UploadMode|string|null $uploadMode = null,
         ?int $validityTimeout = null,
         string|Omit|null $workflowID = Omit::Value,
@@ -157,9 +156,9 @@ final class UploadCreateParams implements BaseModel
     /**
      * Optional Storage override. Omit id to use the Project default. Customer-connected Storage requires path; Chunkify Storage generates its own path.
      *
-     * @param Storage|StorageShape $storage
+     * @param UploadCreateStorageParams|UploadCreateStorageParamsShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(UploadCreateStorageParams|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;

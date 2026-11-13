@@ -7,15 +7,15 @@ namespace Chunkify\Jobs\Transcoders;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Jobs\Transcoders\TranscoderListResponse\Data;
+use Chunkify\TranscoderStatus;
 
 /**
  * Response containing a list of transcoders for a job.
  *
- * @phpstan-import-type DataShape from \Chunkify\Jobs\Transcoders\TranscoderListResponse\Data
+ * @phpstan-import-type TranscoderStatusShape from \Chunkify\TranscoderStatus
  *
  * @phpstan-type TranscoderListResponseShape = array{
- *   data: list<Data|DataShape>, status: 'success'
+ *   data: list<TranscoderStatus|TranscoderStatusShape>, status: 'success'
  * }
  */
 final class TranscoderListResponse implements BaseModel
@@ -31,8 +31,8 @@ final class TranscoderListResponse implements BaseModel
     #[Required]
     public string $status = 'success';
 
-    /** @var list<Data> $data */
-    #[Required(list: Data::class)]
+    /** @var list<TranscoderStatus> $data */
+    #[Required(list: TranscoderStatus::class)]
     public array $data;
 
     /**
@@ -59,7 +59,7 @@ final class TranscoderListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Data|DataShape> $data
+     * @param list<TranscoderStatus|TranscoderStatusShape> $data
      */
     public static function with(array $data): self
     {
@@ -71,7 +71,7 @@ final class TranscoderListResponse implements BaseModel
     }
 
     /**
-     * @param list<Data|DataShape> $data
+     * @param list<TranscoderStatus|TranscoderStatusShape> $data
      */
     public function withData(array $data): self
     {

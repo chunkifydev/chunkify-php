@@ -8,19 +8,18 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Workflows\Runs\WorkflowRun\Actions;
-use Chunkify\Workflows\Runs\WorkflowRun\AssetExecutionStatus;
-use Chunkify\Workflows\Runs\WorkflowRun\Status;
+use Chunkify\Workflows\WorkflowActionCounts;
+use Chunkify\Workflows\WorkflowRunStatus;
 
 /**
  * One execution of Workflow rules for an Asset, started by an event or by updating to a newer revision.
  *
- * @phpstan-import-type ActionsShape from \Chunkify\Workflows\Runs\WorkflowRun\Actions
+ * @phpstan-import-type WorkflowActionCountsShape from \Chunkify\Workflows\WorkflowActionCounts
  *
  * @phpstan-type WorkflowRunShape = array{
  *   id: string,
- *   actions: Actions|ActionsShape,
- *   assetExecutionStatus: AssetExecutionStatus|value-of<AssetExecutionStatus>,
+ *   actions: WorkflowActionCounts|WorkflowActionCountsShape,
+ *   assetExecutionStatus: WorkflowRunStatus|value-of<WorkflowRunStatus>,
  *   assetID: string,
  *   completedAt: \DateTimeInterface|null,
  *   createdAt: \DateTimeInterface,
@@ -28,7 +27,7 @@ use Chunkify\Workflows\Runs\WorkflowRun\Status;
  *   eventID: string|null,
  *   revision: int,
  *   rootRunID: string,
- *   status: Status|value-of<Status>,
+ *   status: WorkflowRunStatus|value-of<WorkflowRunStatus>,
  *   updatedAt: \DateTimeInterface,
  *   workflowID: string,
  *   error?: string|null,
@@ -49,15 +48,15 @@ final class WorkflowRun implements BaseModel
      * Counts of action outcomes in this run. Reused actions are included in completed.
      */
     #[Required]
-    public Actions $actions;
+    public WorkflowActionCounts $actions;
 
     /**
      * AssetExecutionStatus specifies the combined status of this revision for the Asset across retained runs.
      * Any failed action or run makes it failed. Pending or active work, or an Asset still preparing for an unarchived Workflow, makes it running. Otherwise it is completed.
      *
-     * @var value-of<AssetExecutionStatus> $assetExecutionStatus
+     * @var value-of<WorkflowRunStatus> $assetExecutionStatus
      */
-    #[Required('asset_execution_status', enum: AssetExecutionStatus::class)]
+    #[Required('asset_execution_status', enum: WorkflowRunStatus::class)]
     public string $assetExecutionStatus;
 
     /**
@@ -105,9 +104,9 @@ final class WorkflowRun implements BaseModel
     /**
      * Current status of this event run, based on its own actions.
      *
-     * @var value-of<Status> $status
+     * @var value-of<WorkflowRunStatus> $status
      */
-    #[Required(enum: Status::class)]
+    #[Required(enum: WorkflowRunStatus::class)]
     public string $status;
 
     /**
@@ -179,14 +178,14 @@ final class WorkflowRun implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Actions|ActionsShape $actions
-     * @param AssetExecutionStatus|value-of<AssetExecutionStatus> $assetExecutionStatus
-     * @param Status|value-of<Status> $status
+     * @param WorkflowActionCounts|WorkflowActionCountsShape $actions
+     * @param WorkflowRunStatus|value-of<WorkflowRunStatus> $assetExecutionStatus
+     * @param WorkflowRunStatus|value-of<WorkflowRunStatus> $status
      */
     public static function with(
         string $id,
-        Actions|array $actions,
-        AssetExecutionStatus|string $assetExecutionStatus,
+        WorkflowActionCounts|array $actions,
+        WorkflowRunStatus|string $assetExecutionStatus,
         string $assetID,
         ?\DateTimeInterface $completedAt,
         \DateTimeInterface $createdAt,
@@ -194,7 +193,7 @@ final class WorkflowRun implements BaseModel
         ?string $eventID,
         int $revision,
         string $rootRunID,
-        Status|string $status,
+        WorkflowRunStatus|string $status,
         \DateTimeInterface $updatedAt,
         string $workflowID,
         ?string $error = null,
@@ -234,9 +233,9 @@ final class WorkflowRun implements BaseModel
     /**
      * Counts of action outcomes in this run. Reused actions are included in completed.
      *
-     * @param Actions|ActionsShape $actions
+     * @param WorkflowActionCounts|WorkflowActionCountsShape $actions
      */
-    public function withActions(Actions|array $actions): self
+    public function withActions(WorkflowActionCounts|array $actions): self
     {
         $self = clone $this;
         $self['actions'] = $actions;
@@ -248,10 +247,10 @@ final class WorkflowRun implements BaseModel
      * AssetExecutionStatus specifies the combined status of this revision for the Asset across retained runs.
      * Any failed action or run makes it failed. Pending or active work, or an Asset still preparing for an unarchived Workflow, makes it running. Otherwise it is completed.
      *
-     * @param AssetExecutionStatus|value-of<AssetExecutionStatus> $assetExecutionStatus
+     * @param WorkflowRunStatus|value-of<WorkflowRunStatus> $assetExecutionStatus
      */
     public function withAssetExecutionStatus(
-        AssetExecutionStatus|string $assetExecutionStatus
+        WorkflowRunStatus|string $assetExecutionStatus
     ): self {
         $self = clone $this;
         $self['assetExecutionStatus'] = $assetExecutionStatus;
@@ -339,9 +338,9 @@ final class WorkflowRun implements BaseModel
     /**
      * Current status of this event run, based on its own actions.
      *
-     * @param Status|value-of<Status> $status
+     * @param WorkflowRunStatus|value-of<WorkflowRunStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(WorkflowRunStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;

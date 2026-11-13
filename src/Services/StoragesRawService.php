@@ -10,12 +10,12 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\StoragesRawContract;
 use Chunkify\Storages\Storage;
-use Chunkify\Storages\Storage\StorageAws;
-use Chunkify\Storages\Storage\StorageChunkify;
-use Chunkify\Storages\Storage\StorageCloudflare;
-use Chunkify\Storages\Storage\StorageS3Compatible;
+use Chunkify\Storages\StorageAws;
+use Chunkify\Storages\StorageChunkify;
+use Chunkify\Storages\StorageCloudflare;
 use Chunkify\Storages\StorageCreateParams;
 use Chunkify\Storages\StorageListResponse;
+use Chunkify\Storages\StorageS3Compatible;
 use Chunkify\Storages\StorageUpdateParams;
 
 /**

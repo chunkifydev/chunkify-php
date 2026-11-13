@@ -11,7 +11,7 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\WebhooksRawContract;
 use Chunkify\Webhooks\Webhook;
 use Chunkify\Webhooks\WebhookCreateParams;
-use Chunkify\Webhooks\WebhookCreateParams\Event;
+use Chunkify\Webhooks\WebhookEvent;
 use Chunkify\Webhooks\WebhookListResponse;
 use Chunkify\Webhooks\WebhookUpdateParams;
 
@@ -32,7 +32,9 @@ final class WebhooksRawService implements WebhooksRawContract
      * Create a new webhook for a project. The webhook will receive notifications for specified events.
      *
      * @param array{
-     *   url: string, enabled?: bool, events?: list<Event|value-of<Event>>
+     *   url: string,
+     *   enabled?: bool,
+     *   events?: list<WebhookEvent|value-of<WebhookEvent>>,
      * }|WebhookCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -95,8 +97,7 @@ final class WebhooksRawService implements WebhooksRawContract
      *
      * @param string $webhookID Webhook ID
      * @param array{
-     *   enabled?: bool,
-     *   events?: list<WebhookUpdateParams\Event|value-of<WebhookUpdateParams\Event>>,
+     *   enabled?: bool, events?: list<WebhookEvent|value-of<WebhookEvent>>
      * }|WebhookUpdateParams $params
      * @param RequestOpts|null $requestOptions
      *

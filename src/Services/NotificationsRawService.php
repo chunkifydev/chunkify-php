@@ -10,13 +10,13 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Util;
 use Chunkify\Notifications\Notification;
 use Chunkify\Notifications\NotificationCreateParams;
-use Chunkify\Notifications\NotificationCreateParams\Event;
 use Chunkify\Notifications\NotificationListParams;
 use Chunkify\Notifications\NotificationListParams\Created;
 use Chunkify\Notifications\NotificationListParams\ResponseStatusCode;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\NotificationsRawContract;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * @phpstan-import-type CreatedShape from \Chunkify\Notifications\NotificationListParams\Created
@@ -37,7 +37,7 @@ final class NotificationsRawService implements NotificationsRawContract
      * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
      *
      * @param array{
-     *   event: value-of<Event>, objectID: string, webhookID: string
+     *   event: value-of<WebhookEvent>, objectID: string, webhookID: string
      * }|NotificationCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -101,7 +101,7 @@ final class NotificationsRawService implements NotificationsRawContract
      * @param array{
      *   created?: Created|CreatedShape,
      *   eventID?: string,
-     *   events?: list<NotificationListParams\Event|value-of<NotificationListParams\Event>>,
+     *   events?: list<WebhookEvent|value-of<WebhookEvent>>,
      *   limit?: int,
      *   objectID?: string,
      *   offset?: int,
