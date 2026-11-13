@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.4.0](https://github.com/chunkifydev/chunkify-php/compare/v0.3.0...v0.4.0) (2026-11-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* **config:** declare every spec schema as an SDK model
+* **config:** restore the pre-#19 type models and declare AssetOutputError
+* mirror the OpenAPI spec for analytics params and thumbnail storage
+
+### Features
+
+* **config:** declare every spec schema as an SDK model ([20adc3d](https://github.com/chunkifydev/chunkify-php/commit/20adc3dd1a7f91276f42382fbe1d685822ca0ede))
+* mirror the OpenAPI spec for analytics params and thumbnail storage ([0090ea0](https://github.com/chunkifydev/chunkify-php/commit/0090ea028465dcfada671bdd9a9232a231cceeda))
+
+
+### Bug Fixes
+
+* **config:** restore the pre-[#19](https://github.com/chunkifydev/chunkify-php/issues/19) type models and declare AssetOutputError ([0e2e11f](https://github.com/chunkifydev/chunkify-php/commit/0e2e11f6275ed0ecac769521a1463df9eec7f8de))
+
+
+### Chores
+
+* sync OpenAPI schema from Chunkify v3.0.0 ([696963c](https://github.com/chunkifydev/chunkify-php/commit/696963c9db7c674e56e34c3eaec0ca0fc1a95504))
+* sync OpenAPI schema from Chunkify v3.1.0 ([80a8c18](https://github.com/chunkifydev/chunkify-php/commit/80a8c18570b84d7687779b85024ffdb576d91679))
+
 ## [0.3.0](https://github.com/chunkifydev/chunkify-php/compare/v0.2.2...v0.3.0) (2026-11-12)
 
 
