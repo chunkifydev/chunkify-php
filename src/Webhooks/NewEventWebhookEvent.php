@@ -4,162 +4,77 @@ declare(strict_types=1);
 
 namespace Chunkify\Webhooks;
 
-use Chunkify\Core\Attributes\Required;
-use Chunkify\Core\Concerns\SdkModel;
-use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadAsset;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadAssetDeleted;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadAssetOutput;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadAssetOutputDeleted;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadJobCompleted;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadJobCreated;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadJobFailed;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadSourceCreated;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadTranscoding;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadUploadCompleted;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadUploadCreated;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadUploadFailed;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\NotificationPayloadWorkflowRun;
-use Chunkify\Webhooks\NewEventWebhookEvent\Data\ThumbnailEventData;
-use Chunkify\Webhooks\NewEventWebhookEvent\Event;
+use Chunkify\Core\Concerns\SdkUnion;
+use Chunkify\Core\Conversion\Contracts\Converter;
+use Chunkify\Core\Conversion\Contracts\ConverterSource;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAsset;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAssetDeleted;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAssetOutput;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAssetOutputDeleted;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadJobCompleted;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadJobCreated;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadJobFailed;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadSourceCreated;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadSourceDeleted;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadThumbnail;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadTranscoding;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadUploadCompleted;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadUploadCreated;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadUploadFailed;
+use Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadWorkflowRun;
 
 /**
- * @phpstan-import-type DataVariants from \Chunkify\Webhooks\NewEventWebhookEvent\Data
- * @phpstan-import-type DataShape from \Chunkify\Webhooks\NewEventWebhookEvent\Data
+ * Webhook notification. The event field selects the shape of data.
  *
- * @phpstan-type NewEventWebhookEventShape = array{
- *   id: string,
- *   data: DataShape,
- *   date: \DateTimeInterface,
- *   event: Event|value-of<Event>,
- * }
+ * @phpstan-import-type NotificationPayloadJobCompletedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadJobCompleted
+ * @phpstan-import-type NotificationPayloadJobFailedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadJobFailed
+ * @phpstan-import-type NotificationPayloadJobCreatedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadJobCreated
+ * @phpstan-import-type NotificationPayloadSourceCreatedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadSourceCreated
+ * @phpstan-import-type NotificationPayloadSourceDeletedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadSourceDeleted
+ * @phpstan-import-type NotificationPayloadUploadCreatedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadUploadCreated
+ * @phpstan-import-type NotificationPayloadUploadCompletedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadUploadCompleted
+ * @phpstan-import-type NotificationPayloadUploadFailedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadUploadFailed
+ * @phpstan-import-type NotificationPayloadAssetShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAsset
+ * @phpstan-import-type NotificationPayloadAssetOutputShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAssetOutput
+ * @phpstan-import-type NotificationPayloadAssetOutputDeletedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAssetOutputDeleted
+ * @phpstan-import-type NotificationPayloadAssetDeletedShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadAssetDeleted
+ * @phpstan-import-type NotificationPayloadWorkflowRunShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadWorkflowRun
+ * @phpstan-import-type NotificationPayloadTranscodingShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadTranscoding
+ * @phpstan-import-type NotificationPayloadThumbnailShape from \Chunkify\Webhooks\NewEventWebhookEvent\NotificationPayloadThumbnail
+ *
+ * @phpstan-type NewEventWebhookEventVariants = NotificationPayloadJobCompleted|NotificationPayloadJobFailed|NotificationPayloadJobCreated|NotificationPayloadSourceCreated|NotificationPayloadSourceDeleted|NotificationPayloadUploadCreated|NotificationPayloadUploadCompleted|NotificationPayloadUploadFailed|NotificationPayloadAsset|NotificationPayloadAssetOutput|NotificationPayloadAssetOutputDeleted|NotificationPayloadAssetDeleted|NotificationPayloadWorkflowRun|NotificationPayloadTranscoding|NotificationPayloadThumbnail
+ * @phpstan-type NewEventWebhookEventShape = NewEventWebhookEventVariants|NotificationPayloadJobCompletedShape|NotificationPayloadJobFailedShape|NotificationPayloadJobCreatedShape|NotificationPayloadSourceCreatedShape|NotificationPayloadSourceDeletedShape|NotificationPayloadUploadCreatedShape|NotificationPayloadUploadCompletedShape|NotificationPayloadUploadFailedShape|NotificationPayloadAssetShape|NotificationPayloadAssetOutputShape|NotificationPayloadAssetOutputDeletedShape|NotificationPayloadAssetDeletedShape|NotificationPayloadWorkflowRunShape|NotificationPayloadTranscodingShape|NotificationPayloadThumbnailShape
  */
-final class NewEventWebhookEvent implements BaseModel
+final class NewEventWebhookEvent implements ConverterSource
 {
-    /** @use SdkModel<NewEventWebhookEventShape> */
-    use SdkModel;
+    use SdkUnion;
 
-    /**
-     * Unique identifier of the notification.
-     */
-    #[Required]
-    public string $id;
-
-    /**
-     * Payload for the event named in event. Replays preserve the original data; retrieve the resource for current state and fresh signed URLs.
-     *
-     * @var DataVariants $data
-     */
-    #[Required]
-    public NotificationPayloadJobCompleted|NotificationPayloadJobFailed|NotificationPayloadJobCreated|NotificationPayloadSourceCreated|NotificationPayloadUploadCreated|NotificationPayloadUploadCompleted|NotificationPayloadUploadFailed|NotificationPayloadAsset|NotificationPayloadAssetOutput|NotificationPayloadAssetOutputDeleted|NotificationPayloadAssetDeleted|NotificationPayloadWorkflowRun|NotificationPayloadTranscoding|ThumbnailEventData $data;
-
-    /**
-     * Timestamp of the event payload.
-     */
-    #[Required]
-    public \DateTimeInterface $date;
-
-    /**
-     * Type of event that triggered the notification.
-     *
-     * @var value-of<Event> $event
-     */
-    #[Required(enum: Event::class)]
-    public string $event;
-
-    /**
-     * `new NewEventWebhookEvent()` is missing required properties by the API.
-     *
-     * To enforce required parameters use
-     * ```
-     * NewEventWebhookEvent::with(id: ..., data: ..., date: ..., event: ...)
-     * ```
-     *
-     * Otherwise ensure the following setters are called
-     *
-     * ```
-     * (new NewEventWebhookEvent)
-     *   ->withID(...)
-     *   ->withData(...)
-     *   ->withDate(...)
-     *   ->withEvent(...)
-     * ```
-     */
-    public function __construct()
+    public static function discriminator(): string
     {
-        $this->initialize();
+        return 'event';
     }
 
     /**
-     * Construct an instance from the required parameters.
-     *
-     * You must use named parameters to construct any parameters with a default value.
-     *
-     * @param DataShape $data
-     * @param Event|value-of<Event> $event
+     * @return list<string|Converter|ConverterSource>|array<string,string|Converter|ConverterSource>
      */
-    public static function with(
-        string $id,
-        NotificationPayloadJobCompleted|array|NotificationPayloadJobFailed|NotificationPayloadJobCreated|NotificationPayloadSourceCreated|NotificationPayloadUploadCreated|NotificationPayloadUploadCompleted|NotificationPayloadUploadFailed|NotificationPayloadAsset|NotificationPayloadAssetOutput|NotificationPayloadAssetOutputDeleted|NotificationPayloadAssetDeleted|NotificationPayloadWorkflowRun|NotificationPayloadTranscoding|ThumbnailEventData $data,
-        \DateTimeInterface $date,
-        Event|string $event,
-    ): self {
-        $self = new self;
-
-        $self['id'] = $id;
-        $self['data'] = $data;
-        $self['date'] = $date;
-        $self['event'] = $event;
-
-        return $self;
-    }
-
-    /**
-     * Unique identifier of the notification.
-     */
-    public function withID(string $id): self
+    public static function variants(): array
     {
-        $self = clone $this;
-        $self['id'] = $id;
-
-        return $self;
-    }
-
-    /**
-     * Payload for the event named in event. Replays preserve the original data; retrieve the resource for current state and fresh signed URLs.
-     *
-     * @param DataShape $data
-     */
-    public function withData(
-        NotificationPayloadJobCompleted|array|NotificationPayloadJobFailed|NotificationPayloadJobCreated|NotificationPayloadSourceCreated|NotificationPayloadUploadCreated|NotificationPayloadUploadCompleted|NotificationPayloadUploadFailed|NotificationPayloadAsset|NotificationPayloadAssetOutput|NotificationPayloadAssetOutputDeleted|NotificationPayloadAssetDeleted|NotificationPayloadWorkflowRun|NotificationPayloadTranscoding|ThumbnailEventData $data,
-    ): self {
-        $self = clone $this;
-        $self['data'] = $data;
-
-        return $self;
-    }
-
-    /**
-     * Timestamp of the event payload.
-     */
-    public function withDate(\DateTimeInterface $date): self
-    {
-        $self = clone $this;
-        $self['date'] = $date;
-
-        return $self;
-    }
-
-    /**
-     * Type of event that triggered the notification.
-     *
-     * @param Event|value-of<Event> $event
-     */
-    public function withEvent(Event|string $event): self
-    {
-        $self = clone $this;
-        $self['event'] = $event;
-
-        return $self;
+        return [
+            NotificationPayloadJobFailed::class,
+            NotificationPayloadUploadFailed::class,
+            NotificationPayloadAsset::class,
+            NotificationPayloadAssetOutput::class,
+            NotificationPayloadWorkflowRun::class,
+            NotificationPayloadTranscoding::class,
+            NotificationPayloadThumbnail::class,
+            'job.completed' => NotificationPayloadJobCompleted::class,
+            'job.created' => NotificationPayloadJobCreated::class,
+            'source.created' => NotificationPayloadSourceCreated::class,
+            'source.deleted' => NotificationPayloadSourceDeleted::class,
+            'upload.created' => NotificationPayloadUploadCreated::class,
+            'upload.completed' => NotificationPayloadUploadCompleted::class,
+            'asset.output.deleted' => NotificationPayloadAssetOutputDeleted::class,
+            'asset.deleted' => NotificationPayloadAssetDeleted::class,
+        ];
     }
 }

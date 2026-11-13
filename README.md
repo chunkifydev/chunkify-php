@@ -13,10 +13,18 @@ The REST API documentation can be found on [chunkify.dev](https://chunkify.dev/d
 <!-- x-release-please-start-version -->
 
 ```
-composer require "chunkify/chunkify-php 0.2.2"
+composer require "chunkify/chunkify-php 0.3.0"
 ```
 
 <!-- x-release-please-end -->
+
+The SDK sends requests through a [PSR-18](https://www.php-fig.org/psr/psr-18/) HTTP client and [PSR-17](https://www.php-fig.org/psr/psr-17/) factories. If your project does not have them yet, install Guzzle:
+
+```
+composer require guzzlehttp/guzzle
+```
+
+Any other PSR-18 client with PSR-17 factories works too, such as `symfony/http-client` with `nyholm/psr7`. If your project already has one (Laravel ships Guzzle, for example), nothing more is needed.
 
 ## Usage
 

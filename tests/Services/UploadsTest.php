@@ -97,26 +97,7 @@ final class UploadsTest extends TestCase
             $this->markTestSkipped('Mock server tests are disabled');
         }
 
-        $result = $this->client->uploads->complete(
-            'token',
-            parts: [['etag' => '"abc123"', 'partNumber' => 1]]
-        );
-
-        // @phpstan-ignore-next-line method.alreadyNarrowedType
-        $this->assertNull($result);
-    }
-
-    #[Test]
-    public function testCompleteWithOptionalParams(): void
-    {
-        if (UnsupportedMockTests::$skip) {
-            $this->markTestSkipped('Mock server tests are disabled');
-        }
-
-        $result = $this->client->uploads->complete(
-            'token',
-            parts: [['etag' => '"abc123"', 'partNumber' => 1]]
-        );
+        $result = $this->client->uploads->complete('token');
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertNull($result);
