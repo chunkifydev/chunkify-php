@@ -49,10 +49,10 @@ var_dump($asset->id);
 
 ### Value Objects
 
-It is recommended to use the static `with` constructor `AssetStaticRenditionCreateParams::with(resolution: 'highest', ...)`
+It is recommended to use the static `with` constructor `HlsAv1::with(id: 'hls_av1', ...)`
 and named parameters to initialize value objects.
 
-However, builders are also provided `(new AssetStaticRenditionCreateParams)->withResolution('highest')`.
+However, builders are also provided `(new HlsAv1)->withID('hls_av1')`.
 
 ### Pagination
 

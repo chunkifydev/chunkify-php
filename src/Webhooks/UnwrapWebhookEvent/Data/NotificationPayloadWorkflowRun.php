@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Webhooks\UnwrapWebhookEvent\Data;
 
-use Chunkify\Assets\Workflow\AssetActionRun;
+use Chunkify\Assets\Workflow\Actions\AssetActionRun;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -13,7 +13,7 @@ use Chunkify\Workflows\Runs\WorkflowRun;
 /**
  * Payload for workflow_run.created, workflow_run.completed, workflow_run.failed, and workflow_run.cancelled. The run and its actions are snapshots taken when the event was recorded.
  *
- * @phpstan-import-type AssetActionRunShape from \Chunkify\Assets\Workflow\AssetActionRun
+ * @phpstan-import-type AssetActionRunShape from \Chunkify\Assets\Workflow\Actions\AssetActionRun
  * @phpstan-import-type WorkflowRunShape from \Chunkify\Workflows\Runs\WorkflowRun
  *
  * @phpstan-type NotificationPayloadWorkflowRunShape = array{
