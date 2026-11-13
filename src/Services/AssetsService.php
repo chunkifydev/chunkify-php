@@ -9,7 +9,7 @@ use Chunkify\Assets\AssetCreateParams\MaxResolution;
 use Chunkify\Assets\AssetCreateParams\MinResolution;
 use Chunkify\Assets\AssetCreateParams\Storage;
 use Chunkify\Assets\AssetListParams\Created;
-use Chunkify\Assets\AssetStatus;
+use Chunkify\Assets\AssetListParams\Status;
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Omit;
@@ -164,7 +164,7 @@ final class AssetsService implements AssetsContract
      * @param int $offset number of Assets to skip
      * @param string $search case-insensitive search of Asset IDs and titles
      * @param string $sourceID Filter Assets linked to this Source. Omit to include Assets from all Sources in the Project.
-     * @param AssetStatus|value-of<AssetStatus> $status filter by Asset status
+     * @param Status|value-of<Status> $status filter by Asset status
      * @param string $storageID filter by output Storage ID
      * @param RequestOpts|null $requestOptions
      *
@@ -179,7 +179,7 @@ final class AssetsService implements AssetsContract
         int $offset = 0,
         ?string $search = null,
         ?string $sourceID = null,
-        AssetStatus|string|null $status = null,
+        Status|string|null $status = null,
         ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): PaginatedResults {

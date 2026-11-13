@@ -18,14 +18,6 @@ composer require "chunkify/chunkify-php 0.3.0"
 
 <!-- x-release-please-end -->
 
-The SDK sends requests through a [PSR-18](https://www.php-fig.org/psr/psr-18/) HTTP client and [PSR-17](https://www.php-fig.org/psr/psr-17/) factories. If your project does not have them yet, install Guzzle:
-
-```
-composer require guzzlehttp/guzzle
-```
-
-Any other PSR-18 client with PSR-17 factories works too, such as `symfony/http-client` with `nyholm/psr7`. If your project already has one (Laravel ships Guzzle, for example), nothing more is needed.
-
 ## Usage
 
 This library uses named parameters to specify optional arguments.
@@ -49,10 +41,10 @@ var_dump($asset->id);
 
 ### Value Objects
 
-It is recommended to use the static `with` constructor `AssetStaticRenditionCreateParams::with(resolution: 'highest', ...)`
+It is recommended to use the static `with` constructor `HlsAv1::with(id: 'hls_av1', ...)`
 and named parameters to initialize value objects.
 
-However, builders are also provided `(new AssetStaticRenditionCreateParams)->withResolution('highest')`.
+However, builders are also provided `(new HlsAv1)->withID('hls_av1')`.
 
 ### Pagination
 

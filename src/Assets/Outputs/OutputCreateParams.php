@@ -4,6 +4,11 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs;
 
+use Chunkify\Assets\Outputs\OutputCreateParams\Output;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams;
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
@@ -14,7 +19,10 @@ use Chunkify\Core\Contracts\BaseModel;
  *
  * @see Chunkify\Services\Assets\OutputsService::create()
  *
- * @phpstan-type OutputCreateParamsShape = array{type: 'transcript', params: mixed}
+ * @phpstan-import-type OutputVariants from \Chunkify\Assets\Outputs\OutputCreateParams\Output
+ * @phpstan-import-type OutputShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output
+ *
+ * @phpstan-type OutputCreateParamsShape = array{output: OutputShape}
  */
 final class OutputCreateParams implements BaseModel
 {
@@ -23,31 +31,25 @@ final class OutputCreateParams implements BaseModel
     use SdkParams;
 
     /**
-     * Type specifies the output kind.
+     * Create one output for an Asset. Type selects its required, strictly validated parameters.
      *
-     * @var 'transcript' $type
+     * @var OutputVariants $output
      */
-    #[Required]
-    public string $type = 'transcript';
-
-    /**
-     * Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
-     */
-    #[Required]
-    public mixed $params;
+    #[Required(union: Output::class)]
+    public AssetCaptionOutputCreateParams|AssetStaticRenditionOutputCreateParams|AssetThumbnailOutputCreateParams|AssetTranscriptOutputCreateParams $output;
 
     /**
      * `new OutputCreateParams()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
-     * OutputCreateParams::with(params: ...)
+     * OutputCreateParams::with(output: ...)
      * ```
      *
      * Otherwise ensure the following setters are called
      *
      * ```
-     * (new OutputCreateParams)->withParams(...)
+     * (new OutputCreateParams)->withOutput(...)
      * ```
      */
     public function __construct()
@@ -59,36 +61,29 @@ final class OutputCreateParams implements BaseModel
      * Construct an instance from the required parameters.
      *
      * You must use named parameters to construct any parameters with a default value.
+     *
+     * @param OutputShape $output
      */
-    public static function with(mixed $params): self
-    {
+    public static function with(
+        AssetCaptionOutputCreateParams|array|AssetStaticRenditionOutputCreateParams|AssetThumbnailOutputCreateParams|AssetTranscriptOutputCreateParams $output,
+    ): self {
         $self = new self;
 
-        $self['params'] = $params;
+        $self['output'] = $output;
 
         return $self;
     }
 
     /**
-     * Type specifies the output kind.
+     * Create one output for an Asset. Type selects its required, strictly validated parameters.
      *
-     * @param 'transcript' $type
+     * @param OutputShape $output
      */
-    public function withType(string $type): self
-    {
+    public function withOutput(
+        AssetCaptionOutputCreateParams|array|AssetStaticRenditionOutputCreateParams|AssetThumbnailOutputCreateParams|AssetTranscriptOutputCreateParams $output,
+    ): self {
         $self = clone $this;
-        $self['type'] = $type;
-
-        return $self;
-    }
-
-    /**
-     * Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
-     */
-    public function withParams(mixed $params): self
-    {
-        $self = clone $this;
-        $self['params'] = $params;
+        $self['output'] = $output;
 
         return $self;
     }

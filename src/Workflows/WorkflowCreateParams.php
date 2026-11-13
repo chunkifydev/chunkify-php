@@ -8,6 +8,7 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Workflows\WorkflowCreateParams\Rule;
 use Chunkify\Workflows\WorkflowCreateParams\SchemaVersion;
 
 /**
@@ -15,11 +16,11 @@ use Chunkify\Workflows\WorkflowCreateParams\SchemaVersion;
  *
  * @see Chunkify\Services\WorkflowsService::create()
  *
- * @phpstan-import-type WorkflowRuleShape from \Chunkify\Workflows\WorkflowRule
+ * @phpstan-import-type RuleShape from \Chunkify\Workflows\WorkflowCreateParams\Rule
  *
  * @phpstan-type WorkflowCreateParamsShape = array{
  *   name: string,
- *   rules: list<WorkflowRule|WorkflowRuleShape>,
+ *   rules: list<Rule|RuleShape>,
  *   schemaVersion: SchemaVersion|value-of<SchemaVersion>,
  * }
  */
@@ -40,9 +41,9 @@ final class WorkflowCreateParams implements BaseModel
      * Rules specifies the event subscriptions and actions in this definition.
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      *
-     * @var list<WorkflowRule> $rules
+     * @var list<Rule> $rules
      */
-    #[Required(list: WorkflowRule::class)]
+    #[Required(list: Rule::class)]
     public array $rules;
 
     /**
@@ -80,7 +81,7 @@ final class WorkflowCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<WorkflowRule|WorkflowRuleShape> $rules
+     * @param list<Rule|RuleShape> $rules
      * @param SchemaVersion|value-of<SchemaVersion> $schemaVersion
      */
     public static function with(
@@ -113,7 +114,7 @@ final class WorkflowCreateParams implements BaseModel
      * Rules specifies the event subscriptions and actions in this definition.
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      *
-     * @param list<WorkflowRule|WorkflowRuleShape> $rules
+     * @param list<Rule|RuleShape> $rules
      */
     public function withRules(array $rules): self
     {
