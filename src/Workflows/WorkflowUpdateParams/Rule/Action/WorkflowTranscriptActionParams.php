@@ -7,12 +7,15 @@ namespace Chunkify\Workflows\WorkflowUpdateParams\Rule\Action;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Workflows\WorkflowUpdateParams\Rule\Action\WorkflowTranscriptActionParams\Params;
 
 /**
  * Creates or reuses the original-language transcript. Can run alongside caption generation in the same asset.ready rule.
  *
+ * @phpstan-import-type ParamsShape from \Chunkify\Workflows\WorkflowUpdateParams\Rule\Action\WorkflowTranscriptActionParams\Params
+ *
  * @phpstan-type WorkflowTranscriptActionParamsShape = array{
- *   id: string, params: mixed, type: 'create_transcript'
+ *   id: string, params: Params|ParamsShape, type: 'create_transcript'
  * }
  */
 final class WorkflowTranscriptActionParams implements BaseModel
@@ -39,7 +42,7 @@ final class WorkflowTranscriptActionParams implements BaseModel
      * Params specifies transcript settings. Pass an empty object.
      */
     #[Required]
-    public mixed $params;
+    public Params $params;
 
     /**
      * `new WorkflowTranscriptActionParams()` is missing required properties by the API.
@@ -64,8 +67,10 @@ final class WorkflowTranscriptActionParams implements BaseModel
      * Construct an instance from the required parameters.
      *
      * You must use named parameters to construct any parameters with a default value.
+     *
+     * @param Params|ParamsShape $params
      */
-    public static function with(string $id, mixed $params): self
+    public static function with(string $id, Params|array $params): self
     {
         $self = new self;
 
@@ -89,8 +94,10 @@ final class WorkflowTranscriptActionParams implements BaseModel
 
     /**
      * Params specifies transcript settings. Pass an empty object.
+     *
+     * @param Params|ParamsShape $params
      */
-    public function withParams(mixed $params): self
+    public function withParams(Params|array $params): self
     {
         $self = clone $this;
         $self['params'] = $params;
