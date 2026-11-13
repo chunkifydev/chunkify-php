@@ -11,13 +11,13 @@ use Chunkify\Thumbnails\Thumbnail;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Format;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Output;
 use Chunkify\Thumbnails\ThumbnailCreateParams\Range;
-use Chunkify\Thumbnails\ThumbnailCreateStorageParams;
+use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
 use Chunkify\Thumbnails\ThumbnailListParams\Created;
 use Chunkify\Thumbnails\ThumbnailListParams\Status;
 
 /**
  * @phpstan-import-type RangeShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Range
- * @phpstan-import-type ThumbnailCreateStorageParamsShape from \Chunkify\Thumbnails\ThumbnailCreateStorageParams
+ * @phpstan-import-type StorageShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Storage
  * @phpstan-import-type CreatedShape from \Chunkify\Thumbnails\ThumbnailListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -33,7 +33,7 @@ interface ThumbnailsContract
      * @param Output|value-of<Output> $output Output selects images or sprites. Defaults to images.
      * @param Range|RangeShape $range Range limits sampling to part of the Source. Defaults to the whole Source duration.
      * @param int $size Size specifies the maximum image or tile edge in pixels, from 64 to 1920. Defaults to 320. Odd sizes are supported. Preserves display aspect ratio without cropping or upscaling.
-     * @param ThumbnailCreateStorageParams|ThumbnailCreateStorageParamsShape $storage Storage overrides the Project output destination and names the output files. Source storage remains independent.
+     * @param Storage|StorageShape $storage Storage overrides the Project output destination and names the output files. Source storage remains independent.
      * @param list<float> $timestamps Timestamps specifies 1 to 100 Source-relative target times in seconds. Every time must be within the selected range. Repeated targets produce separate outputs.
      * @param RequestOpts|null $requestOptions
      *
@@ -47,7 +47,7 @@ interface ThumbnailsContract
         Output|string $output = 'images',
         Range|array|null $range = null,
         int $size = 320,
-        ThumbnailCreateStorageParams|array|null $storage = null,
+        Storage|array|null $storage = null,
         ?array $timestamps = null,
         RequestOptions|array|null $requestOptions = null,
     ): Thumbnail;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\ServiceContracts\Workflows\Runs;
 
-use Chunkify\Assets\Workflow\AssetActionRun;
+use Chunkify\Assets\Workflow\Actions\AssetActionRun;
 use Chunkify\Core\Contracts\BaseResponse;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\PaginatedResults;

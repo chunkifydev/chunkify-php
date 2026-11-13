@@ -12,7 +12,7 @@ use Chunkify\Assets\AssetCreateParams\Storage;
 use Chunkify\Assets\AssetDeleteParams;
 use Chunkify\Assets\AssetListParams;
 use Chunkify\Assets\AssetListParams\Created;
-use Chunkify\Assets\AssetStatus;
+use Chunkify\Assets\AssetListParams\Status;
 use Chunkify\Assets\AssetUpdateParams;
 use Chunkify\Client;
 use Chunkify\Core\Contracts\BaseResponse;
@@ -153,7 +153,7 @@ final class AssetsRawService implements AssetsRawContract
      *   offset?: int,
      *   search?: string,
      *   sourceID?: string,
-     *   status?: AssetStatus|value-of<AssetStatus>,
+     *   status?: Status|value-of<Status>,
      *   storageID?: string,
      * }|AssetListParams $params
      * @param RequestOpts|null $requestOptions
