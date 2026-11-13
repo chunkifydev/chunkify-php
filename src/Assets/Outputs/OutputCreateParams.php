@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs;
 
+use Chunkify\Assets\AssetCaptionOutputCreateParams;
+use Chunkify\Assets\AssetStaticRenditionOutputCreateParams;
+use Chunkify\Assets\AssetThumbnailOutputCreateParams;
+use Chunkify\Assets\AssetTranscriptOutputCreateParams;
 use Chunkify\Assets\Outputs\OutputCreateParams\Output;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;

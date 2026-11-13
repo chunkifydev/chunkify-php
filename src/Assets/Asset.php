@@ -4,24 +4,19 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets;
 
-use Chunkify\Assets\Asset\CreatedVia;
-use Chunkify\Assets\Asset\Error;
 use Chunkify\Assets\Asset\MaxResolution;
 use Chunkify\Assets\Asset\MinResolution;
-use Chunkify\Assets\Asset\Poster;
-use Chunkify\Assets\Asset\SourceMetadata;
-use Chunkify\Assets\Asset\Status;
-use Chunkify\Assets\Asset\TimelinePreviews;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\CreatedVia;
 
 /**
- * @phpstan-import-type SourceMetadataShape from \Chunkify\Assets\Asset\SourceMetadata
- * @phpstan-import-type ErrorShape from \Chunkify\Assets\Asset\Error
- * @phpstan-import-type PosterShape from \Chunkify\Assets\Asset\Poster
- * @phpstan-import-type TimelinePreviewsShape from \Chunkify\Assets\Asset\TimelinePreviews
+ * @phpstan-import-type AssetSourceMetadataShape from \Chunkify\Assets\AssetSourceMetadata
+ * @phpstan-import-type AssetErrorShape from \Chunkify\Assets\AssetError
+ * @phpstan-import-type AssetPosterShape from \Chunkify\Assets\AssetPoster
+ * @phpstan-import-type AssetTimelinePreviewsShape from \Chunkify\Assets\AssetTimelinePreviews
  *
  * @phpstan-type AssetShape = array{
  *   id: string,
@@ -32,8 +27,8 @@ use Chunkify\Core\Contracts\BaseModel;
  *   minResolution: MinResolution|value-of<MinResolution>,
  *   playbackReady: bool,
  *   previewEnabled: bool,
- *   sourceMetadata: SourceMetadata|SourceMetadataShape,
- *   status: Status|value-of<Status>,
+ *   sourceMetadata: AssetSourceMetadata|AssetSourceMetadataShape,
+ *   status: AssetStatus|value-of<AssetStatus>,
  *   storageID: string,
  *   title: string,
  *   updatedAt: \DateTimeInterface,
@@ -43,16 +38,16 @@ use Chunkify\Core\Contracts\BaseModel;
  *   createdByTokenID?: string|null,
  *   createdByUserID?: string|null,
  *   createdVia?: null|CreatedVia|value-of<CreatedVia>,
- *   error?: null|Error|ErrorShape,
+ *   error?: null|AssetError|AssetErrorShape,
  *   expiresAt?: \DateTimeInterface|null,
  *   playbackPath?: string|null,
  *   playbackReadyAt?: \DateTimeInterface|null,
- *   poster?: null|Poster|PosterShape,
+ *   poster?: null|AssetPoster|AssetPosterShape,
  *   previewURL?: string|null,
  *   readyAt?: \DateTimeInterface|null,
  *   size?: int|null,
  *   sourceID?: string|null,
- *   timelinePreviews?: null|TimelinePreviews|TimelinePreviewsShape,
+ *   timelinePreviews?: null|AssetTimelinePreviews|AssetTimelinePreviewsShape,
  * }
  */
 final class Asset implements BaseModel
@@ -118,14 +113,14 @@ final class Asset implements BaseModel
      * Original media metadata saved at Asset creation and preserved after Source deletion.
      */
     #[Required('source_metadata')]
-    public SourceMetadata $sourceMetadata;
+    public AssetSourceMetadata $sourceMetadata;
 
     /**
      * Status specifies the Asset preparation state. ready means the video is prepared for playback, with its poster and timeline previews available. Static renditions and captions have independent statuses.
      *
-     * @var value-of<Status> $status
+     * @var value-of<AssetStatus> $status
      */
-    #[Required(enum: Status::class)]
+    #[Required(enum: AssetStatus::class)]
     public string $status;
 
     /**
@@ -188,7 +183,7 @@ final class Asset implements BaseModel
     public ?string $createdVia;
 
     #[Optional]
-    public ?Error $error;
+    public ?AssetError $error;
 
     /**
      * When managed outputs expire, 24 hours after readiness. Omitted for customer-connected Storage.
@@ -212,7 +207,7 @@ final class Asset implements BaseModel
      * Poster image, available once generated.
      */
     #[Optional]
-    public ?Poster $poster;
+    public ?AssetPoster $poster;
 
     /**
      * Public HLS preview URL. Available when playback_ready and preview_enabled are true. No API token is required.
@@ -242,7 +237,7 @@ final class Asset implements BaseModel
      * Timeline thumbnails. The WebVTT file maps video timestamps to image URLs and crop coordinates.
      */
     #[Optional('timeline_previews')]
-    public ?TimelinePreviews $timelinePreviews;
+    public ?AssetTimelinePreviews $timelinePreviews;
 
     /**
      * `new Asset()` is missing required properties by the API.
@@ -302,12 +297,12 @@ final class Asset implements BaseModel
      * @param MaxResolution|value-of<MaxResolution> $maxResolution
      * @param array<string,string> $metadata
      * @param MinResolution|value-of<MinResolution> $minResolution
-     * @param SourceMetadata|SourceMetadataShape $sourceMetadata
-     * @param Status|value-of<Status> $status
+     * @param AssetSourceMetadata|AssetSourceMetadataShape $sourceMetadata
+     * @param AssetStatus|value-of<AssetStatus> $status
      * @param CreatedVia|value-of<CreatedVia>|null $createdVia
-     * @param Error|ErrorShape|null $error
-     * @param Poster|PosterShape|null $poster
-     * @param TimelinePreviews|TimelinePreviewsShape|null $timelinePreviews
+     * @param AssetError|AssetErrorShape|null $error
+     * @param AssetPoster|AssetPosterShape|null $poster
+     * @param AssetTimelinePreviews|AssetTimelinePreviewsShape|null $timelinePreviews
      */
     public static function with(
         string $id,
@@ -318,8 +313,8 @@ final class Asset implements BaseModel
         MinResolution|string $minResolution,
         bool $playbackReady,
         bool $previewEnabled,
-        SourceMetadata|array $sourceMetadata,
-        Status|string $status,
+        AssetSourceMetadata|array $sourceMetadata,
+        AssetStatus|string $status,
         string $storageID,
         string $title,
         \DateTimeInterface $updatedAt,
@@ -329,16 +324,16 @@ final class Asset implements BaseModel
         ?string $createdByTokenID = null,
         ?string $createdByUserID = null,
         CreatedVia|string|null $createdVia = null,
-        Error|array|null $error = null,
+        AssetError|array|null $error = null,
         ?\DateTimeInterface $expiresAt = null,
         ?string $playbackPath = null,
         ?\DateTimeInterface $playbackReadyAt = null,
-        Poster|array|null $poster = null,
+        AssetPoster|array|null $poster = null,
         ?string $previewURL = null,
         ?\DateTimeInterface $readyAt = null,
         ?int $size = null,
         ?string $sourceID = null,
-        TimelinePreviews|array|null $timelinePreviews = null,
+        AssetTimelinePreviews|array|null $timelinePreviews = null,
     ): self {
         $self = new self;
 
@@ -474,10 +469,10 @@ final class Asset implements BaseModel
     /**
      * Original media metadata saved at Asset creation and preserved after Source deletion.
      *
-     * @param SourceMetadata|SourceMetadataShape $sourceMetadata
+     * @param AssetSourceMetadata|AssetSourceMetadataShape $sourceMetadata
      */
     public function withSourceMetadata(
-        SourceMetadata|array $sourceMetadata
+        AssetSourceMetadata|array $sourceMetadata
     ): self {
         $self = clone $this;
         $self['sourceMetadata'] = $sourceMetadata;
@@ -488,9 +483,9 @@ final class Asset implements BaseModel
     /**
      * Status specifies the Asset preparation state. ready means the video is prepared for playback, with its poster and timeline previews available. Static renditions and captions have independent statuses.
      *
-     * @param Status|value-of<Status> $status
+     * @param AssetStatus|value-of<AssetStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(AssetStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;
@@ -603,9 +598,9 @@ final class Asset implements BaseModel
     }
 
     /**
-     * @param Error|ErrorShape $error
+     * @param AssetError|AssetErrorShape $error
      */
-    public function withError(Error|array $error): self
+    public function withError(AssetError|array $error): self
     {
         $self = clone $this;
         $self['error'] = $error;
@@ -650,9 +645,9 @@ final class Asset implements BaseModel
     /**
      * Poster image, available once generated.
      *
-     * @param Poster|PosterShape $poster
+     * @param AssetPoster|AssetPosterShape $poster
      */
-    public function withPoster(Poster|array $poster): self
+    public function withPoster(AssetPoster|array $poster): self
     {
         $self = clone $this;
         $self['poster'] = $poster;
@@ -707,10 +702,10 @@ final class Asset implements BaseModel
     /**
      * Timeline thumbnails. The WebVTT file maps video timestamps to image URLs and crop coordinates.
      *
-     * @param TimelinePreviews|TimelinePreviewsShape $timelinePreviews
+     * @param AssetTimelinePreviews|AssetTimelinePreviewsShape $timelinePreviews
      */
     public function withTimelinePreviews(
-        TimelinePreviews|array $timelinePreviews
+        AssetTimelinePreviews|array $timelinePreviews
     ): self {
         $self = clone $this;
         $self['timelinePreviews'] = $timelinePreviews;

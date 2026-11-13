@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Services;
 
+use Chunkify\Assets\AssetDefaultsParams;
 use Chunkify\Client;
 use Chunkify\Core\Contracts\BaseResponse;
 use Chunkify\Core\Exceptions\APIException;
@@ -11,12 +12,11 @@ use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectCreateParams;
 use Chunkify\Projects\ProjectListResponse;
 use Chunkify\Projects\ProjectUpdateParams;
-use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ProjectsRawContract;
 
 /**
- * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
+ * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class ProjectsRawService implements ProjectsRawContract
@@ -94,7 +94,7 @@ final class ProjectsRawService implements ProjectsRawContract
      *
      * @param string $projectID Project Id
      * @param array{
-     *   assetDefaults?: AssetDefaults|AssetDefaultsShape,
+     *   assetDefaults?: AssetDefaultsParams|AssetDefaultsParamsShape,
      *   defaultWorkflowID?: string|null,
      *   name?: string,
      *   storageID?: string,

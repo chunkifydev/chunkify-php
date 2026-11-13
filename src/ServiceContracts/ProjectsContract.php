@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Chunkify\ServiceContracts;
 
+use Chunkify\Assets\AssetDefaultsParams;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Omit;
 use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectListResponse;
-use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 use Chunkify\RequestOptions;
 
 /**
- * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
+ * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 interface ProjectsContract
@@ -47,7 +47,7 @@ interface ProjectsContract
      * @api
      *
      * @param string $projectID Project Id
-     * @param AssetDefaults|AssetDefaultsShape $assetDefaults Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
+     * @param AssetDefaultsParams|AssetDefaultsParamsShape $assetDefaults Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
      * @param string|Omit|null $defaultWorkflowID DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
      * @param string $name project name
      * @param string $storageID ID of this Project's default Storage
@@ -57,7 +57,7 @@ interface ProjectsContract
      */
     public function update(
         string $projectID,
-        AssetDefaults|array|null $assetDefaults = null,
+        AssetDefaultsParams|array|null $assetDefaults = null,
         string|Omit|null $defaultWorkflowID = Omit::Value,
         ?string $name = null,
         ?string $storageID = null,

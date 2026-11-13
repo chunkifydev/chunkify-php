@@ -10,6 +10,7 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Events\Event\DeliveryStatus;
 use Chunkify\Notifications\Notification;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * A retained lifecycle event, recorded independently of webhook subscriptions. The payload is an immutable JSON snapshot.
@@ -21,7 +22,7 @@ use Chunkify\Notifications\Notification;
  *   createdAt: \DateTimeInterface,
  *   deliveryCount: int,
  *   deliveryStatus: DeliveryStatus|value-of<DeliveryStatus>,
- *   event: \Chunkify\Events\Event\Event|value-of<\Chunkify\Events\Event\Event>,
+ *   event: WebhookEvent|value-of<WebhookEvent>,
  *   expiresAt: \DateTimeInterface,
  *   objectID: string,
  *   payload: string,
@@ -60,8 +61,8 @@ final class Event implements BaseModel
     #[Required('delivery_status', enum: DeliveryStatus::class)]
     public string $deliveryStatus;
 
-    /** @var value-of<Event\Event> $event */
-    #[Required(enum: Event\Event::class)]
+    /** @var value-of<WebhookEvent> $event */
+    #[Required(enum: WebhookEvent::class)]
     public string $event;
 
     /**
@@ -142,7 +143,7 @@ final class Event implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param DeliveryStatus|value-of<DeliveryStatus> $deliveryStatus
-     * @param Event\Event|value-of<Event\Event> $event
+     * @param WebhookEvent|value-of<WebhookEvent> $event
      * @param list<string> $relatedObjectIDs
      * @param list<Notification|NotificationShape>|null $deliveries
      */
@@ -151,7 +152,7 @@ final class Event implements BaseModel
         \DateTimeInterface $createdAt,
         int $deliveryCount,
         DeliveryStatus|string $deliveryStatus,
-        Event\Event|string $event,
+        WebhookEvent|string $event,
         \DateTimeInterface $expiresAt,
         string $objectID,
         string $payload,
@@ -223,9 +224,9 @@ final class Event implements BaseModel
     }
 
     /**
-     * @param Event\Event|value-of<Event\Event> $event
+     * @param WebhookEvent|value-of<WebhookEvent> $event
      */
-    public function withEvent(Event\Event|string $event): self
+    public function withEvent(WebhookEvent|string $event): self
     {
         $self = clone $this;
         $self['event'] = $event;

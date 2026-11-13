@@ -6,6 +6,8 @@ use Chunkify\Client;
 use Chunkify\Core\Util;
 use Chunkify\PaginatedResults;
 use Chunkify\Thumbnails\Thumbnail;
+use Chunkify\Thumbnails\ThumbnailFormat;
+use Chunkify\Thumbnails\ThumbnailOutput;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -56,9 +58,9 @@ final class ThumbnailsTest extends TestCase
         $result = $this->client->thumbnails->create(
             sourceID: 'src_example',
             count: 10,
-            format: 'jpeg',
+            format: ThumbnailFormat::JPEG,
             metadata: ['foo' => 'string'],
-            output: 'images',
+            output: ThumbnailOutput::IMAGES,
             range: ['end' => 1, 'start' => 0],
             size: 64,
             storage: ['id' => 'x', 'path' => 'x'],
