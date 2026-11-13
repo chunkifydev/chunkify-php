@@ -22,7 +22,6 @@ use Chunkify\Services\TranscodingsService;
 use Chunkify\Services\UploadsService;
 use Chunkify\Services\WebhooksService;
 use Chunkify\Services\WorkflowsService;
-use Http\Discovery\Exception\NotFoundException;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Http\Discovery\Psr18ClientDiscovery;
 
@@ -137,22 +136,15 @@ class Client extends BaseClient
             'CHUNKIFY_BASE_URL'
         ) ?: 'https://api.chunkify.dev/v1';
 
-        try {
-            $options = RequestOptions::parse(
-                RequestOptions::with(
-                    uriFactory: Psr17FactoryDiscovery::findUriFactory(),
-                    streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
-                    requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
-                    transporter: Psr18ClientDiscovery::find(),
-                ),
-                $requestOptions,
-            );
-        } catch (NotFoundException $e) {
-            throw new \RuntimeException(
-                'No PSR-18 HTTP client or PSR-17 factories were found. Install one, for example with `composer require guzzlehttp/guzzle`; any other PSR-18 client with PSR-17 factories also works.',
-                previous: $e,
-            );
-        }
+        $options = RequestOptions::parse(
+            RequestOptions::with(
+                uriFactory: Psr17FactoryDiscovery::findUriFactory(),
+                streamFactory: Psr17FactoryDiscovery::findStreamFactory(),
+                requestFactory: Psr17FactoryDiscovery::findRequestFactory(),
+                transporter: Psr18ClientDiscovery::find(),
+            ),
+            $requestOptions,
+        );
 
         if (is_null($options->streamingTransporter)) {
             assert(!is_null($options->transporter));

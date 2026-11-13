@@ -2,7 +2,7 @@
 
 namespace Tests\Services\Assets\Workflow;
 
-use Chunkify\Assets\Workflow\AssetActionRun;
+use Chunkify\Assets\Workflow\Actions\AssetActionRun;
 use Chunkify\Client;
 use Chunkify\Core\Util;
 use Chunkify\PaginatedResults;
