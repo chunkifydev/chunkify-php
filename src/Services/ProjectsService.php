@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Chunkify\Services;
 
+use Chunkify\Assets\AssetDefaultsParams;
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Omit;
 use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectListResponse;
-use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ProjectsContract;
 use Chunkify\Services\Projects\AnalyticsService;
 
 /**
- * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
+ * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class ProjectsService implements ProjectsContract
@@ -88,7 +88,7 @@ final class ProjectsService implements ProjectsContract
      * Update a project's name or storage settings. Only team owners can update projects.
      *
      * @param string $projectID Project Id
-     * @param AssetDefaults|AssetDefaultsShape $assetDefaults Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
+     * @param AssetDefaultsParams|AssetDefaultsParamsShape $assetDefaults Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
      * @param string|Omit|null $defaultWorkflowID DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
      * @param string $name project name
      * @param string $storageID ID of this Project's default Storage
@@ -98,7 +98,7 @@ final class ProjectsService implements ProjectsContract
      */
     public function update(
         string $projectID,
-        AssetDefaults|array|null $assetDefaults = null,
+        AssetDefaultsParams|array|null $assetDefaults = null,
         string|Omit|null $defaultWorkflowID = Omit::Value,
         ?string $name = null,
         ?string $storageID = null,

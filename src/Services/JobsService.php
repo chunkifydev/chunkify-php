@@ -11,10 +11,10 @@ use Chunkify\Jobs\HlsAv1;
 use Chunkify\Jobs\HlsH264;
 use Chunkify\Jobs\HlsH265;
 use Chunkify\Jobs\Job;
-use Chunkify\Jobs\JobCreateParams\Storage;
-use Chunkify\Jobs\JobCreateParams\Transcoder;
+use Chunkify\Jobs\JobCreateStorageParams;
+use Chunkify\Jobs\JobCreateTranscoderParams;
+use Chunkify\Jobs\JobFormatID;
 use Chunkify\Jobs\JobListParams\Created;
-use Chunkify\Jobs\JobListParams\FormatID;
 use Chunkify\Jobs\JobListParams\Status;
 use Chunkify\Jobs\Jpg;
 use Chunkify\Jobs\MP4Av1;
@@ -29,9 +29,9 @@ use Chunkify\Services\Jobs\LogsService;
 use Chunkify\Services\Jobs\TranscodersService;
 
 /**
- * @phpstan-import-type FormatShape from \Chunkify\Jobs\JobCreateParams\Format
- * @phpstan-import-type StorageShape from \Chunkify\Jobs\JobCreateParams\Storage
- * @phpstan-import-type TranscoderShape from \Chunkify\Jobs\JobCreateParams\Transcoder
+ * @phpstan-import-type JobCreateFormatParamsShape from \Chunkify\Jobs\JobCreateFormatParams
+ * @phpstan-import-type JobCreateStorageParamsShape from \Chunkify\Jobs\JobCreateStorageParams
+ * @phpstan-import-type JobCreateTranscoderParamsShape from \Chunkify\Jobs\JobCreateTranscoderParams
  * @phpstan-import-type CreatedShape from \Chunkify\Jobs\JobListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -75,15 +75,15 @@ final class JobsService implements JobsContract
      *
      * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
-     * @param FormatShape $format Required format configuration, one and only one valid format configuration must be provided.
+     * @param JobCreateFormatParamsShape $format Required format configuration, one and only one valid format configuration must be provided.
      * If you want to use a format without specifying any configuration, use an empty object in the corresponding field.
      * @param string $sourceID The ID of the source file to transcode
      * @param string $hlsManifestID Optional HLS manifest configuration
      * Use the same hls manifest ID to group multiple jobs into a single HLS manifest
      * By default, it's automatically generated if no set for HLS jobs
      * @param array<string,string> $metadata Optional metadata to attach to the job, the maximum size allowed is 2048 bytes
-     * @param Storage|StorageShape $storage Optional storage configuration
-     * @param Transcoder|TranscoderShape $transcoder Optional transcoder configuration. If not provided, the system will automatically
+     * @param JobCreateStorageParams|JobCreateStorageParamsShape $storage Optional storage configuration
+     * @param JobCreateTranscoderParams|JobCreateTranscoderParamsShape $transcoder Optional transcoder configuration. If not provided, the system will automatically
      * calculate the optimal quantity and CPU type based on the source file specifications
      * and output requirements. This auto-scaling ensures efficient resource utilization.
      * @param RequestOpts|null $requestOptions
@@ -95,8 +95,8 @@ final class JobsService implements JobsContract
         string $sourceID,
         ?string $hlsManifestID = null,
         ?array $metadata = null,
-        Storage|array|null $storage = null,
-        Transcoder|array|null $transcoder = null,
+        JobCreateStorageParams|array|null $storage = null,
+        JobCreateTranscoderParams|array|null $transcoder = null,
         RequestOptions|array|null $requestOptions = null,
     ): Job {
         $params = [];
@@ -144,7 +144,7 @@ final class JobsService implements JobsContract
      *
      * @param string $id Filter by job ID
      * @param Created|CreatedShape $created
-     * @param FormatID|value-of<FormatID> $formatID Filter by format id
+     * @param JobFormatID|value-of<JobFormatID> $formatID Filter by format id
      * @param string $hlsManifestID Filter by hls manifest ID
      * @param int $limit Pagination limit
      * @param list<list<string>> $metadata Filter by metadata
@@ -160,7 +160,7 @@ final class JobsService implements JobsContract
     public function list(
         ?string $id = null,
         Created|array|null $created = null,
-        FormatID|string|null $formatID = null,
+        JobFormatID|string|null $formatID = null,
         ?string $hlsManifestID = null,
         int $limit = 100,
         ?array $metadata = null,

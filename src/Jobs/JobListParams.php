@@ -10,7 +10,6 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Conversion\ListOf;
 use Chunkify\Jobs\JobListParams\Created;
-use Chunkify\Jobs\JobListParams\FormatID;
 use Chunkify\Jobs\JobListParams\Status;
 
 /**
@@ -24,7 +23,7 @@ use Chunkify\Jobs\JobListParams\Status;
  * @phpstan-type JobListParamsShape = array{
  *   id?: string|null,
  *   created?: null|Created|CreatedShape,
- *   formatID?: null|FormatID|value-of<FormatID>,
+ *   formatID?: null|JobFormatID|value-of<JobFormatID>,
  *   hlsManifestID?: string|null,
  *   limit?: int|null,
  *   metadata?: list<list<string>>|null,
@@ -51,9 +50,9 @@ final class JobListParams implements BaseModel
     /**
      * Filter by format id.
      *
-     * @var value-of<FormatID>|null $formatID
+     * @var value-of<JobFormatID>|null $formatID
      */
-    #[Optional(enum: FormatID::class)]
+    #[Optional(enum: JobFormatID::class)]
     public ?string $formatID;
 
     /**
@@ -107,14 +106,14 @@ final class JobListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
-     * @param FormatID|value-of<FormatID>|null $formatID
+     * @param JobFormatID|value-of<JobFormatID>|null $formatID
      * @param list<list<string>>|null $metadata
      * @param Status|value-of<Status>|null $status
      */
     public static function with(
         ?string $id = null,
         Created|array|null $created = null,
-        FormatID|string|null $formatID = null,
+        JobFormatID|string|null $formatID = null,
         ?string $hlsManifestID = null,
         ?int $limit = null,
         ?array $metadata = null,
@@ -162,9 +161,9 @@ final class JobListParams implements BaseModel
     /**
      * Filter by format id.
      *
-     * @param FormatID|value-of<FormatID> $formatID
+     * @param JobFormatID|value-of<JobFormatID> $formatID
      */
-    public function withFormatID(FormatID|string $formatID): self
+    public function withFormatID(JobFormatID|string $formatID): self
     {
         $self = clone $this;
         $self['formatID'] = $formatID;

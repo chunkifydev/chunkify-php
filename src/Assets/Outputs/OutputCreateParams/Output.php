@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs\OutputCreateParams;
 
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams;
+use Chunkify\Assets\AssetCaptionOutputCreateParams;
+use Chunkify\Assets\AssetStaticRenditionOutputCreateParams;
+use Chunkify\Assets\AssetThumbnailOutputCreateParams;
+use Chunkify\Assets\AssetTranscriptOutputCreateParams;
 use Chunkify\Core\Concerns\SdkUnion;
 use Chunkify\Core\Conversion\Contracts\Converter;
 use Chunkify\Core\Conversion\Contracts\ConverterSource;
@@ -15,10 +15,10 @@ use Chunkify\Core\Conversion\Contracts\ConverterSource;
 /**
  * Create one output for an Asset. Type selects its required, strictly validated parameters.
  *
- * @phpstan-import-type AssetCaptionOutputCreateParamsShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams
- * @phpstan-import-type AssetStaticRenditionOutputCreateParamsShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams
- * @phpstan-import-type AssetThumbnailOutputCreateParamsShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams
- * @phpstan-import-type AssetTranscriptOutputCreateParamsShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams
+ * @phpstan-import-type AssetCaptionOutputCreateParamsShape from \Chunkify\Assets\AssetCaptionOutputCreateParams
+ * @phpstan-import-type AssetStaticRenditionOutputCreateParamsShape from \Chunkify\Assets\AssetStaticRenditionOutputCreateParams
+ * @phpstan-import-type AssetThumbnailOutputCreateParamsShape from \Chunkify\Assets\AssetThumbnailOutputCreateParams
+ * @phpstan-import-type AssetTranscriptOutputCreateParamsShape from \Chunkify\Assets\AssetTranscriptOutputCreateParams
  *
  * @phpstan-type OutputVariants = AssetCaptionOutputCreateParams|AssetStaticRenditionOutputCreateParams|AssetThumbnailOutputCreateParams|AssetTranscriptOutputCreateParams
  * @phpstan-type OutputShape = OutputVariants|AssetCaptionOutputCreateParamsShape|AssetStaticRenditionOutputCreateParamsShape|AssetThumbnailOutputCreateParamsShape|AssetTranscriptOutputCreateParamsShape

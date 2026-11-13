@@ -9,28 +9,24 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Format;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Output;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Range;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
 
 /**
  * Generate individual images or sprite sheets from a Source. Each accepted request creates a new resource. Processing continues after the response.
  *
  * @see Chunkify\Services\ThumbnailsService::create()
  *
- * @phpstan-import-type RangeShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Range
- * @phpstan-import-type StorageShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Storage
+ * @phpstan-import-type ThumbnailRangeParamsShape from \Chunkify\Thumbnails\ThumbnailRangeParams
+ * @phpstan-import-type ThumbnailCreateStorageParamsShape from \Chunkify\Thumbnails\ThumbnailCreateStorageParams
  *
  * @phpstan-type ThumbnailCreateParamsShape = array{
  *   sourceID: string,
  *   count?: int|null,
- *   format?: null|Format|value-of<Format>,
+ *   format?: null|ThumbnailFormat|value-of<ThumbnailFormat>,
  *   metadata?: array<string,string>|null,
- *   output?: null|Output|value-of<Output>,
- *   range?: null|Range|RangeShape,
+ *   output?: null|ThumbnailOutput|value-of<ThumbnailOutput>,
+ *   range?: null|ThumbnailRangeParams|ThumbnailRangeParamsShape,
  *   size?: int|null,
- *   storage?: null|Storage|StorageShape,
+ *   storage?: null|ThumbnailCreateStorageParams|ThumbnailCreateStorageParamsShape,
  *   timestamps?: list<float>|null,
  * }
  */
@@ -55,9 +51,9 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Format selects JPEG or WebP. Defaults to JPEG.
      *
-     * @var value-of<Format>|null $format
+     * @var value-of<ThumbnailFormat>|null $format
      */
-    #[Optional(enum: Format::class)]
+    #[Optional(enum: ThumbnailFormat::class)]
     public ?string $format;
 
     /**
@@ -71,16 +67,16 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Output selects images or sprites. Defaults to images.
      *
-     * @var value-of<Output>|null $output
+     * @var value-of<ThumbnailOutput>|null $output
      */
-    #[Optional(enum: Output::class)]
+    #[Optional(enum: ThumbnailOutput::class)]
     public ?string $output;
 
     /**
      * Range limits sampling to part of the Source. Defaults to the whole Source duration.
      */
     #[Optional]
-    public ?Range $range;
+    public ?ThumbnailRangeParams $range;
 
     /**
      * Size specifies the maximum image or tile edge in pixels, from 64 to 1920. Defaults to 320. Odd sizes are supported. Preserves display aspect ratio without cropping or upscaling.
@@ -92,7 +88,7 @@ final class ThumbnailCreateParams implements BaseModel
      * Storage overrides the Project output destination and names the output files. Source storage remains independent.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?ThumbnailCreateStorageParams $storage;
 
     /**
      * Timestamps specifies 1 to 100 Source-relative target times in seconds. Every time must be within the selected range. Repeated targets produce separate outputs.
@@ -126,22 +122,22 @@ final class ThumbnailCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Format|value-of<Format>|null $format
+     * @param ThumbnailFormat|value-of<ThumbnailFormat>|null $format
      * @param array<string,string>|null $metadata
-     * @param Output|value-of<Output>|null $output
-     * @param Range|RangeShape|null $range
-     * @param Storage|StorageShape|null $storage
+     * @param ThumbnailOutput|value-of<ThumbnailOutput>|null $output
+     * @param ThumbnailRangeParams|ThumbnailRangeParamsShape|null $range
+     * @param ThumbnailCreateStorageParams|ThumbnailCreateStorageParamsShape|null $storage
      * @param list<float>|null $timestamps
      */
     public static function with(
         string $sourceID,
         ?int $count = null,
-        Format|string|null $format = null,
+        ThumbnailFormat|string|null $format = null,
         ?array $metadata = null,
-        Output|string|null $output = null,
-        Range|array|null $range = null,
+        ThumbnailOutput|string|null $output = null,
+        ThumbnailRangeParams|array|null $range = null,
         ?int $size = null,
-        Storage|array|null $storage = null,
+        ThumbnailCreateStorageParams|array|null $storage = null,
         ?array $timestamps = null,
     ): self {
         $self = new self;
@@ -185,9 +181,9 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Format selects JPEG or WebP. Defaults to JPEG.
      *
-     * @param Format|value-of<Format> $format
+     * @param ThumbnailFormat|value-of<ThumbnailFormat> $format
      */
-    public function withFormat(Format|string $format): self
+    public function withFormat(ThumbnailFormat|string $format): self
     {
         $self = clone $this;
         $self['format'] = $format;
@@ -211,9 +207,9 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Output selects images or sprites. Defaults to images.
      *
-     * @param Output|value-of<Output> $output
+     * @param ThumbnailOutput|value-of<ThumbnailOutput> $output
      */
-    public function withOutput(Output|string $output): self
+    public function withOutput(ThumbnailOutput|string $output): self
     {
         $self = clone $this;
         $self['output'] = $output;
@@ -224,9 +220,9 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Range limits sampling to part of the Source. Defaults to the whole Source duration.
      *
-     * @param Range|RangeShape $range
+     * @param ThumbnailRangeParams|ThumbnailRangeParamsShape $range
      */
-    public function withRange(Range|array $range): self
+    public function withRange(ThumbnailRangeParams|array $range): self
     {
         $self = clone $this;
         $self['range'] = $range;
@@ -248,10 +244,11 @@ final class ThumbnailCreateParams implements BaseModel
     /**
      * Storage overrides the Project output destination and names the output files. Source storage remains independent.
      *
-     * @param Storage|StorageShape $storage
+     * @param ThumbnailCreateStorageParams|ThumbnailCreateStorageParamsShape $storage
      */
-    public function withStorage(Storage|array $storage): self
-    {
+    public function withStorage(
+        ThumbnailCreateStorageParams|array $storage
+    ): self {
         $self = clone $this;
         $self['storage'] = $storage;
 

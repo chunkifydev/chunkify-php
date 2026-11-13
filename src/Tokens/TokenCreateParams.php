@@ -9,7 +9,6 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Tokens\TokenCreateParams\Scope;
 
 /**
  * Create a new access token for either account-wide or project-specific access. Project tokens require a valid project slug.
@@ -17,7 +16,9 @@ use Chunkify\Tokens\TokenCreateParams\Scope;
  * @see Chunkify\Services\TokensService::create()
  *
  * @phpstan-type TokenCreateParamsShape = array{
- *   scope: Scope|value-of<Scope>, name?: string|null, projectID?: string|null
+ *   scope: TokenScope|value-of<TokenScope>,
+ *   name?: string|null,
+ *   projectID?: string|null,
  * }
  */
 final class TokenCreateParams implements BaseModel
@@ -29,9 +30,9 @@ final class TokenCreateParams implements BaseModel
     /**
      * Scope specifies the scope of the token, which must be either "team" or "project".
      *
-     * @var value-of<Scope> $scope
+     * @var value-of<TokenScope> $scope
      */
-    #[Required(enum: Scope::class)]
+    #[Required(enum: TokenScope::class)]
     public string $scope;
 
     /**
@@ -70,10 +71,10 @@ final class TokenCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Scope|value-of<Scope> $scope
+     * @param TokenScope|value-of<TokenScope> $scope
      */
     public static function with(
-        Scope|string $scope,
+        TokenScope|string $scope,
         ?string $name = null,
         ?string $projectID = null
     ): self {
@@ -90,9 +91,9 @@ final class TokenCreateParams implements BaseModel
     /**
      * Scope specifies the scope of the token, which must be either "team" or "project".
      *
-     * @param Scope|value-of<Scope> $scope
+     * @param TokenScope|value-of<TokenScope> $scope
      */
-    public function withScope(Scope|string $scope): self
+    public function withScope(TokenScope|string $scope): self
     {
         $self = clone $this;
         $self['scope'] = $scope;

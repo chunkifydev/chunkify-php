@@ -7,19 +7,17 @@ namespace Chunkify\Metrics;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Metrics\MetricsAssets\Daily;
-use Chunkify\Metrics\MetricsAssets\Summary;
 
 /**
  * Measurements saved on retained Assets. Explicit deletion can change historical results; temporary media cleanup does not erase saved Asset measurements.
  *
- * @phpstan-import-type DailyShape from \Chunkify\Metrics\MetricsAssets\Daily
- * @phpstan-import-type SummaryShape from \Chunkify\Metrics\MetricsAssets\Summary
+ * @phpstan-import-type MetricsAssetDayShape from \Chunkify\Metrics\MetricsAssetDay
+ * @phpstan-import-type MetricsAssetValuesShape from \Chunkify\Metrics\MetricsAssetValues
  *
  * @phpstan-type MetricsAssetsShape = array{
- *   daily: list<Daily|DailyShape>,
+ *   daily: list<MetricsAssetDay|MetricsAssetDayShape>,
  *   from: string,
- *   summary: Summary|SummaryShape,
+ *   summary: MetricsAssetValues|MetricsAssetValuesShape,
  *   to: string,
  * }
  */
@@ -31,9 +29,9 @@ final class MetricsAssets implements BaseModel
     /**
      * Daily specifies one record for each selected creation day, oldest first.
      *
-     * @var list<Daily> $daily
+     * @var list<MetricsAssetDay> $daily
      */
-    #[Required(list: Daily::class)]
+    #[Required(list: MetricsAssetDay::class)]
     public array $daily;
 
     /**
@@ -46,7 +44,7 @@ final class MetricsAssets implements BaseModel
      * Summary specifies the complete creation-date cohort.
      */
     #[Required]
-    public Summary $summary;
+    public MetricsAssetValues $summary;
 
     /**
      * To specifies the exclusive UTC end date.
@@ -82,13 +80,13 @@ final class MetricsAssets implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Daily|DailyShape> $daily
-     * @param Summary|SummaryShape $summary
+     * @param list<MetricsAssetDay|MetricsAssetDayShape> $daily
+     * @param MetricsAssetValues|MetricsAssetValuesShape $summary
      */
     public static function with(
         array $daily,
         string $from,
-        Summary|array $summary,
+        MetricsAssetValues|array $summary,
         string $to
     ): self {
         $self = new self;
@@ -104,7 +102,7 @@ final class MetricsAssets implements BaseModel
     /**
      * Daily specifies one record for each selected creation day, oldest first.
      *
-     * @param list<Daily|DailyShape> $daily
+     * @param list<MetricsAssetDay|MetricsAssetDayShape> $daily
      */
     public function withDaily(array $daily): self
     {
@@ -128,9 +126,9 @@ final class MetricsAssets implements BaseModel
     /**
      * Summary specifies the complete creation-date cohort.
      *
-     * @param Summary|SummaryShape $summary
+     * @param MetricsAssetValues|MetricsAssetValuesShape $summary
      */
-    public function withSummary(Summary|array $summary): self
+    public function withSummary(MetricsAssetValues|array $summary): self
     {
         $self = clone $this;
         $self['summary'] = $summary;

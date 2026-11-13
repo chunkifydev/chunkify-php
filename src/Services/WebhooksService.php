@@ -11,23 +11,23 @@ use Chunkify\Core\Exceptions\WebhookException;
 use Chunkify\Core\Util;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\WebhooksContract;
+use Chunkify\Webhooks\NotificationPayloadAsset;
+use Chunkify\Webhooks\NotificationPayloadAssetDeleted;
+use Chunkify\Webhooks\NotificationPayloadAssetOutput;
+use Chunkify\Webhooks\NotificationPayloadAssetOutputDeleted;
+use Chunkify\Webhooks\NotificationPayloadJobCompleted;
+use Chunkify\Webhooks\NotificationPayloadJobCreated;
+use Chunkify\Webhooks\NotificationPayloadJobFailed;
+use Chunkify\Webhooks\NotificationPayloadSourceCreated;
+use Chunkify\Webhooks\NotificationPayloadSourceDeleted;
+use Chunkify\Webhooks\NotificationPayloadThumbnail;
+use Chunkify\Webhooks\NotificationPayloadTranscoding;
+use Chunkify\Webhooks\NotificationPayloadUploadCompleted;
+use Chunkify\Webhooks\NotificationPayloadUploadCreated;
+use Chunkify\Webhooks\NotificationPayloadUploadFailed;
+use Chunkify\Webhooks\NotificationPayloadWorkflowRun;
 use Chunkify\Webhooks\UnwrapWebhookEvent;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAsset;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAssetDeleted;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAssetOutput;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadAssetOutputDeleted;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadJobCompleted;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadJobCreated;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadJobFailed;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadSourceCreated;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadSourceDeleted;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadThumbnail;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadTranscoding;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadUploadCompleted;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadUploadCreated;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadUploadFailed;
-use Chunkify\Webhooks\UnwrapWebhookEvent\NotificationPayloadWorkflowRun;
-use Chunkify\Webhooks\WebhookCreateParams\Event;
+use Chunkify\Webhooks\WebhookEvent;
 use Chunkify\Webhooks\WebhookListResponse;
 use StandardWebhooks\Exception\WebhookVerificationException;
 use StandardWebhooks\Webhook;
@@ -57,7 +57,7 @@ final class WebhooksService implements WebhooksContract
      *
      * @param string $url url is the endpoint that will receive webhook notifications, which must be a valid HTTP URL
      * @param bool $enabled enabled indicates whether the webhook is active
-     * @param list<Event|value-of<Event>> $events events specifies the types of events that will trigger the webhook
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events events specifies the types of events that will trigger the webhook
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
@@ -106,7 +106,7 @@ final class WebhooksService implements WebhooksContract
      *
      * @param string $webhookID Webhook ID
      * @param bool $enabled enabled indicates whether the webhook should be enabled or disabled
-     * @param list<\Chunkify\Webhooks\WebhookUpdateParams\Event|value-of<\Chunkify\Webhooks\WebhookUpdateParams\Event>> $events events specifies the types of events that will trigger the webhook
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events events specifies the types of events that will trigger the webhook
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException

@@ -9,7 +9,6 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Thumbnails\ThumbnailListParams\Created;
-use Chunkify\Thumbnails\ThumbnailListParams\Status;
 
 /**
  * List Thumbnails in the authenticated Project, newest first by default.
@@ -24,7 +23,7 @@ use Chunkify\Thumbnails\ThumbnailListParams\Status;
  *   limit?: int|null,
  *   offset?: int|null,
  *   sourceID?: string|null,
- *   status?: null|Status|value-of<Status>,
+ *   status?: null|ThumbnailStatus|value-of<ThumbnailStatus>,
  *   storageID?: string|null,
  * }
  */
@@ -64,9 +63,9 @@ final class ThumbnailListParams implements BaseModel
     /**
      * Filter by Thumbnail status.
      *
-     * @var value-of<Status>|null $status
+     * @var value-of<ThumbnailStatus>|null $status
      */
-    #[Optional(enum: Status::class)]
+    #[Optional(enum: ThumbnailStatus::class)]
     public ?string $status;
 
     /**
@@ -86,7 +85,7 @@ final class ThumbnailListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
-     * @param Status|value-of<Status>|null $status
+     * @param ThumbnailStatus|value-of<ThumbnailStatus>|null $status
      */
     public static function with(
         ?string $id = null,
@@ -94,7 +93,7 @@ final class ThumbnailListParams implements BaseModel
         ?int $limit = null,
         ?int $offset = null,
         ?string $sourceID = null,
-        Status|string|null $status = null,
+        ThumbnailStatus|string|null $status = null,
         ?string $storageID = null,
     ): self {
         $self = new self;
@@ -168,9 +167,9 @@ final class ThumbnailListParams implements BaseModel
     /**
      * Filter by Thumbnail status.
      *
-     * @param Status|value-of<Status> $status
+     * @param ThumbnailStatus|value-of<ThumbnailStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(ThumbnailStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;

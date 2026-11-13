@@ -9,9 +9,6 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Jobs\JobCreateParams\Format;
-use Chunkify\Jobs\JobCreateParams\Storage;
-use Chunkify\Jobs\JobCreateParams\Transcoder;
 
 /**
  * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
@@ -19,18 +16,18 @@ use Chunkify\Jobs\JobCreateParams\Transcoder;
  * @deprecated
  * @see Chunkify\Services\JobsService::create()
  *
- * @phpstan-import-type FormatVariants from \Chunkify\Jobs\JobCreateParams\Format
- * @phpstan-import-type FormatShape from \Chunkify\Jobs\JobCreateParams\Format
- * @phpstan-import-type StorageShape from \Chunkify\Jobs\JobCreateParams\Storage
- * @phpstan-import-type TranscoderShape from \Chunkify\Jobs\JobCreateParams\Transcoder
+ * @phpstan-import-type JobCreateFormatParamsVariants from \Chunkify\Jobs\JobCreateFormatParams
+ * @phpstan-import-type JobCreateFormatParamsShape from \Chunkify\Jobs\JobCreateFormatParams
+ * @phpstan-import-type JobCreateStorageParamsShape from \Chunkify\Jobs\JobCreateStorageParams
+ * @phpstan-import-type JobCreateTranscoderParamsShape from \Chunkify\Jobs\JobCreateTranscoderParams
  *
  * @phpstan-type JobCreateParamsShape = array{
- *   format: FormatShape,
+ *   format: JobCreateFormatParamsShape,
  *   sourceID: string,
  *   hlsManifestID?: string|null,
  *   metadata?: array<string,string>|null,
- *   storage?: null|Storage|StorageShape,
- *   transcoder?: null|Transcoder|TranscoderShape,
+ *   storage?: null|JobCreateStorageParams|JobCreateStorageParamsShape,
+ *   transcoder?: null|JobCreateTranscoderParams|JobCreateTranscoderParamsShape,
  * }
  */
 final class JobCreateParams implements BaseModel
@@ -43,9 +40,9 @@ final class JobCreateParams implements BaseModel
      * Required format configuration, one and only one valid format configuration must be provided.
      * If you want to use a format without specifying any configuration, use an empty object in the corresponding field.
      *
-     * @var FormatVariants $format
+     * @var JobCreateFormatParamsVariants $format
      */
-    #[Required(union: Format::class)]
+    #[Required(union: JobCreateFormatParams::class)]
     public MP4Av1|MP4H264|MP4H265|WebmVp9|HlsAv1|HlsH264|HlsH265|Jpg $format;
 
     /**
@@ -74,7 +71,7 @@ final class JobCreateParams implements BaseModel
      * Optional storage configuration.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?JobCreateStorageParams $storage;
 
     /**
      * Optional transcoder configuration. If not provided, the system will automatically
@@ -82,7 +79,7 @@ final class JobCreateParams implements BaseModel
      * and output requirements. This auto-scaling ensures efficient resource utilization.
      */
     #[Optional]
-    public ?Transcoder $transcoder;
+    public ?JobCreateTranscoderParams $transcoder;
 
     /**
      * `new JobCreateParams()` is missing required properties by the API.
@@ -108,18 +105,18 @@ final class JobCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param FormatShape $format
+     * @param JobCreateFormatParamsShape $format
      * @param array<string,string>|null $metadata
-     * @param Storage|StorageShape|null $storage
-     * @param Transcoder|TranscoderShape|null $transcoder
+     * @param JobCreateStorageParams|JobCreateStorageParamsShape|null $storage
+     * @param JobCreateTranscoderParams|JobCreateTranscoderParamsShape|null $transcoder
      */
     public static function with(
         MP4Av1|array|MP4H264|MP4H265|WebmVp9|HlsAv1|HlsH264|HlsH265|Jpg $format,
         string $sourceID,
         ?string $hlsManifestID = null,
         ?array $metadata = null,
-        Storage|array|null $storage = null,
-        Transcoder|array|null $transcoder = null,
+        JobCreateStorageParams|array|null $storage = null,
+        JobCreateTranscoderParams|array|null $transcoder = null,
     ): self {
         $self = new self;
 
@@ -138,7 +135,7 @@ final class JobCreateParams implements BaseModel
      * Required format configuration, one and only one valid format configuration must be provided.
      * If you want to use a format without specifying any configuration, use an empty object in the corresponding field.
      *
-     * @param FormatShape $format
+     * @param JobCreateFormatParamsShape $format
      */
     public function withFormat(
         MP4Av1|array|MP4H264|MP4H265|WebmVp9|HlsAv1|HlsH264|HlsH265|Jpg $format
@@ -189,9 +186,9 @@ final class JobCreateParams implements BaseModel
     /**
      * Optional storage configuration.
      *
-     * @param Storage|StorageShape $storage
+     * @param JobCreateStorageParams|JobCreateStorageParamsShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(JobCreateStorageParams|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;
@@ -204,10 +201,11 @@ final class JobCreateParams implements BaseModel
      * calculate the optimal quantity and CPU type based on the source file specifications
      * and output requirements. This auto-scaling ensures efficient resource utilization.
      *
-     * @param Transcoder|TranscoderShape $transcoder
+     * @param JobCreateTranscoderParams|JobCreateTranscoderParamsShape $transcoder
      */
-    public function withTranscoder(Transcoder|array $transcoder): self
-    {
+    public function withTranscoder(
+        JobCreateTranscoderParams|array $transcoder
+    ): self {
         $self = clone $this;
         $self['transcoder'] = $transcoder;
 

@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Chunkify\Projects;
 
+use Chunkify\Assets\AssetDefaults;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Omit;
-use Chunkify\Projects\Project\AssetDefaults;
 
 /**
- * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\Project\AssetDefaults
+ * @phpstan-import-type AssetDefaultsShape from \Chunkify\Assets\AssetDefaults
  *
  * @phpstan-type ProjectShape = array{
  *   id: string,

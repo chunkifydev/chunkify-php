@@ -13,18 +13,18 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ThumbnailsRawContract;
 use Chunkify\Thumbnails\Thumbnail;
 use Chunkify\Thumbnails\ThumbnailCreateParams;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Format;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Output;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Range;
-use Chunkify\Thumbnails\ThumbnailCreateParams\Storage;
+use Chunkify\Thumbnails\ThumbnailCreateStorageParams;
 use Chunkify\Thumbnails\ThumbnailDeleteParams;
+use Chunkify\Thumbnails\ThumbnailFormat;
 use Chunkify\Thumbnails\ThumbnailListParams;
 use Chunkify\Thumbnails\ThumbnailListParams\Created;
-use Chunkify\Thumbnails\ThumbnailListParams\Status;
+use Chunkify\Thumbnails\ThumbnailOutput;
+use Chunkify\Thumbnails\ThumbnailRangeParams;
+use Chunkify\Thumbnails\ThumbnailStatus;
 
 /**
- * @phpstan-import-type RangeShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Range
- * @phpstan-import-type StorageShape from \Chunkify\Thumbnails\ThumbnailCreateParams\Storage
+ * @phpstan-import-type ThumbnailRangeParamsShape from \Chunkify\Thumbnails\ThumbnailRangeParams
+ * @phpstan-import-type ThumbnailCreateStorageParamsShape from \Chunkify\Thumbnails\ThumbnailCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Thumbnails\ThumbnailListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -44,12 +44,12 @@ final class ThumbnailsRawService implements ThumbnailsRawContract
      * @param array{
      *   sourceID: string,
      *   count?: int,
-     *   format?: Format|value-of<Format>,
+     *   format?: ThumbnailFormat|value-of<ThumbnailFormat>,
      *   metadata?: array<string,string>,
-     *   output?: Output|value-of<Output>,
-     *   range?: Range|RangeShape,
+     *   output?: ThumbnailOutput|value-of<ThumbnailOutput>,
+     *   range?: ThumbnailRangeParams|ThumbnailRangeParamsShape,
      *   size?: int,
-     *   storage?: Storage|StorageShape,
+     *   storage?: ThumbnailCreateStorageParams|ThumbnailCreateStorageParamsShape,
      *   timestamps?: list<float>,
      * }|ThumbnailCreateParams $params
      * @param RequestOpts|null $requestOptions
@@ -117,7 +117,7 @@ final class ThumbnailsRawService implements ThumbnailsRawContract
      *   limit?: int,
      *   offset?: int,
      *   sourceID?: string,
-     *   status?: Status|value-of<Status>,
+     *   status?: ThumbnailStatus|value-of<ThumbnailStatus>,
      *   storageID?: string,
      * }|ThumbnailListParams $params
      * @param RequestOpts|null $requestOptions

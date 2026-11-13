@@ -8,31 +8,26 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Thumbnails\Thumbnail\CreatedVia;
-use Chunkify\Thumbnails\Thumbnail\Error;
-use Chunkify\Thumbnails\Thumbnail\File;
-use Chunkify\Thumbnails\Thumbnail\Sample;
-use Chunkify\Thumbnails\Thumbnail\Settings;
-use Chunkify\Thumbnails\Thumbnail\Status;
+use Chunkify\CreatedVia;
 
 /**
  * One thumbnail generation request. At least one sample and its companion files must be published before the resource is ready.
  *
- * @phpstan-import-type FileShape from \Chunkify\Thumbnails\Thumbnail\File
- * @phpstan-import-type SampleShape from \Chunkify\Thumbnails\Thumbnail\Sample
- * @phpstan-import-type SettingsShape from \Chunkify\Thumbnails\Thumbnail\Settings
- * @phpstan-import-type ErrorShape from \Chunkify\Thumbnails\Thumbnail\Error
+ * @phpstan-import-type ThumbnailFileShape from \Chunkify\Thumbnails\ThumbnailFile
+ * @phpstan-import-type ThumbnailSampleShape from \Chunkify\Thumbnails\ThumbnailSample
+ * @phpstan-import-type ThumbnailSettingsShape from \Chunkify\Thumbnails\ThumbnailSettings
+ * @phpstan-import-type ThumbnailErrorShape from \Chunkify\Thumbnails\ThumbnailError
  *
  * @phpstan-type ThumbnailShape = array{
  *   id: string,
  *   assetID: string|null,
  *   createdAt: \DateTimeInterface,
- *   files: list<File|FileShape>,
+ *   files: list<ThumbnailFile|ThumbnailFileShape>,
  *   metadata: array<string,string>,
- *   samples: list<Sample|SampleShape>,
- *   settings: Settings|SettingsShape,
+ *   samples: list<ThumbnailSample|ThumbnailSampleShape>,
+ *   settings: ThumbnailSettings|ThumbnailSettingsShape,
  *   sourceID: string|null,
- *   status: Status|value-of<Status>,
+ *   status: ThumbnailStatus|value-of<ThumbnailStatus>,
  *   storageID: string,
  *   storagePath: string|null,
  *   storagePrefix: string,
@@ -41,7 +36,7 @@ use Chunkify\Thumbnails\Thumbnail\Status;
  *   createdByUserID?: string|null,
  *   createdVia?: null|CreatedVia|value-of<CreatedVia>,
  *   deleteAt?: \DateTimeInterface|null,
- *   error?: null|Error|ErrorShape,
+ *   error?: null|ThumbnailError|ThumbnailErrorShape,
  *   expiresAt?: \DateTimeInterface|null,
  *   readyAt?: \DateTimeInterface|null,
  * }
@@ -72,9 +67,9 @@ final class Thumbnail implements BaseModel
     /**
      * Files contains all published images or sheets and the WebVTT index. Empty while preparing.
      *
-     * @var list<File> $files
+     * @var list<ThumbnailFile> $files
      */
-    #[Required(list: File::class)]
+    #[Required(list: ThumbnailFile::class)]
     public array $files;
 
     /**
@@ -88,16 +83,16 @@ final class Thumbnail implements BaseModel
     /**
      * Samples contains published thumbnails ordered by timestamp. Empty while preparing. A ready resource may contain fewer samples than requested.
      *
-     * @var list<Sample> $samples
+     * @var list<ThumbnailSample> $samples
      */
-    #[Required(list: Sample::class)]
+    #[Required(list: ThumbnailSample::class)]
     public array $samples;
 
     /**
      * Settings contains the accepted sampling and output settings.
      */
     #[Required]
-    public Settings $settings;
+    public ThumbnailSettings $settings;
 
     /**
      * SourceId identifies the input Source, or null if it has been deleted.
@@ -108,9 +103,9 @@ final class Thumbnail implements BaseModel
     /**
      * Status reports processing or output expiry.
      *
-     * @var value-of<Status> $status
+     * @var value-of<ThumbnailStatus> $status
      */
-    #[Required(enum: Status::class)]
+    #[Required(enum: ThumbnailStatus::class)]
     public string $status;
 
     /**
@@ -170,7 +165,7 @@ final class Thumbnail implements BaseModel
      * Error explains a failed request. Omitted otherwise.
      */
     #[Optional]
-    public ?Error $error;
+    public ?ThumbnailError $error;
 
     /**
      * ExpiresAt specifies when temporary output files expire. Omitted for customer output Storage.
@@ -235,13 +230,13 @@ final class Thumbnail implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<File|FileShape> $files
+     * @param list<ThumbnailFile|ThumbnailFileShape> $files
      * @param array<string,string> $metadata
-     * @param list<Sample|SampleShape> $samples
-     * @param Settings|SettingsShape $settings
-     * @param Status|value-of<Status> $status
+     * @param list<ThumbnailSample|ThumbnailSampleShape> $samples
+     * @param ThumbnailSettings|ThumbnailSettingsShape $settings
+     * @param ThumbnailStatus|value-of<ThumbnailStatus> $status
      * @param CreatedVia|value-of<CreatedVia>|null $createdVia
-     * @param Error|ErrorShape|null $error
+     * @param ThumbnailError|ThumbnailErrorShape|null $error
      */
     public static function with(
         string $id,
@@ -250,9 +245,9 @@ final class Thumbnail implements BaseModel
         array $files,
         array $metadata,
         array $samples,
-        Settings|array $settings,
+        ThumbnailSettings|array $settings,
         ?string $sourceID,
-        Status|string $status,
+        ThumbnailStatus|string $status,
         string $storageID,
         ?string $storagePath,
         string $storagePrefix,
@@ -261,7 +256,7 @@ final class Thumbnail implements BaseModel
         ?string $createdByUserID = null,
         CreatedVia|string|null $createdVia = null,
         ?\DateTimeInterface $deleteAt = null,
-        Error|array|null $error = null,
+        ThumbnailError|array|null $error = null,
         ?\DateTimeInterface $expiresAt = null,
         ?\DateTimeInterface $readyAt = null,
     ): self {
@@ -328,7 +323,7 @@ final class Thumbnail implements BaseModel
     /**
      * Files contains all published images or sheets and the WebVTT index. Empty while preparing.
      *
-     * @param list<File|FileShape> $files
+     * @param list<ThumbnailFile|ThumbnailFileShape> $files
      */
     public function withFiles(array $files): self
     {
@@ -354,7 +349,7 @@ final class Thumbnail implements BaseModel
     /**
      * Samples contains published thumbnails ordered by timestamp. Empty while preparing. A ready resource may contain fewer samples than requested.
      *
-     * @param list<Sample|SampleShape> $samples
+     * @param list<ThumbnailSample|ThumbnailSampleShape> $samples
      */
     public function withSamples(array $samples): self
     {
@@ -367,9 +362,9 @@ final class Thumbnail implements BaseModel
     /**
      * Settings contains the accepted sampling and output settings.
      *
-     * @param Settings|SettingsShape $settings
+     * @param ThumbnailSettings|ThumbnailSettingsShape $settings
      */
-    public function withSettings(Settings|array $settings): self
+    public function withSettings(ThumbnailSettings|array $settings): self
     {
         $self = clone $this;
         $self['settings'] = $settings;
@@ -391,9 +386,9 @@ final class Thumbnail implements BaseModel
     /**
      * Status reports processing or output expiry.
      *
-     * @param Status|value-of<Status> $status
+     * @param ThumbnailStatus|value-of<ThumbnailStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(ThumbnailStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;
@@ -497,9 +492,9 @@ final class Thumbnail implements BaseModel
     /**
      * Error explains a failed request. Omitted otherwise.
      *
-     * @param Error|ErrorShape $error
+     * @param ThumbnailError|ThumbnailErrorShape $error
      */
-    public function withError(Error|array $error): self
+    public function withError(ThumbnailError|array $error): self
     {
         $self = clone $this;
         $self['error'] = $error;

@@ -8,17 +8,16 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Uploads\UploadCompleteParams\Part;
 
 /**
  * POST the returned completion_url before expires_at. Single-PUT Uploads send no body; multipart Uploads send every part number and storage ETag. Chunkify verifies the assembled object and atomically creates the Source and optional Asset. An Asset destination conflict returns 409 and fails the Upload without committing Source, Asset, or usage changes. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff.
  *
  * @see Chunkify\Services\UploadsService::complete()
  *
- * @phpstan-import-type PartShape from \Chunkify\Uploads\UploadCompleteParams\Part
+ * @phpstan-import-type UploadMultipartPartParamsShape from \Chunkify\Uploads\UploadMultipartPartParams
  *
  * @phpstan-type UploadCompleteParamsShape = array{
- *   parts?: list<Part|PartShape>|null
+ *   parts?: list<UploadMultipartPartParams|UploadMultipartPartParamsShape>|null
  * }
  */
 final class UploadCompleteParams implements BaseModel
@@ -30,9 +29,9 @@ final class UploadCompleteParams implements BaseModel
     /**
      * All uploaded parts in ascending part_number order, with the ETags returned by storage.
      *
-     * @var list<Part>|null $parts
+     * @var list<UploadMultipartPartParams>|null $parts
      */
-    #[Optional(list: Part::class)]
+    #[Optional(list: UploadMultipartPartParams::class)]
     public ?array $parts;
 
     public function __construct()
@@ -45,7 +44,7 @@ final class UploadCompleteParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Part|PartShape>|null $parts
+     * @param list<UploadMultipartPartParams|UploadMultipartPartParamsShape>|null $parts
      */
     public static function with(?array $parts = null): self
     {
@@ -59,7 +58,7 @@ final class UploadCompleteParams implements BaseModel
     /**
      * All uploaded parts in ascending part_number order, with the ETags returned by storage.
      *
-     * @param list<Part|PartShape> $parts
+     * @param list<UploadMultipartPartParams|UploadMultipartPartParamsShape> $parts
      */
     public function withParts(array $parts): self
     {

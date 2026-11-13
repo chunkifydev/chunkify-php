@@ -9,7 +9,6 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Transcodings\TranscodingListParams\Created;
-use Chunkify\Transcodings\TranscodingListParams\Status;
 
 /**
  * List Transcodings in the authenticated Project, newest first by default.
@@ -24,7 +23,7 @@ use Chunkify\Transcodings\TranscodingListParams\Status;
  *   limit?: int|null,
  *   offset?: int|null,
  *   sourceID?: string|null,
- *   status?: null|Status|value-of<Status>,
+ *   status?: null|TranscodingStatus|value-of<TranscodingStatus>,
  *   storageID?: string|null,
  * }
  */
@@ -64,9 +63,9 @@ final class TranscodingListParams implements BaseModel
     /**
      * Filter by Transcoding status.
      *
-     * @var value-of<Status>|null $status
+     * @var value-of<TranscodingStatus>|null $status
      */
-    #[Optional(enum: Status::class)]
+    #[Optional(enum: TranscodingStatus::class)]
     public ?string $status;
 
     /**
@@ -86,7 +85,7 @@ final class TranscodingListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
-     * @param Status|value-of<Status>|null $status
+     * @param TranscodingStatus|value-of<TranscodingStatus>|null $status
      */
     public static function with(
         ?string $id = null,
@@ -94,7 +93,7 @@ final class TranscodingListParams implements BaseModel
         ?int $limit = null,
         ?int $offset = null,
         ?string $sourceID = null,
-        Status|string|null $status = null,
+        TranscodingStatus|string|null $status = null,
         ?string $storageID = null,
     ): self {
         $self = new self;
@@ -168,9 +167,9 @@ final class TranscodingListParams implements BaseModel
     /**
      * Filter by Transcoding status.
      *
-     * @param Status|value-of<Status> $status
+     * @param TranscodingStatus|value-of<TranscodingStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(TranscodingStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;

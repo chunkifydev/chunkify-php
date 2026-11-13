@@ -6,6 +6,8 @@ use Chunkify\Client;
 use Chunkify\Core\Util;
 use Chunkify\PaginatedResults;
 use Chunkify\Workflows\Workflow;
+use Chunkify\Workflows\WorkflowRuleEvent;
+use Chunkify\Workflows\WorkflowStaticResolution;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -48,11 +50,11 @@ final class WorkflowsTest extends TestCase
                     'actions' => [
                         [
                             'id' => 'id',
-                            'params' => ['resolution' => 'highest'],
+                            'params' => ['resolution' => WorkflowStaticResolution::HIGHEST],
                             'type' => 'create_static_rendition',
                         ],
                     ],
-                    'event' => 'asset.ready',
+                    'event' => WorkflowRuleEvent::ASSET_READY,
                 ],
             ],
             schemaVersion: 1,
@@ -77,11 +79,11 @@ final class WorkflowsTest extends TestCase
                     'actions' => [
                         [
                             'id' => 'id',
-                            'params' => ['resolution' => 'highest'],
+                            'params' => ['resolution' => WorkflowStaticResolution::HIGHEST],
                             'type' => 'create_static_rendition',
                         ],
                     ],
-                    'event' => 'asset.ready',
+                    'event' => WorkflowRuleEvent::ASSET_READY,
                     'origin' => ['actionID' => 'action_id', 'ruleID' => 'rule_id'],
                 ],
             ],

@@ -9,23 +9,21 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Transcodings\TranscodingCreateParams\Format;
-use Chunkify\Transcodings\TranscodingCreateParams\Storage;
 
 /**
  * Create a standalone file export with resolved encoding settings.
  *
  * @see Chunkify\Services\TranscodingsService::create()
  *
- * @phpstan-import-type FormatVariants from \Chunkify\Transcodings\TranscodingCreateParams\Format
- * @phpstan-import-type FormatShape from \Chunkify\Transcodings\TranscodingCreateParams\Format
- * @phpstan-import-type StorageShape from \Chunkify\Transcodings\TranscodingCreateParams\Storage
+ * @phpstan-import-type TranscodingCreateFormatParamsVariants from \Chunkify\Transcodings\TranscodingCreateFormatParams
+ * @phpstan-import-type TranscodingCreateFormatParamsShape from \Chunkify\Transcodings\TranscodingCreateFormatParams
+ * @phpstan-import-type TranscodingCreateStorageParamsShape from \Chunkify\Transcodings\TranscodingCreateStorageParams
  *
  * @phpstan-type TranscodingCreateParamsShape = array{
- *   format: FormatShape,
+ *   format: TranscodingCreateFormatParamsShape,
  *   sourceID: string,
  *   metadata?: array<string,string>|null,
- *   storage?: null|Storage|StorageShape,
+ *   storage?: null|TranscodingCreateStorageParams|TranscodingCreateStorageParamsShape,
  * }
  */
 final class TranscodingCreateParams implements BaseModel
@@ -37,9 +35,9 @@ final class TranscodingCreateParams implements BaseModel
     /**
      * Format specifies the requested encoding settings.
      *
-     * @var FormatVariants $format
+     * @var TranscodingCreateFormatParamsVariants $format
      */
-    #[Required(union: Format::class)]
+    #[Required(union: TranscodingCreateFormatParams::class)]
     public TranscodingMP4H264|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format;
 
     /**
@@ -60,7 +58,7 @@ final class TranscodingCreateParams implements BaseModel
      * Storage overrides the Project output destination. Source storage remains independent.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?TranscodingCreateStorageParams $storage;
 
     /**
      * `new TranscodingCreateParams()` is missing required properties by the API.
@@ -86,15 +84,15 @@ final class TranscodingCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param FormatShape $format
+     * @param TranscodingCreateFormatParamsShape $format
      * @param array<string,string>|null $metadata
-     * @param Storage|StorageShape|null $storage
+     * @param TranscodingCreateStorageParams|TranscodingCreateStorageParamsShape|null $storage
      */
     public static function with(
         TranscodingMP4H264|array|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format,
         string $sourceID,
         ?array $metadata = null,
-        Storage|array|null $storage = null,
+        TranscodingCreateStorageParams|array|null $storage = null,
     ): self {
         $self = new self;
 
@@ -110,7 +108,7 @@ final class TranscodingCreateParams implements BaseModel
     /**
      * Format specifies the requested encoding settings.
      *
-     * @param FormatShape $format
+     * @param TranscodingCreateFormatParamsShape $format
      */
     public function withFormat(
         TranscodingMP4H264|array|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format,
@@ -148,10 +146,11 @@ final class TranscodingCreateParams implements BaseModel
     /**
      * Storage overrides the Project output destination. Source storage remains independent.
      *
-     * @param Storage|StorageShape $storage
+     * @param TranscodingCreateStorageParams|TranscodingCreateStorageParamsShape $storage
      */
-    public function withStorage(Storage|array $storage): self
-    {
+    public function withStorage(
+        TranscodingCreateStorageParams|array $storage
+    ): self {
         $self = clone $this;
         $self['storage'] = $storage;
 
