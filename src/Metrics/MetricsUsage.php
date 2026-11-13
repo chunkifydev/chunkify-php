@@ -7,19 +7,17 @@ namespace Chunkify\Metrics;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Metrics\MetricsUsage\Daily;
-use Chunkify\Metrics\MetricsUsage\Summary;
 
 /**
  * Project usage for the selected UTC accounting period.
  *
- * @phpstan-import-type DailyShape from \Chunkify\Metrics\MetricsUsage\Daily
- * @phpstan-import-type SummaryShape from \Chunkify\Metrics\MetricsUsage\Summary
+ * @phpstan-import-type MetricsUsageDayShape from \Chunkify\Metrics\MetricsUsageDay
+ * @phpstan-import-type MetricsUsageValuesShape from \Chunkify\Metrics\MetricsUsageValues
  *
  * @phpstan-type MetricsUsageShape = array{
- *   daily: list<Daily|DailyShape>,
+ *   daily: list<MetricsUsageDay|MetricsUsageDayShape>,
  *   from: string,
- *   summary: Summary|SummaryShape,
+ *   summary: MetricsUsageValues|MetricsUsageValuesShape,
  *   to: string,
  * }
  */
@@ -31,9 +29,9 @@ final class MetricsUsage implements BaseModel
     /**
      * Daily specifies one record for every selected day, oldest first.
      *
-     * @var list<Daily> $daily
+     * @var list<MetricsUsageDay> $daily
      */
-    #[Required(list: Daily::class)]
+    #[Required(list: MetricsUsageDay::class)]
     public array $daily;
 
     /**
@@ -46,7 +44,7 @@ final class MetricsUsage implements BaseModel
      * Summary specifies totals across the selected period.
      */
     #[Required]
-    public Summary $summary;
+    public MetricsUsageValues $summary;
 
     /**
      * To specifies the exclusive UTC end date.
@@ -78,13 +76,13 @@ final class MetricsUsage implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Daily|DailyShape> $daily
-     * @param Summary|SummaryShape $summary
+     * @param list<MetricsUsageDay|MetricsUsageDayShape> $daily
+     * @param MetricsUsageValues|MetricsUsageValuesShape $summary
      */
     public static function with(
         array $daily,
         string $from,
-        Summary|array $summary,
+        MetricsUsageValues|array $summary,
         string $to
     ): self {
         $self = new self;
@@ -100,7 +98,7 @@ final class MetricsUsage implements BaseModel
     /**
      * Daily specifies one record for every selected day, oldest first.
      *
-     * @param list<Daily|DailyShape> $daily
+     * @param list<MetricsUsageDay|MetricsUsageDayShape> $daily
      */
     public function withDaily(array $daily): self
     {
@@ -124,9 +122,9 @@ final class MetricsUsage implements BaseModel
     /**
      * Summary specifies totals across the selected period.
      *
-     * @param Summary|SummaryShape $summary
+     * @param MetricsUsageValues|MetricsUsageValuesShape $summary
      */
-    public function withSummary(Summary|array $summary): self
+    public function withSummary(MetricsUsageValues|array $summary): self
     {
         $self = clone $this;
         $self['summary'] = $summary;

@@ -10,20 +10,20 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Util;
 use Chunkify\Jobs\Job;
 use Chunkify\Jobs\JobCreateParams;
-use Chunkify\Jobs\JobCreateParams\Storage;
-use Chunkify\Jobs\JobCreateParams\Transcoder;
+use Chunkify\Jobs\JobCreateStorageParams;
+use Chunkify\Jobs\JobCreateTranscoderParams;
+use Chunkify\Jobs\JobFormatID;
 use Chunkify\Jobs\JobListParams;
 use Chunkify\Jobs\JobListParams\Created;
-use Chunkify\Jobs\JobListParams\FormatID;
 use Chunkify\Jobs\JobListParams\Status;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\JobsRawContract;
 
 /**
- * @phpstan-import-type FormatShape from \Chunkify\Jobs\JobCreateParams\Format
- * @phpstan-import-type StorageShape from \Chunkify\Jobs\JobCreateParams\Storage
- * @phpstan-import-type TranscoderShape from \Chunkify\Jobs\JobCreateParams\Transcoder
+ * @phpstan-import-type JobCreateFormatParamsShape from \Chunkify\Jobs\JobCreateFormatParams
+ * @phpstan-import-type JobCreateStorageParamsShape from \Chunkify\Jobs\JobCreateStorageParams
+ * @phpstan-import-type JobCreateTranscoderParamsShape from \Chunkify\Jobs\JobCreateTranscoderParams
  * @phpstan-import-type CreatedShape from \Chunkify\Jobs\JobListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -43,12 +43,12 @@ final class JobsRawService implements JobsRawContract
      * Create a new video processing job with specified parameters. The job is created with pending status and waits for scheduler admission before processing. Pending jobs are admitted oldest first across all projects in the team as vCPU capacity becomes available. Deprecated: Jobs are a legacy resource. Use Assets, Transcodings or Thumbnails instead.
      *
      * @param array{
-     *   format: FormatShape,
+     *   format: JobCreateFormatParamsShape,
      *   sourceID: string,
      *   hlsManifestID?: string,
      *   metadata?: array<string,string>,
-     *   storage?: Storage|StorageShape,
-     *   transcoder?: Transcoder|TranscoderShape,
+     *   storage?: JobCreateStorageParams|JobCreateStorageParamsShape,
+     *   transcoder?: JobCreateTranscoderParams|JobCreateTranscoderParamsShape,
      * }|JobCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -116,7 +116,7 @@ final class JobsRawService implements JobsRawContract
      * @param array{
      *   id?: string,
      *   created?: Created|CreatedShape,
-     *   formatID?: value-of<FormatID>,
+     *   formatID?: value-of<JobFormatID>,
      *   hlsManifestID?: string,
      *   limit?: int,
      *   metadata?: list<list<string>>,

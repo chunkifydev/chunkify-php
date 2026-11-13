@@ -8,7 +8,6 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Webhooks\WebhookUpdateParams\Event;
 
 /**
  * Update the enabled status of a webhook. The webhook must belong to the current project.
@@ -16,7 +15,7 @@ use Chunkify\Webhooks\WebhookUpdateParams\Event;
  * @see Chunkify\Services\WebhooksService::update()
  *
  * @phpstan-type WebhookUpdateParamsShape = array{
- *   enabled?: bool|null, events?: list<Event|value-of<Event>>|null
+ *   enabled?: bool|null, events?: list<WebhookEvent|value-of<WebhookEvent>>|null
  * }
  */
 final class WebhookUpdateParams implements BaseModel
@@ -34,9 +33,9 @@ final class WebhookUpdateParams implements BaseModel
     /**
      * Events specifies the types of events that will trigger the webhook.
      *
-     * @var list<value-of<Event>>|null $events
+     * @var list<value-of<WebhookEvent>>|null $events
      */
-    #[Optional(list: Event::class)]
+    #[Optional(list: WebhookEvent::class)]
     public ?array $events;
 
     public function __construct()
@@ -49,7 +48,7 @@ final class WebhookUpdateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Event|value-of<Event>>|null $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>>|null $events
      */
     public static function with(
         ?bool $enabled = null,
@@ -77,7 +76,7 @@ final class WebhookUpdateParams implements BaseModel
     /**
      * Events specifies the types of events that will trigger the webhook.
      *
-     * @param list<Event|value-of<Event>> $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events
      */
     public function withEvents(array $events): self
     {

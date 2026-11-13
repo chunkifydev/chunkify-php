@@ -7,13 +7,12 @@ namespace Chunkify\Webhooks;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Webhooks\Webhook\Event;
 
 /**
  * @phpstan-type WebhookShape = array{
  *   id: string,
  *   enabled: bool,
- *   events: list<Event|value-of<Event>>,
+ *   events: list<WebhookEvent|value-of<WebhookEvent>>,
  *   projectID: string,
  *   url: string,
  * }
@@ -38,9 +37,9 @@ final class Webhook implements BaseModel
     /**
      * Array of event types this webhook subscribes to.
      *
-     * @var list<value-of<Event>> $events
+     * @var list<value-of<WebhookEvent>> $events
      */
-    #[Required(list: Event::class)]
+    #[Required(list: WebhookEvent::class)]
     public array $events;
 
     /**
@@ -84,7 +83,7 @@ final class Webhook implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Event|value-of<Event>> $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events
      */
     public static function with(
         string $id,
@@ -129,7 +128,7 @@ final class Webhook implements BaseModel
     /**
      * Array of event types this webhook subscribes to.
      *
-     * @param list<Event|value-of<Event>> $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events
      */
     public function withEvents(array $events): self
     {

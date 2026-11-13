@@ -6,6 +6,7 @@ use Chunkify\Client;
 use Chunkify\Core\Util;
 use Chunkify\Tokens\Token;
 use Chunkify\Tokens\TokenListResponse;
+use Chunkify\Tokens\TokenScope;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -40,7 +41,7 @@ final class TokensTest extends TestCase
             $this->markTestSkipped('Mock server tests are disabled');
         }
 
-        $result = $this->client->tokens->create(scope: 'project');
+        $result = $this->client->tokens->create(scope: TokenScope::PROJECT);
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Token::class, $result);
@@ -54,7 +55,7 @@ final class TokensTest extends TestCase
         }
 
         $result = $this->client->tokens->create(
-            scope: 'project',
+            scope: TokenScope::PROJECT,
             name: 'My Token',
             projectID: 'proj_A1cce6120E56e7Tu9ioP09Nhjk1',
         );

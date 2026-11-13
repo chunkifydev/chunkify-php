@@ -7,15 +7,15 @@ namespace Chunkify\Jobs\Logs;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Jobs\Logs\LogListResponse\Data;
+use Chunkify\Log;
 
 /**
  * Response containing a list of logs for a job.
  *
- * @phpstan-import-type DataShape from \Chunkify\Jobs\Logs\LogListResponse\Data
+ * @phpstan-import-type LogShape from \Chunkify\Log
  *
  * @phpstan-type LogListResponseShape = array{
- *   data: list<Data|DataShape>, status: 'success'
+ *   data: list<Log|LogShape>, status: 'success'
  * }
  */
 final class LogListResponse implements BaseModel
@@ -31,8 +31,8 @@ final class LogListResponse implements BaseModel
     #[Required]
     public string $status = 'success';
 
-    /** @var list<Data> $data */
-    #[Required(list: Data::class)]
+    /** @var list<Log> $data */
+    #[Required(list: Log::class)]
     public array $data;
 
     /**
@@ -59,7 +59,7 @@ final class LogListResponse implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Data|DataShape> $data
+     * @param list<Log|LogShape> $data
      */
     public static function with(array $data): self
     {
@@ -71,7 +71,7 @@ final class LogListResponse implements BaseModel
     }
 
     /**
-     * @param list<Data|DataShape> $data
+     * @param list<Log|LogShape> $data
      */
     public function withData(array $data): self
     {

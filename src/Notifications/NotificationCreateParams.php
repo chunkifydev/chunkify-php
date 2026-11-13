@@ -8,7 +8,7 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Notifications\NotificationCreateParams\Event;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
@@ -16,7 +16,9 @@ use Chunkify\Notifications\NotificationCreateParams\Event;
  * @see Chunkify\Services\NotificationsService::create()
  *
  * @phpstan-type NotificationCreateParamsShape = array{
- *   event: Event|value-of<Event>, objectID: string, webhookID: string
+ *   event: WebhookEvent|value-of<WebhookEvent>,
+ *   objectID: string,
+ *   webhookID: string,
  * }
  */
 final class NotificationCreateParams implements BaseModel
@@ -28,9 +30,9 @@ final class NotificationCreateParams implements BaseModel
     /**
      * Event specifies the type of event that triggered the notification.
      *
-     * @var value-of<Event> $event
+     * @var value-of<WebhookEvent> $event
      */
-    #[Required(enum: Event::class)]
+    #[Required(enum: WebhookEvent::class)]
     public string $event;
 
     /**
@@ -72,10 +74,10 @@ final class NotificationCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Event|value-of<Event> $event
+     * @param WebhookEvent|value-of<WebhookEvent> $event
      */
     public static function with(
-        Event|string $event,
+        WebhookEvent|string $event,
         string $objectID,
         string $webhookID
     ): self {
@@ -91,9 +93,9 @@ final class NotificationCreateParams implements BaseModel
     /**
      * Event specifies the type of event that triggered the notification.
      *
-     * @param Event|value-of<Event> $event
+     * @param WebhookEvent|value-of<WebhookEvent> $event
      */
-    public function withEvent(Event|string $event): self
+    public function withEvent(WebhookEvent|string $event): self
     {
         $self = clone $this;
         $self['event'] = $event;

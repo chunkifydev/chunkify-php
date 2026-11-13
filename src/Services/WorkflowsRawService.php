@@ -12,14 +12,13 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\WorkflowsRawContract;
 use Chunkify\Workflows\Workflow;
 use Chunkify\Workflows\WorkflowCreateParams;
-use Chunkify\Workflows\WorkflowCreateParams\Rule;
 use Chunkify\Workflows\WorkflowCreateParams\SchemaVersion;
 use Chunkify\Workflows\WorkflowListParams;
+use Chunkify\Workflows\WorkflowRuleParams;
 use Chunkify\Workflows\WorkflowUpdateParams;
 
 /**
- * @phpstan-import-type RuleShape from \Chunkify\Workflows\WorkflowCreateParams\Rule
- * @phpstan-import-type RuleShape from \Chunkify\Workflows\WorkflowUpdateParams\Rule as RuleShape1
+ * @phpstan-import-type WorkflowRuleParamsShape from \Chunkify\Workflows\WorkflowRuleParams
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class WorkflowsRawService implements WorkflowsRawContract
@@ -37,7 +36,7 @@ final class WorkflowsRawService implements WorkflowsRawContract
      *
      * @param array{
      *   name: string,
-     *   rules: list<Rule|RuleShape>,
+     *   rules: list<WorkflowRuleParams|WorkflowRuleParamsShape>,
      *   schemaVersion: SchemaVersion|value-of<SchemaVersion>,
      * }|WorkflowCreateParams $params
      * @param RequestOpts|null $requestOptions
@@ -103,7 +102,7 @@ final class WorkflowsRawService implements WorkflowsRawContract
      * @param array{
      *   expectedRevision?: int,
      *   name?: string,
-     *   rules?: list<WorkflowUpdateParams\Rule|RuleShape1>,
+     *   rules?: list<WorkflowRuleParams|WorkflowRuleParamsShape>,
      *   schemaVersion?: WorkflowUpdateParams\SchemaVersion|value-of<WorkflowUpdateParams\SchemaVersion>,
      * }|WorkflowUpdateParams $params
      * @param RequestOpts|null $requestOptions

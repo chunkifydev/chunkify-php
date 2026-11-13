@@ -8,8 +8,8 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Notifications\Notification\Event;
 use Chunkify\Webhooks\Webhook;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * @phpstan-import-type WebhookShape from \Chunkify\Webhooks\Webhook
@@ -17,7 +17,7 @@ use Chunkify\Webhooks\Webhook;
  * @phpstan-type NotificationShape = array{
  *   id: string,
  *   createdAt: \DateTimeInterface,
- *   event: Event|value-of<Event>,
+ *   event: WebhookEvent|value-of<WebhookEvent>,
  *   objectID: string,
  *   payload: string,
  *   webhook: Webhook|WebhookShape,
@@ -45,9 +45,9 @@ final class Notification implements BaseModel
     /**
      * Type of event that triggered this notification.
      *
-     * @var value-of<Event> $event
+     * @var value-of<WebhookEvent> $event
      */
-    #[Required(enum: Event::class)]
+    #[Required(enum: WebhookEvent::class)]
     public string $event;
 
     /**
@@ -112,13 +112,13 @@ final class Notification implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Event|value-of<Event> $event
+     * @param WebhookEvent|value-of<WebhookEvent> $event
      * @param Webhook|WebhookShape $webhook
      */
     public static function with(
         string $id,
         \DateTimeInterface $createdAt,
-        Event|string $event,
+        WebhookEvent|string $event,
         string $objectID,
         string $payload,
         Webhook|array $webhook,
@@ -165,9 +165,9 @@ final class Notification implements BaseModel
     /**
      * Type of event that triggered this notification.
      *
-     * @param Event|value-of<Event> $event
+     * @param WebhookEvent|value-of<WebhookEvent> $event
      */
-    public function withEvent(Event|string $event): self
+    public function withEvent(WebhookEvent|string $event): self
     {
         $self = clone $this;
         $self['event'] = $event;

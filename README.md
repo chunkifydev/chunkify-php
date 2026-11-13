@@ -49,10 +49,10 @@ var_dump($asset->id);
 
 ### Value Objects
 
-It is recommended to use the static `with` constructor `HlsAv1::with(id: 'hls_av1', ...)`
+It is recommended to use the static `with` constructor `AssetCaptionOutputCreateParams::with(params: (object)[], ...)`
 and named parameters to initialize value objects.
 
-However, builders are also provided `(new HlsAv1)->withID('hls_av1')`.
+However, builders are also provided `(new AssetCaptionOutputCreateParams)->withParams((object)[])`.
 
 ### Pagination
 

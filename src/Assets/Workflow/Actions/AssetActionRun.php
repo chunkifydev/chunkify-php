@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Workflow\Actions;
 
-use Chunkify\Assets\Workflow\Actions\AssetActionRun\Input;
-use Chunkify\Assets\Workflow\Actions\AssetActionRun\Result;
-use Chunkify\Assets\Workflow\Actions\AssetActionRun\Status;
-use Chunkify\Assets\Workflow\Actions\AssetActionRun\Type;
+use Chunkify\Assets\AssetActionInput;
+use Chunkify\Assets\AssetActionResult;
+use Chunkify\Assets\AssetActionStatus;
+use Chunkify\Assets\AssetActionType;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
@@ -16,23 +16,23 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * One execution of an Asset action, started by a Workflow or a direct output request.
  *
- * @phpstan-import-type InputShape from \Chunkify\Assets\Workflow\Actions\AssetActionRun\Input
- * @phpstan-import-type ResultShape from \Chunkify\Assets\Workflow\Actions\AssetActionRun\Result
+ * @phpstan-import-type AssetActionInputShape from \Chunkify\Assets\AssetActionInput
+ * @phpstan-import-type AssetActionResultShape from \Chunkify\Assets\AssetActionResult
  *
  * @phpstan-type AssetActionRunShape = array{
  *   id: string,
  *   assetID: string,
  *   completedAt: \DateTimeInterface|null,
  *   createdAt: \DateTimeInterface,
- *   input: Input|InputShape,
- *   status: Status|value-of<Status>,
- *   type: Type|value-of<Type>,
+ *   input: AssetActionInput|AssetActionInputShape,
+ *   status: AssetActionStatus|value-of<AssetActionStatus>,
+ *   type: AssetActionType|value-of<AssetActionType>,
  *   updatedAt: \DateTimeInterface,
  *   workflowRunID: string|null,
  *   actionID?: string|null,
  *   error?: string|null,
  *   reason?: string|null,
- *   result?: null|Result|ResultShape,
+ *   result?: null|AssetActionResult|AssetActionResultShape,
  *   ruleID?: string|null,
  * }
  */
@@ -69,22 +69,22 @@ final class AssetActionRun implements BaseModel
      * Resolved parameters and input references for this execution.
      */
     #[Required]
-    public Input $input;
+    public AssetActionInput $input;
 
     /**
      * Current execution status of the action.
      *
-     * @var value-of<Status> $status
+     * @var value-of<AssetActionStatus> $status
      */
-    #[Required(enum: Status::class)]
+    #[Required(enum: AssetActionStatus::class)]
     public string $status;
 
     /**
      * Type of action performed.
      *
-     * @var value-of<Type> $type
+     * @var value-of<AssetActionType> $type
      */
-    #[Required(enum: Type::class)]
+    #[Required(enum: AssetActionType::class)]
     public string $type;
 
     /**
@@ -121,7 +121,7 @@ final class AssetActionRun implements BaseModel
      * Output reference and reuse flag. Included when the action completes successfully.
      */
     #[Optional]
-    public ?Result $result;
+    public ?AssetActionResult $result;
 
     /**
      * Rule key from the Workflow definition. Omitted for direct output requests.
@@ -172,25 +172,25 @@ final class AssetActionRun implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Input|InputShape $input
-     * @param Status|value-of<Status> $status
-     * @param Type|value-of<Type> $type
-     * @param Result|ResultShape|null $result
+     * @param AssetActionInput|AssetActionInputShape $input
+     * @param AssetActionStatus|value-of<AssetActionStatus> $status
+     * @param AssetActionType|value-of<AssetActionType> $type
+     * @param AssetActionResult|AssetActionResultShape|null $result
      */
     public static function with(
         string $id,
         string $assetID,
         ?\DateTimeInterface $completedAt,
         \DateTimeInterface $createdAt,
-        Input|array $input,
-        Status|string $status,
-        Type|string $type,
+        AssetActionInput|array $input,
+        AssetActionStatus|string $status,
+        AssetActionType|string $type,
         \DateTimeInterface $updatedAt,
         ?string $workflowRunID,
         ?string $actionID = null,
         ?string $error = null,
         ?string $reason = null,
-        Result|array|null $result = null,
+        AssetActionResult|array|null $result = null,
         ?string $ruleID = null,
     ): self {
         $self = new self;
@@ -261,9 +261,9 @@ final class AssetActionRun implements BaseModel
     /**
      * Resolved parameters and input references for this execution.
      *
-     * @param Input|InputShape $input
+     * @param AssetActionInput|AssetActionInputShape $input
      */
-    public function withInput(Input|array $input): self
+    public function withInput(AssetActionInput|array $input): self
     {
         $self = clone $this;
         $self['input'] = $input;
@@ -274,9 +274,9 @@ final class AssetActionRun implements BaseModel
     /**
      * Current execution status of the action.
      *
-     * @param Status|value-of<Status> $status
+     * @param AssetActionStatus|value-of<AssetActionStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(AssetActionStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;
@@ -287,9 +287,9 @@ final class AssetActionRun implements BaseModel
     /**
      * Type of action performed.
      *
-     * @param Type|value-of<Type> $type
+     * @param AssetActionType|value-of<AssetActionType> $type
      */
-    public function withType(Type|string $type): self
+    public function withType(AssetActionType|string $type): self
     {
         $self = clone $this;
         $self['type'] = $type;
@@ -355,9 +355,9 @@ final class AssetActionRun implements BaseModel
     /**
      * Output reference and reuse flag. Included when the action completes successfully.
      *
-     * @param Result|ResultShape $result
+     * @param AssetActionResult|AssetActionResultShape $result
      */
-    public function withResult(Result|array $result): self
+    public function withResult(AssetActionResult|array $result): self
     {
         $self = clone $this;
         $self['result'] = $result;
