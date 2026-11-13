@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs\OutputCreateParams\Output;
 
+use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams\Params;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
@@ -11,8 +12,10 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Create or reuse the original-language transcript for an Asset. Caption generation shares this transcript and its speech-recognition charge.
  *
+ * @phpstan-import-type ParamsShape from \Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams\Params
+ *
  * @phpstan-type AssetTranscriptOutputCreateParamsShape = array{
- *   params: mixed, type: 'transcript'
+ *   params: Params|ParamsShape, type: 'transcript'
  * }
  */
 final class AssetTranscriptOutputCreateParams implements BaseModel
@@ -32,7 +35,7 @@ final class AssetTranscriptOutputCreateParams implements BaseModel
      * Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
      */
     #[Required]
-    public mixed $params;
+    public Params $params;
 
     /**
      * `new AssetTranscriptOutputCreateParams()` is missing required properties by the API.
@@ -57,8 +60,10 @@ final class AssetTranscriptOutputCreateParams implements BaseModel
      * Construct an instance from the required parameters.
      *
      * You must use named parameters to construct any parameters with a default value.
+     *
+     * @param Params|ParamsShape $params
      */
-    public static function with(mixed $params): self
+    public static function with(Params|array $params): self
     {
         $self = new self;
 
@@ -69,8 +74,10 @@ final class AssetTranscriptOutputCreateParams implements BaseModel
 
     /**
      * Parameters for an original-language transcript. Pass an empty object; the spoken language is detected automatically.
+     *
+     * @param Params|ParamsShape $params
      */
-    public function withParams(mixed $params): self
+    public function withParams(Params|array $params): self
     {
         $self = clone $this;
         $self['params'] = $params;
