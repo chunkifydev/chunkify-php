@@ -10,6 +10,7 @@ use Chunkify\Assets\Asset\MaxResolution;
 use Chunkify\Assets\Asset\MinResolution;
 use Chunkify\Assets\Asset\Poster;
 use Chunkify\Assets\Asset\SourceMetadata;
+use Chunkify\Assets\Asset\Status;
 use Chunkify\Assets\Asset\TimelinePreviews;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
@@ -32,7 +33,7 @@ use Chunkify\Core\Contracts\BaseModel;
  *   playbackReady: bool,
  *   previewEnabled: bool,
  *   sourceMetadata: SourceMetadata|SourceMetadataShape,
- *   status: AssetStatus|value-of<AssetStatus>,
+ *   status: Status|value-of<Status>,
  *   storageID: string,
  *   title: string,
  *   updatedAt: \DateTimeInterface,
@@ -122,9 +123,9 @@ final class Asset implements BaseModel
     /**
      * Status specifies the Asset preparation state. ready means the video is prepared for playback, with its poster and timeline previews available. Static renditions and captions have independent statuses.
      *
-     * @var value-of<AssetStatus> $status
+     * @var value-of<Status> $status
      */
-    #[Required(enum: AssetStatus::class)]
+    #[Required(enum: Status::class)]
     public string $status;
 
     /**
@@ -302,7 +303,7 @@ final class Asset implements BaseModel
      * @param array<string,string> $metadata
      * @param MinResolution|value-of<MinResolution> $minResolution
      * @param SourceMetadata|SourceMetadataShape $sourceMetadata
-     * @param AssetStatus|value-of<AssetStatus> $status
+     * @param Status|value-of<Status> $status
      * @param CreatedVia|value-of<CreatedVia>|null $createdVia
      * @param Error|ErrorShape|null $error
      * @param Poster|PosterShape|null $poster
@@ -318,7 +319,7 @@ final class Asset implements BaseModel
         bool $playbackReady,
         bool $previewEnabled,
         SourceMetadata|array $sourceMetadata,
-        AssetStatus|string $status,
+        Status|string $status,
         string $storageID,
         string $title,
         \DateTimeInterface $updatedAt,
@@ -487,9 +488,9 @@ final class Asset implements BaseModel
     /**
      * Status specifies the Asset preparation state. ready means the video is prepared for playback, with its poster and timeline previews available. Static renditions and captions have independent statuses.
      *
-     * @param AssetStatus|value-of<AssetStatus> $status
+     * @param Status|value-of<Status> $status
      */
-    public function withStatus(AssetStatus|string $status): self
+    public function withStatus(Status|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;
