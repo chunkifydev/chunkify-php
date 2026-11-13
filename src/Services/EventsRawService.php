@@ -14,6 +14,7 @@ use Chunkify\Events\EventListParams\Created;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\EventsRawContract;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * @phpstan-import-type CreatedShape from \Chunkify\Events\EventListParams\Created
@@ -61,7 +62,7 @@ final class EventsRawService implements EventsRawContract
      *
      * @param array{
      *   created?: Created|CreatedShape,
-     *   events?: list<EventListParams\Event|value-of<EventListParams\Event>>,
+     *   events?: list<WebhookEvent|value-of<WebhookEvent>>,
      *   limit?: int,
      *   objectID?: string,
      *   offset?: int,

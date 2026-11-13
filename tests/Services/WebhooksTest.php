@@ -5,6 +5,7 @@ namespace Tests\Services;
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\WebhookException;
 use Chunkify\Core\Util;
+use Chunkify\Webhooks\WebhookEvent;
 use Chunkify\Webhooks\WebhookListResponse;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
@@ -59,7 +60,7 @@ final class WebhooksTest extends TestCase
         $result = $this->client->webhooks->create(
             url: 'https://example.com/webhook',
             enabled: true,
-            events: ['asset.playback_ready'],
+            events: [WebhookEvent::ASSET_PLAYBACK_READY],
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

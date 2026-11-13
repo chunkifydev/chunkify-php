@@ -9,8 +9,8 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\TokensContract;
 use Chunkify\Tokens\Token;
-use Chunkify\Tokens\TokenCreateParams\Scope;
 use Chunkify\Tokens\TokenListResponse;
+use Chunkify\Tokens\TokenScope;
 
 /**
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
@@ -35,7 +35,7 @@ final class TokensService implements TokensContract
      *
      * Create a new access token for either account-wide or project-specific access. Project tokens require a valid project slug.
      *
-     * @param Scope|value-of<Scope> $scope scope specifies the scope of the token, which must be either "team" or "project"
+     * @param TokenScope|value-of<TokenScope> $scope scope specifies the scope of the token, which must be either "team" or "project"
      * @param string $name name is the name of the token, which can be up to 64 characters long
      * @param string $projectID projectId is required if the scope is set to "project"
      * @param RequestOpts|null $requestOptions
@@ -43,7 +43,7 @@ final class TokensService implements TokensContract
      * @throws APIException
      */
     public function create(
-        Scope|string $scope,
+        TokenScope|string $scope,
         ?string $name = null,
         ?string $projectID = null,
         RequestOptions|array|null $requestOptions = null,

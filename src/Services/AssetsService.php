@@ -7,9 +7,9 @@ namespace Chunkify\Services;
 use Chunkify\Assets\Asset;
 use Chunkify\Assets\AssetCreateParams\MaxResolution;
 use Chunkify\Assets\AssetCreateParams\MinResolution;
-use Chunkify\Assets\AssetCreateParams\Storage;
+use Chunkify\Assets\AssetCreateStorageParams;
 use Chunkify\Assets\AssetListParams\Created;
-use Chunkify\Assets\AssetListParams\Status;
+use Chunkify\Assets\AssetStatus;
 use Chunkify\Client;
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Omit;
@@ -23,7 +23,7 @@ use Chunkify\Services\Assets\WorkflowService;
 /**
  * Automatic video-on-demand Assets and independent H.264 MP4 static renditions.
  *
- * @phpstan-import-type StorageShape from \Chunkify\Assets\AssetCreateParams\Storage
+ * @phpstan-import-type AssetCreateStorageParamsShape from \Chunkify\Assets\AssetCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Assets\AssetListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -68,7 +68,7 @@ final class AssetsService implements AssetsContract
      * Ignored for Chunkify storage, which always uses {assetID}.
      * Overrides the Project default. Defaults to {assetID} when neither is set. Maximum template size: 1024 UTF-8 bytes. Expanded prefix: 768 bytes including base_prefix and trailing slash.
      * @param bool $previewEnabled Allow public preview access without an API token. Omit to use the Project default. Does not control CDN or static download access.
-     * @param Storage|StorageShape $storage Output Storage. Omit to use the Project default. The path_template controls the folder for generated output paths.
+     * @param AssetCreateStorageParams|AssetCreateStorageParamsShape $storage Output Storage. Omit to use the Project default. The path_template controls the folder for generated output paths.
      * @param string $title Asset title, up to 256 characters. Defaults to an empty string.
      * @param string|Omit|null $workflowID WorkflowId specifies the Workflow to select. Omit to use the Project default. Set null to disable automatic actions. The current revision is pinned when creation is accepted.
      * @param RequestOpts|null $requestOptions
@@ -82,7 +82,7 @@ final class AssetsService implements AssetsContract
         MinResolution|string|null $minResolution = null,
         ?string $pathTemplate = null,
         ?bool $previewEnabled = null,
-        Storage|array|null $storage = null,
+        AssetCreateStorageParams|array|null $storage = null,
         ?string $title = null,
         string|Omit|null $workflowID = Omit::Value,
         RequestOptions|array|null $requestOptions = null,
@@ -164,7 +164,7 @@ final class AssetsService implements AssetsContract
      * @param int $offset number of Assets to skip
      * @param string $search case-insensitive search of Asset IDs and titles
      * @param string $sourceID Filter Assets linked to this Source. Omit to include Assets from all Sources in the Project.
-     * @param Status|value-of<Status> $status filter by Asset status
+     * @param AssetStatus|value-of<AssetStatus> $status filter by Asset status
      * @param string $storageID filter by output Storage ID
      * @param RequestOpts|null $requestOptions
      *
@@ -179,7 +179,7 @@ final class AssetsService implements AssetsContract
         int $offset = 0,
         ?string $search = null,
         ?string $sourceID = null,
-        Status|string|null $status = null,
+        AssetStatus|string|null $status = null,
         ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): PaginatedResults {

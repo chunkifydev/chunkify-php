@@ -9,8 +9,8 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Notifications\NotificationListParams\Created;
-use Chunkify\Notifications\NotificationListParams\Event;
 use Chunkify\Notifications\NotificationListParams\ResponseStatusCode;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * Retrieve a list of notifications with optional filtering and pagination.
@@ -23,7 +23,7 @@ use Chunkify\Notifications\NotificationListParams\ResponseStatusCode;
  * @phpstan-type NotificationListParamsShape = array{
  *   created?: null|Created|CreatedShape,
  *   eventID?: string|null,
- *   events?: list<Event|value-of<Event>>|null,
+ *   events?: list<WebhookEvent|value-of<WebhookEvent>>|null,
  *   limit?: int|null,
  *   objectID?: string|null,
  *   offset?: int|null,
@@ -49,9 +49,9 @@ final class NotificationListParams implements BaseModel
     /**
      * Filter by events.
      *
-     * @var list<value-of<Event>>|null $events
+     * @var list<value-of<WebhookEvent>>|null $events
      */
-    #[Optional(list: Event::class)]
+    #[Optional(list: WebhookEvent::class)]
     public ?array $events;
 
     /**
@@ -92,7 +92,7 @@ final class NotificationListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
-     * @param list<Event|value-of<Event>>|null $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>>|null $events
      * @param ResponseStatusCode|ResponseStatusCodeShape|null $responseStatusCode
      */
     public static function with(
@@ -144,7 +144,7 @@ final class NotificationListParams implements BaseModel
     /**
      * Filter by events.
      *
-     * @param list<Event|value-of<Event>> $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events
      */
     public function withEvents(array $events): self
     {

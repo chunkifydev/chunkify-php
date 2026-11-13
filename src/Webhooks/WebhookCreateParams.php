@@ -9,7 +9,6 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Webhooks\WebhookCreateParams\Event;
 
 /**
  * Create a new webhook for a project. The webhook will receive notifications for specified events.
@@ -17,7 +16,9 @@ use Chunkify\Webhooks\WebhookCreateParams\Event;
  * @see Chunkify\Services\WebhooksService::create()
  *
  * @phpstan-type WebhookCreateParamsShape = array{
- *   url: string, enabled?: bool|null, events?: list<Event|value-of<Event>>|null
+ *   url: string,
+ *   enabled?: bool|null,
+ *   events?: list<WebhookEvent|value-of<WebhookEvent>>|null,
  * }
  */
 final class WebhookCreateParams implements BaseModel
@@ -41,9 +42,9 @@ final class WebhookCreateParams implements BaseModel
     /**
      * Events specifies the types of events that will trigger the webhook.
      *
-     * @var list<value-of<Event>>|null $events
+     * @var list<value-of<WebhookEvent>>|null $events
      */
-    #[Optional(list: Event::class)]
+    #[Optional(list: WebhookEvent::class)]
     public ?array $events;
 
     /**
@@ -70,7 +71,7 @@ final class WebhookCreateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Event|value-of<Event>>|null $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>>|null $events
      */
     public static function with(
         string $url,
@@ -112,7 +113,7 @@ final class WebhookCreateParams implements BaseModel
     /**
      * Events specifies the types of events that will trigger the webhook.
      *
-     * @param list<Event|value-of<Event>> $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events
      */
     public function withEvents(array $events): self
     {

@@ -8,18 +8,17 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Sources\SourceCreateParams\Storage;
 
 /**
  * Create a new source from a media URL. The source will be analyzed to extract metadata and generate a thumbnail. The source will be automatically deleted after the data retention period.
  *
  * @see Chunkify\Services\SourcesService::create()
  *
- * @phpstan-import-type StorageShape from \Chunkify\Sources\SourceCreateParams\Storage
+ * @phpstan-import-type SourceCreateStorageParamsShape from \Chunkify\Sources\SourceCreateStorageParams
  *
  * @phpstan-type SourceCreateParamsShape = array{
  *   metadata?: array<string,string>|null,
- *   storage?: null|Storage|StorageShape,
+ *   storage?: null|SourceCreateStorageParams|SourceCreateStorageParamsShape,
  *   url?: string|null,
  * }
  */
@@ -41,7 +40,7 @@ final class SourceCreateParams implements BaseModel
      * Storage input configuration. Provide this or url, never both.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?SourceCreateStorageParams $storage;
 
     /**
      * Url is the URL of the source, which must be a valid HTTP URL.
@@ -60,12 +59,12 @@ final class SourceCreateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param array<string,string>|null $metadata
-     * @param Storage|StorageShape|null $storage
+     * @param SourceCreateStorageParams|SourceCreateStorageParamsShape|null $storage
      */
     public static function with(
         ?array $metadata = null,
-        Storage|array|null $storage = null,
-        ?string $url = null
+        SourceCreateStorageParams|array|null $storage = null,
+        ?string $url = null,
     ): self {
         $self = new self;
 
@@ -92,9 +91,9 @@ final class SourceCreateParams implements BaseModel
     /**
      * Storage input configuration. Provide this or url, never both.
      *
-     * @param Storage|StorageShape $storage
+     * @param SourceCreateStorageParams|SourceCreateStorageParamsShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(SourceCreateStorageParams|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;
