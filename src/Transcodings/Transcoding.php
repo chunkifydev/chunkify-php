@@ -8,38 +8,32 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Transcodings\Transcoding\CreatedVia;
-use Chunkify\Transcodings\Transcoding\Error;
-use Chunkify\Transcodings\Transcoding\File;
-use Chunkify\Transcodings\Transcoding\Format;
-use Chunkify\Transcodings\Transcoding\ProcessingStage;
-use Chunkify\Transcodings\Transcoding\Status;
-use Chunkify\Transcodings\Transcoding\Storage;
+use Chunkify\CreatedVia;
 
 /**
  * A standalone file-encoding request with its accepted settings and published files.
  *
- * @phpstan-import-type FileShape from \Chunkify\Transcodings\Transcoding\File
- * @phpstan-import-type FormatShape from \Chunkify\Transcodings\Transcoding\Format
- * @phpstan-import-type StorageShape from \Chunkify\Transcodings\Transcoding\Storage
- * @phpstan-import-type ErrorShape from \Chunkify\Transcodings\Transcoding\Error
+ * @phpstan-import-type TranscodingFileShape from \Chunkify\Transcodings\TranscodingFile
+ * @phpstan-import-type TranscodingFormatShape from \Chunkify\Transcodings\TranscodingFormat
+ * @phpstan-import-type TranscodingStorageShape from \Chunkify\Transcodings\TranscodingStorage
+ * @phpstan-import-type TranscodingErrorShape from \Chunkify\Transcodings\TranscodingError
  *
  * @phpstan-type TranscodingShape = array{
  *   id: string,
  *   createdAt: \DateTimeInterface,
- *   files: list<File|FileShape>,
- *   format: Format|FormatShape,
+ *   files: list<TranscodingFile|TranscodingFileShape>,
+ *   format: TranscodingFormat|TranscodingFormatShape,
  *   metadata: array<string,string>,
- *   status: Status|value-of<Status>,
- *   storage: Storage|StorageShape,
+ *   status: TranscodingStatus|value-of<TranscodingStatus>,
+ *   storage: TranscodingStorage|TranscodingStorageShape,
  *   updatedAt: \DateTimeInterface,
  *   createdByTokenID?: string|null,
  *   createdByUserID?: string|null,
  *   createdVia?: null|CreatedVia|value-of<CreatedVia>,
  *   deleteAt?: \DateTimeInterface|null,
- *   error?: null|Error|ErrorShape,
+ *   error?: null|TranscodingError|TranscodingErrorShape,
  *   expiresAt?: \DateTimeInterface|null,
- *   processingStage?: null|ProcessingStage|value-of<ProcessingStage>,
+ *   processingStage?: null|TranscodingProcessingStage|value-of<TranscodingProcessingStage>,
  *   progress?: float|null,
  *   readyAt?: \DateTimeInterface|null,
  *   sourceID?: string|null,
@@ -65,16 +59,16 @@ final class Transcoding implements BaseModel
     /**
      * Files contains the published output files and their measured properties, ordered by creation time. Empty until publication. Presigned URLs are refreshed on each read and included in lifecycle webhooks when available.
      *
-     * @var list<File> $files
+     * @var list<TranscodingFile> $files
      */
-    #[Required(list: File::class)]
+    #[Required(list: TranscodingFile::class)]
     public array $files;
 
     /**
      * Format contains the resolved encoding settings accepted at creation, including defaults, dimensions, frame rate and normalized seek and duration. Per-title rate control is resolved during processing. Measured media properties are available in Files.
      */
     #[Required]
-    public Format $format;
+    public TranscodingFormat $format;
 
     /**
      * Metadata contains the string values attached to the Transcoding.
@@ -87,16 +81,16 @@ final class Transcoding implements BaseModel
     /**
      * Status reports processing or output expiry.
      *
-     * @var value-of<Status> $status
+     * @var value-of<TranscodingStatus> $status
      */
-    #[Required(enum: Status::class)]
+    #[Required(enum: TranscodingStatus::class)]
     public string $status;
 
     /**
      * Storage contains the resolved output destination.
      */
     #[Required]
-    public Storage $storage;
+    public TranscodingStorage $storage;
 
     /**
      * UpdatedAt specifies when the request was last updated.
@@ -137,7 +131,7 @@ final class Transcoding implements BaseModel
      * Error describes why processing failed. Omitted when no processing error exists.
      */
     #[Optional]
-    public ?Error $error;
+    public ?TranscodingError $error;
 
     /**
      * ExpiresAt specifies when temporary output files expire. Omitted for customer output Storage and before the Transcoding is ready.
@@ -148,9 +142,9 @@ final class Transcoding implements BaseModel
     /**
      * ProcessingStage specifies the current activity while the status is preparing. Omitted otherwise.
      *
-     * @var value-of<ProcessingStage>|null $processingStage
+     * @var value-of<TranscodingProcessingStage>|null $processingStage
      */
-    #[Optional('processing_stage', enum: ProcessingStage::class)]
+    #[Optional('processing_stage', enum: TranscodingProcessingStage::class)]
     public ?string $processingStage;
 
     /**
@@ -212,31 +206,31 @@ final class Transcoding implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<File|FileShape> $files
-     * @param Format|FormatShape $format
+     * @param list<TranscodingFile|TranscodingFileShape> $files
+     * @param TranscodingFormat|TranscodingFormatShape $format
      * @param array<string,string> $metadata
-     * @param Status|value-of<Status> $status
-     * @param Storage|StorageShape $storage
+     * @param TranscodingStatus|value-of<TranscodingStatus> $status
+     * @param TranscodingStorage|TranscodingStorageShape $storage
      * @param CreatedVia|value-of<CreatedVia>|null $createdVia
-     * @param Error|ErrorShape|null $error
-     * @param ProcessingStage|value-of<ProcessingStage>|null $processingStage
+     * @param TranscodingError|TranscodingErrorShape|null $error
+     * @param TranscodingProcessingStage|value-of<TranscodingProcessingStage>|null $processingStage
      */
     public static function with(
         string $id,
         \DateTimeInterface $createdAt,
         array $files,
-        Format|array $format,
+        TranscodingFormat|array $format,
         array $metadata,
-        Status|string $status,
-        Storage|array $storage,
+        TranscodingStatus|string $status,
+        TranscodingStorage|array $storage,
         \DateTimeInterface $updatedAt,
         ?string $createdByTokenID = null,
         ?string $createdByUserID = null,
         CreatedVia|string|null $createdVia = null,
         ?\DateTimeInterface $deleteAt = null,
-        Error|array|null $error = null,
+        TranscodingError|array|null $error = null,
         ?\DateTimeInterface $expiresAt = null,
-        ProcessingStage|string|null $processingStage = null,
+        TranscodingProcessingStage|string|null $processingStage = null,
         ?float $progress = null,
         ?\DateTimeInterface $readyAt = null,
         ?string $sourceID = null,
@@ -291,7 +285,7 @@ final class Transcoding implements BaseModel
     /**
      * Files contains the published output files and their measured properties, ordered by creation time. Empty until publication. Presigned URLs are refreshed on each read and included in lifecycle webhooks when available.
      *
-     * @param list<File|FileShape> $files
+     * @param list<TranscodingFile|TranscodingFileShape> $files
      */
     public function withFiles(array $files): self
     {
@@ -304,9 +298,9 @@ final class Transcoding implements BaseModel
     /**
      * Format contains the resolved encoding settings accepted at creation, including defaults, dimensions, frame rate and normalized seek and duration. Per-title rate control is resolved during processing. Measured media properties are available in Files.
      *
-     * @param Format|FormatShape $format
+     * @param TranscodingFormat|TranscodingFormatShape $format
      */
-    public function withFormat(Format|array $format): self
+    public function withFormat(TranscodingFormat|array $format): self
     {
         $self = clone $this;
         $self['format'] = $format;
@@ -330,9 +324,9 @@ final class Transcoding implements BaseModel
     /**
      * Status reports processing or output expiry.
      *
-     * @param Status|value-of<Status> $status
+     * @param TranscodingStatus|value-of<TranscodingStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(TranscodingStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;
@@ -343,9 +337,9 @@ final class Transcoding implements BaseModel
     /**
      * Storage contains the resolved output destination.
      *
-     * @param Storage|StorageShape $storage
+     * @param TranscodingStorage|TranscodingStorageShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(TranscodingStorage|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;
@@ -416,9 +410,9 @@ final class Transcoding implements BaseModel
     /**
      * Error describes why processing failed. Omitted when no processing error exists.
      *
-     * @param Error|ErrorShape $error
+     * @param TranscodingError|TranscodingErrorShape $error
      */
-    public function withError(Error|array $error): self
+    public function withError(TranscodingError|array $error): self
     {
         $self = clone $this;
         $self['error'] = $error;
@@ -440,10 +434,10 @@ final class Transcoding implements BaseModel
     /**
      * ProcessingStage specifies the current activity while the status is preparing. Omitted otherwise.
      *
-     * @param ProcessingStage|value-of<ProcessingStage> $processingStage
+     * @param TranscodingProcessingStage|value-of<TranscodingProcessingStage> $processingStage
      */
     public function withProcessingStage(
-        ProcessingStage|string $processingStage
+        TranscodingProcessingStage|string $processingStage
     ): self {
         $self = clone $this;
         $self['processingStage'] = $processingStage;

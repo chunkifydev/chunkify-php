@@ -7,12 +7,11 @@ namespace Chunkify\Workflows;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Workflows\Workflow\Rule;
 
 /**
  * A reusable definition of actions triggered by Asset events.
  *
- * @phpstan-import-type RuleShape from \Chunkify\Workflows\Workflow\Rule
+ * @phpstan-import-type WorkflowRuleShape from \Chunkify\Workflows\WorkflowRule
  *
  * @phpstan-type WorkflowShape = array{
  *   id: string,
@@ -20,7 +19,7 @@ use Chunkify\Workflows\Workflow\Rule;
  *   createdAt: \DateTimeInterface,
  *   name: string,
  *   revision: int,
- *   rules: list<Rule|RuleShape>,
+ *   rules: list<WorkflowRule|WorkflowRuleShape>,
  *   schemaVersion: int,
  *   updatedAt: \DateTimeInterface,
  * }
@@ -65,9 +64,9 @@ final class Workflow implements BaseModel
      * Rules specifies the event subscriptions and actions in this definition.
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      *
-     * @var list<Rule> $rules
+     * @var list<WorkflowRule> $rules
      */
-    #[Required(list: Rule::class)]
+    #[Required(list: WorkflowRule::class)]
     public array $rules;
 
     /**
@@ -123,7 +122,7 @@ final class Workflow implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Rule|RuleShape> $rules
+     * @param list<WorkflowRule|WorkflowRuleShape> $rules
      */
     public static function with(
         string $id,
@@ -209,7 +208,7 @@ final class Workflow implements BaseModel
      * Rules specifies the event subscriptions and actions in this definition.
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      *
-     * @param list<Rule|RuleShape> $rules
+     * @param list<WorkflowRule|WorkflowRuleShape> $rules
      */
     public function withRules(array $rules): self
     {

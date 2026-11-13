@@ -6,6 +6,7 @@ use Chunkify\Client;
 use Chunkify\Core\Util;
 use Chunkify\Notifications\Notification;
 use Chunkify\PaginatedResults;
+use Chunkify\Webhooks\WebhookEvent;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -41,7 +42,7 @@ final class NotificationsTest extends TestCase
         }
 
         $result = $this->client->notifications->create(
-            event: 'asset.playback_ready',
+            event: WebhookEvent::ASSET_PLAYBACK_READY,
             objectID: 'ast_A1cce6120E56e7Tu9ioP09Nhjk9',
             webhookID: 'wh_A1cce6120E56e7Tu9ioP09Nhjk9',
         );
@@ -58,7 +59,7 @@ final class NotificationsTest extends TestCase
         }
 
         $result = $this->client->notifications->create(
-            event: 'asset.playback_ready',
+            event: WebhookEvent::ASSET_PLAYBACK_READY,
             objectID: 'ast_A1cce6120E56e7Tu9ioP09Nhjk9',
             webhookID: 'wh_A1cce6120E56e7Tu9ioP09Nhjk9',
         );

@@ -8,18 +8,18 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\Transcodings\Transcoding;
-use Chunkify\Transcodings\TranscodingCreateParams\Storage;
+use Chunkify\Transcodings\TranscodingCreateStorageParams;
 use Chunkify\Transcodings\TranscodingListParams\Created;
-use Chunkify\Transcodings\TranscodingListParams\Status;
 use Chunkify\Transcodings\TranscodingM4aAac;
 use Chunkify\Transcodings\TranscodingMP4Av1;
 use Chunkify\Transcodings\TranscodingMP4H264;
 use Chunkify\Transcodings\TranscodingMP4H265;
+use Chunkify\Transcodings\TranscodingStatus;
 use Chunkify\Transcodings\TranscodingWebmVp9;
 
 /**
- * @phpstan-import-type FormatShape from \Chunkify\Transcodings\TranscodingCreateParams\Format
- * @phpstan-import-type StorageShape from \Chunkify\Transcodings\TranscodingCreateParams\Storage
+ * @phpstan-import-type TranscodingCreateFormatParamsShape from \Chunkify\Transcodings\TranscodingCreateFormatParams
+ * @phpstan-import-type TranscodingCreateStorageParamsShape from \Chunkify\Transcodings\TranscodingCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Transcodings\TranscodingListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -28,10 +28,10 @@ interface TranscodingsContract
     /**
      * @api
      *
-     * @param FormatShape $format format specifies the requested encoding settings
+     * @param TranscodingCreateFormatParamsShape $format format specifies the requested encoding settings
      * @param string $sourceID sourceId identifies a Source in this Project
      * @param array<string,string> $metadata Metadata attaches string values to the Transcoding. The serialized object may contain at most 2048 bytes.
-     * @param Storage|StorageShape $storage Storage overrides the Project output destination. Source storage remains independent.
+     * @param TranscodingCreateStorageParams|TranscodingCreateStorageParamsShape $storage Storage overrides the Project output destination. Source storage remains independent.
      * @param RequestOpts|null $requestOptions
      *
      * @throws APIException
@@ -40,7 +40,7 @@ interface TranscodingsContract
         TranscodingMP4H264|array|TranscodingMP4H265|TranscodingMP4Av1|TranscodingWebmVp9|TranscodingM4aAac $format,
         string $sourceID,
         ?array $metadata = null,
-        Storage|array|null $storage = null,
+        TranscodingCreateStorageParams|array|null $storage = null,
         RequestOptions|array|null $requestOptions = null,
     ): Transcoding;
 
@@ -65,7 +65,7 @@ interface TranscodingsContract
      * @param int $limit maximum number of Transcodings to return
      * @param int $offset number of Transcodings to skip
      * @param string $sourceID Filter Transcodings linked to this Source. Omit to include Transcodings from all Sources in the Project.
-     * @param Status|value-of<Status> $status filter by Transcoding status
+     * @param TranscodingStatus|value-of<TranscodingStatus> $status filter by Transcoding status
      * @param string $storageID filter by output Storage ID
      * @param RequestOpts|null $requestOptions
      *
@@ -79,7 +79,7 @@ interface TranscodingsContract
         int $limit = 100,
         int $offset = 0,
         ?string $sourceID = null,
-        Status|string|null $status = null,
+        TranscodingStatus|string|null $status = null,
         ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): PaginatedResults;

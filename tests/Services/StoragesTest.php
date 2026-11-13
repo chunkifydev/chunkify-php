@@ -4,6 +4,7 @@ namespace Tests\Services;
 
 use Chunkify\Client;
 use Chunkify\Core\Util;
+use Chunkify\Storages\AwsRegion;
 use Chunkify\Storages\StorageListResponse;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
@@ -44,7 +45,7 @@ final class StoragesTest extends TestCase
                 'accessKeyID' => '1234567890',
                 'bucket' => 'my-bucket',
                 'provider' => 'aws',
-                'region' => 'us-east-1',
+                'region' => AwsRegion::US_EAST_1,
                 'secretAccessKey' => '1234567890',
             ],
         );
@@ -65,7 +66,7 @@ final class StoragesTest extends TestCase
                 'accessKeyID' => '1234567890',
                 'bucket' => 'my-bucket',
                 'provider' => 'aws',
-                'region' => 'us-east-1',
+                'region' => AwsRegion::US_EAST_1,
                 'secretAccessKey' => '1234567890',
                 'basePrefix' => 'chunkify/',
                 'cdnBaseURL' => 'https://media.example.com',

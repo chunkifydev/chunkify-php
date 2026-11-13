@@ -9,7 +9,7 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Events\EventListParams\Created;
-use Chunkify\Events\EventListParams\Event;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * List lifecycle events recorded with or without webhooks. Events and their deliveries expire according to the plan retention deadline. Historical notifications recorded before the event log remain available through Notifications.
@@ -20,7 +20,7 @@ use Chunkify\Events\EventListParams\Event;
  *
  * @phpstan-type EventListParamsShape = array{
  *   created?: null|Created|CreatedShape,
- *   events?: list<\Chunkify\Events\EventListParams\Event|value-of<\Chunkify\Events\EventListParams\Event>>|null,
+ *   events?: list<WebhookEvent|value-of<WebhookEvent>>|null,
  *   limit?: int|null,
  *   objectID?: string|null,
  *   offset?: int|null,
@@ -38,9 +38,9 @@ final class EventListParams implements BaseModel
     /**
      * Filter by events.
      *
-     * @var list<value-of<Event>>|null $events
+     * @var list<value-of<WebhookEvent>>|null $events
      */
-    #[Optional(list: Event::class)]
+    #[Optional(list: WebhookEvent::class)]
     public ?array $events;
 
     /**
@@ -72,7 +72,7 @@ final class EventListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
-     * @param list<Event|value-of<Event>>|null $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>>|null $events
      */
     public static function with(
         Created|array|null $created = null,
@@ -106,7 +106,7 @@ final class EventListParams implements BaseModel
     /**
      * Filter by events.
      *
-     * @param list<Event|value-of<Event>> $events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events
      */
     public function withEvents(array $events): self
     {

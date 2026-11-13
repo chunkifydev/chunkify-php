@@ -13,18 +13,18 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\UploadsRawContract;
 use Chunkify\Uploads\Upload;
 use Chunkify\Uploads\UploadCompleteParams;
-use Chunkify\Uploads\UploadCompleteParams\Part;
 use Chunkify\Uploads\UploadCreateParams;
-use Chunkify\Uploads\UploadCreateParams\Storage;
 use Chunkify\Uploads\UploadCreateParams\UploadMode;
+use Chunkify\Uploads\UploadCreateStorageParams;
 use Chunkify\Uploads\UploadListParams;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
+use Chunkify\Uploads\UploadMultipartPartParams;
 
 /**
- * @phpstan-import-type StorageShape from \Chunkify\Uploads\UploadCreateParams\Storage
+ * @phpstan-import-type UploadCreateStorageParamsShape from \Chunkify\Uploads\UploadCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Uploads\UploadListParams\Created
- * @phpstan-import-type PartShape from \Chunkify\Uploads\UploadCompleteParams\Part
+ * @phpstan-import-type UploadMultipartPartParamsShape from \Chunkify\Uploads\UploadMultipartPartParams
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class UploadsRawService implements UploadsRawContract
@@ -44,7 +44,7 @@ final class UploadsRawService implements UploadsRawContract
      *   createAsset?: bool,
      *   fileSizeBytes?: int,
      *   metadata?: array<string,string>,
-     *   storage?: Storage|StorageShape,
+     *   storage?: UploadCreateStorageParams|UploadCreateStorageParamsShape,
      *   uploadMode?: UploadMode|value-of<UploadMode>,
      *   validityTimeout?: int,
      *   workflowID?: string|null,
@@ -176,7 +176,9 @@ final class UploadsRawService implements UploadsRawContract
      * POST the returned completion_url before expires_at. Single-PUT Uploads send no body; multipart Uploads send every part number and storage ETag. Chunkify verifies the assembled object and atomically creates the Source and optional Asset. An Asset destination conflict returns 409 and fails the Upload without committing Source, Asset, or usage changes. Valid retries return 204 without duplicate side effects. Retry network errors, 429, and 5xx responses with bounded backoff.
      *
      * @param string $token Opaque completion capability from completion_url
-     * @param array{parts?: list<Part|PartShape>}|UploadCompleteParams $params
+     * @param array{
+     *   parts?: list<UploadMultipartPartParams|UploadMultipartPartParamsShape>
+     * }|UploadCompleteParams $params
      * @param RequestOpts|null $requestOptions
      *
      * @return BaseResponse<mixed>
