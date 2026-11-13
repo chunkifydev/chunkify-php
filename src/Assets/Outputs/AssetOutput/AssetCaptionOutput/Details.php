@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput;
 
-use Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput\Details\Error;
+use Chunkify\AssetOutputError;
 use Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput\Details\Status;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
@@ -14,13 +14,13 @@ use Chunkify\Core\Contracts\BaseModel;
 /**
  * Details contains the canonical typed output resource, including its available delivery fields.
  *
- * @phpstan-import-type ErrorShape from \Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput\Details\Error
+ * @phpstan-import-type AssetOutputErrorShape from \Chunkify\AssetOutputError
  *
  * @phpstan-type DetailsShape = array{
  *   id: string,
  *   status: \Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput\Details\Status|value-of<\Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput\Details\Status>,
  *   createdAt?: \DateTimeInterface|null,
- *   error?: null|Error|ErrorShape,
+ *   error?: null|AssetOutputError|AssetOutputErrorShape,
  *   languageCode?: string|null,
  *   playlistPath?: string|null,
  *   size?: int|null,
@@ -60,7 +60,7 @@ final class Details implements BaseModel
      * Reason caption processing failed.
      */
     #[Optional]
-    public ?Error $error;
+    public ?AssetOutputError $error;
 
     /**
      * Primary language of this subtitle track, such as en or fr. Omitted when no speech was detected or processing has not finished.
@@ -123,13 +123,13 @@ final class Details implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Status|value-of<Status> $status
-     * @param Error|ErrorShape|null $error
+     * @param AssetOutputError|AssetOutputErrorShape|null $error
      */
     public static function with(
         string $id,
         Status|string $status,
         ?\DateTimeInterface $createdAt = null,
-        Error|array|null $error = null,
+        AssetOutputError|array|null $error = null,
         ?string $languageCode = null,
         ?string $playlistPath = null,
         ?int $size = null,
@@ -193,9 +193,9 @@ final class Details implements BaseModel
     /**
      * Reason caption processing failed.
      *
-     * @param Error|ErrorShape $error
+     * @param AssetOutputError|AssetOutputErrorShape $error
      */
-    public function withError(Error|array $error): self
+    public function withError(AssetOutputError|array $error): self
     {
         $self = clone $this;
         $self['error'] = $error;

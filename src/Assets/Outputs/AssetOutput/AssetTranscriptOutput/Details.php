@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput;
 
+use Chunkify\AssetOutputError;
 use Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Content;
-use Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Error;
 use Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Status;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
@@ -16,13 +16,13 @@ use Chunkify\Core\Contracts\BaseModel;
  * An original-language transcript. Content is included in ready output responses and lifecycle event snapshots. Transcripts have no download or CDN URL.
  *
  * @phpstan-import-type ContentShape from \Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Content
- * @phpstan-import-type ErrorShape from \Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Error
+ * @phpstan-import-type AssetOutputErrorShape from \Chunkify\AssetOutputError
  *
  * @phpstan-type DetailsShape = array{
  *   id: string,
  *   status: \Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Status|value-of<\Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput\Details\Status>,
  *   content?: null|Content|ContentShape,
- *   error?: null|Error|ErrorShape,
+ *   error?: null|AssetOutputError|AssetOutputErrorShape,
  *   languageCode?: string|null,
  * }
  */
@@ -53,8 +53,11 @@ final class Details implements BaseModel
     #[Optional]
     public ?Content $content;
 
+    /**
+     * A customer-facing Asset output processing failure.
+     */
     #[Optional]
-    public ?Error $error;
+    public ?AssetOutputError $error;
 
     /**
      * LanguageCode identifies the detected primary language, such as en. Omitted before recognition or when no speech is detected.
@@ -88,13 +91,13 @@ final class Details implements BaseModel
      *
      * @param Status|value-of<Status> $status
      * @param Content|ContentShape|null $content
-     * @param Error|ErrorShape|null $error
+     * @param AssetOutputError|AssetOutputErrorShape|null $error
      */
     public static function with(
         string $id,
         Status|string $status,
         Content|array|null $content = null,
-        Error|array|null $error = null,
+        AssetOutputError|array|null $error = null,
         ?string $languageCode = null,
     ): self {
         $self = new self;
@@ -148,9 +151,11 @@ final class Details implements BaseModel
     }
 
     /**
-     * @param Error|ErrorShape $error
+     * A customer-facing Asset output processing failure.
+     *
+     * @param AssetOutputError|AssetOutputErrorShape $error
      */
-    public function withError(Error|array $error): self
+    public function withError(AssetOutputError|array $error): self
     {
         $self = clone $this;
         $self['error'] = $error;
