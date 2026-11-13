@@ -8,16 +8,18 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
+use Chunkify\Workflows\Workflow\Rule\Action\WorkflowCaptionAction\Params;
 use Chunkify\Workflows\Workflow\Rule\Action\WorkflowCaptionAction\TranscriptID;
 
 /**
  * Generates or reuses original captions and their transcript from the Asset's speech.
  *
+ * @phpstan-import-type ParamsShape from \Chunkify\Workflows\Workflow\Rule\Action\WorkflowCaptionAction\Params
  * @phpstan-import-type TranscriptIDShape from \Chunkify\Workflows\Workflow\Rule\Action\WorkflowCaptionAction\TranscriptID
  *
  * @phpstan-type WorkflowCaptionActionShape = array{
  *   id: string,
- *   params: mixed,
+ *   params: Params|ParamsShape,
  *   type: 'create_caption',
  *   transcriptID?: null|TranscriptID|TranscriptIDShape,
  * }
@@ -46,7 +48,7 @@ final class WorkflowCaptionAction implements BaseModel
      * Params specifies caption generation settings. Pass an empty object.
      */
     #[Required]
-    public mixed $params;
+    public Params $params;
 
     /**
      * TranscriptId binds caption publication to the transcript in the triggering event. Use it only when connected to create_transcript. When omitted, creates or reuses the Asset’s original transcript.
@@ -78,11 +80,12 @@ final class WorkflowCaptionAction implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
+     * @param Params|ParamsShape $params
      * @param TranscriptID|TranscriptIDShape|null $transcriptID
      */
     public static function with(
         string $id,
-        mixed $params,
+        Params|array $params,
         TranscriptID|array|null $transcriptID = null
     ): self {
         $self = new self;
@@ -109,8 +112,10 @@ final class WorkflowCaptionAction implements BaseModel
 
     /**
      * Params specifies caption generation settings. Pass an empty object.
+     *
+     * @param Params|ParamsShape $params
      */
-    public function withParams(mixed $params): self
+    public function withParams(Params|array $params): self
     {
         $self = clone $this;
         $self['params'] = $params;
