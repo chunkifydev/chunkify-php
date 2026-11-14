@@ -6,7 +6,6 @@ namespace Chunkify\Assets;
 
 use Chunkify\Assets\AssetCreateParams\MaxResolution;
 use Chunkify\Assets\AssetCreateParams\MinResolution;
-use Chunkify\Assets\AssetCreateParams\Storage;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
@@ -19,7 +18,7 @@ use Chunkify\Core\Omit;
  *
  * @see Chunkify\Services\AssetsService::create()
  *
- * @phpstan-import-type StorageShape from \Chunkify\Assets\AssetCreateParams\Storage
+ * @phpstan-import-type AssetCreateStorageParamsShape from \Chunkify\Assets\AssetCreateStorageParams
  *
  * @phpstan-type AssetCreateParamsShape = array{
  *   sourceID: string,
@@ -28,7 +27,7 @@ use Chunkify\Core\Omit;
  *   minResolution?: null|MinResolution|value-of<MinResolution>,
  *   pathTemplate?: string|null,
  *   previewEnabled?: bool|null,
- *   storage?: null|Storage|StorageShape,
+ *   storage?: null|AssetCreateStorageParams|AssetCreateStorageParamsShape,
  *   title?: string|null,
  *   workflowID?: string|null,
  * }
@@ -88,7 +87,7 @@ final class AssetCreateParams implements BaseModel
      * Output Storage. Omit to use the Project default. The path_template controls the folder for generated output paths.
      */
     #[Optional]
-    public ?Storage $storage;
+    public ?AssetCreateStorageParams $storage;
 
     /**
      * Asset title, up to 256 characters. Defaults to an empty string.
@@ -129,7 +128,7 @@ final class AssetCreateParams implements BaseModel
      * @param MaxResolution|value-of<MaxResolution>|null $maxResolution
      * @param array<string,string>|null $metadata
      * @param MinResolution|value-of<MinResolution>|null $minResolution
-     * @param Storage|StorageShape|null $storage
+     * @param AssetCreateStorageParams|AssetCreateStorageParamsShape|null $storage
      */
     public static function with(
         string $sourceID,
@@ -138,7 +137,7 @@ final class AssetCreateParams implements BaseModel
         MinResolution|string|null $minResolution = null,
         ?string $pathTemplate = null,
         ?bool $previewEnabled = null,
-        Storage|array|null $storage = null,
+        AssetCreateStorageParams|array|null $storage = null,
         ?string $title = null,
         string|Omit|null $workflowID = Omit::Value,
     ): self {
@@ -236,9 +235,9 @@ final class AssetCreateParams implements BaseModel
     /**
      * Output Storage. Omit to use the Project default. The path_template controls the folder for generated output paths.
      *
-     * @param Storage|StorageShape $storage
+     * @param AssetCreateStorageParams|AssetCreateStorageParamsShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(AssetCreateStorageParams|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;

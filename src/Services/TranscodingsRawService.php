@@ -13,15 +13,15 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\TranscodingsRawContract;
 use Chunkify\Transcodings\Transcoding;
 use Chunkify\Transcodings\TranscodingCreateParams;
-use Chunkify\Transcodings\TranscodingCreateParams\Storage;
+use Chunkify\Transcodings\TranscodingCreateStorageParams;
 use Chunkify\Transcodings\TranscodingDeleteParams;
 use Chunkify\Transcodings\TranscodingListParams;
 use Chunkify\Transcodings\TranscodingListParams\Created;
-use Chunkify\Transcodings\TranscodingListParams\Status;
+use Chunkify\Transcodings\TranscodingStatus;
 
 /**
- * @phpstan-import-type FormatShape from \Chunkify\Transcodings\TranscodingCreateParams\Format
- * @phpstan-import-type StorageShape from \Chunkify\Transcodings\TranscodingCreateParams\Storage
+ * @phpstan-import-type TranscodingCreateFormatParamsShape from \Chunkify\Transcodings\TranscodingCreateFormatParams
+ * @phpstan-import-type TranscodingCreateStorageParamsShape from \Chunkify\Transcodings\TranscodingCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Transcodings\TranscodingListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -39,10 +39,10 @@ final class TranscodingsRawService implements TranscodingsRawContract
      * Create a standalone file export with resolved encoding settings.
      *
      * @param array{
-     *   format: FormatShape,
+     *   format: TranscodingCreateFormatParamsShape,
      *   sourceID: string,
      *   metadata?: array<string,string>,
-     *   storage?: Storage|StorageShape,
+     *   storage?: TranscodingCreateStorageParams|TranscodingCreateStorageParamsShape,
      * }|TranscodingCreateParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -109,7 +109,7 @@ final class TranscodingsRawService implements TranscodingsRawContract
      *   limit?: int,
      *   offset?: int,
      *   sourceID?: string,
-     *   status?: Status|value-of<Status>,
+     *   status?: TranscodingStatus|value-of<TranscodingStatus>,
      *   storageID?: string,
      * }|TranscodingListParams $params
      * @param RequestOpts|null $requestOptions

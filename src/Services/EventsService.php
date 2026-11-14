@@ -12,6 +12,7 @@ use Chunkify\Events\EventListParams\Created;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\EventsContract;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * @phpstan-import-type CreatedShape from \Chunkify\Events\EventListParams\Created
@@ -58,7 +59,7 @@ final class EventsService implements EventsContract
      * List lifecycle events recorded with or without webhooks. Events and their deliveries expire according to the plan retention deadline. Historical notifications recorded before the event log remain available through Notifications.
      *
      * @param Created|CreatedShape $created
-     * @param list<\Chunkify\Events\EventListParams\Event|value-of<\Chunkify\Events\EventListParams\Event>> $events Filter by events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events Filter by events
      * @param int $limit Pagination limit (max 100)
      * @param string $objectID filter by the primary or a related resource ID, including retained associations after resource deletion
      * @param int $offset Pagination offset

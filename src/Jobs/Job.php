@@ -9,41 +9,38 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Jobs\Job\Format;
-use Chunkify\Jobs\Job\Format\JobsHlsAv1;
-use Chunkify\Jobs\Job\Format\JobsHlsH264;
-use Chunkify\Jobs\Job\Format\JobsHlsH265;
-use Chunkify\Jobs\Job\Format\JobsJpg;
-use Chunkify\Jobs\Job\Format\JobsMP4Av1;
-use Chunkify\Jobs\Job\Format\JobsMP4H264;
-use Chunkify\Jobs\Job\Format\JobsMP4H265;
-use Chunkify\Jobs\Job\Format\JobsWebmVp9;
 use Chunkify\Jobs\Job\Status;
-use Chunkify\Jobs\Job\Storage;
-use Chunkify\Jobs\Job\Transcoder;
+use Chunkify\Jobs\JobFormat\JobsHlsAv1;
+use Chunkify\Jobs\JobFormat\JobsHlsH264;
+use Chunkify\Jobs\JobFormat\JobsHlsH265;
+use Chunkify\Jobs\JobFormat\JobsJpg;
+use Chunkify\Jobs\JobFormat\JobsMP4Av1;
+use Chunkify\Jobs\JobFormat\JobsMP4H264;
+use Chunkify\Jobs\JobFormat\JobsMP4H265;
+use Chunkify\Jobs\JobFormat\JobsWebmVp9;
 
 /**
- * @phpstan-import-type FormatVariants from \Chunkify\Jobs\Job\Format
- * @phpstan-import-type FormatShape from \Chunkify\Jobs\Job\Format
- * @phpstan-import-type StorageShape from \Chunkify\Jobs\Job\Storage
+ * @phpstan-import-type JobFormatVariants from \Chunkify\Jobs\JobFormat
+ * @phpstan-import-type JobFormatShape from \Chunkify\Jobs\JobFormat
+ * @phpstan-import-type JobStorageShape from \Chunkify\Jobs\JobStorage
  * @phpstan-import-type ChunkifyErrorShape from \Chunkify\ChunkifyError
- * @phpstan-import-type TranscoderShape from \Chunkify\Jobs\Job\Transcoder
+ * @phpstan-import-type JobTranscoderShape from \Chunkify\Jobs\JobTranscoder
  *
  * @phpstan-type JobShape = array{
  *   id: string,
  *   billableTime: int,
  *   createdAt: \DateTimeInterface,
- *   format: FormatShape,
+ *   format: JobFormatShape,
  *   progress: float,
  *   sourceID: string,
  *   status: Status|value-of<Status>,
- *   storage: Storage|StorageShape,
+ *   storage: JobStorage|JobStorageShape,
  *   updatedAt: \DateTimeInterface,
  *   error?: null|ChunkifyError|ChunkifyErrorShape,
  *   hlsManifestID?: string|null,
  *   metadata?: array<string,string>|null,
  *   startedAt?: \DateTimeInterface|null,
- *   transcoder?: null|Transcoder|TranscoderShape,
+ *   transcoder?: null|JobTranscoder|JobTranscoderShape,
  * }
  */
 final class Job implements BaseModel
@@ -72,9 +69,9 @@ final class Job implements BaseModel
     /**
      * The format parameters and settings for a job.
      *
-     * @var FormatVariants $format
+     * @var JobFormatVariants $format
      */
-    #[Required(union: Format::class)]
+    #[Required(union: JobFormat::class)]
     public JobsMP4Av1|JobsMP4H264|JobsMP4H265|JobsWebmVp9|JobsHlsAv1|JobsHlsH264|JobsHlsH265|JobsJpg $format;
 
     /**
@@ -101,7 +98,7 @@ final class Job implements BaseModel
      * Storage settings for where the job output will be saved.
      */
     #[Required]
-    public Storage $storage;
+    public JobStorage $storage;
 
     /**
      * Last update timestamp.
@@ -139,7 +136,7 @@ final class Job implements BaseModel
      * The transcoder configuration for a job.
      */
     #[Optional]
-    public ?Transcoder $transcoder;
+    public ?JobTranscoder $transcoder;
 
     /**
      * `new Job()` is missing required properties by the API.
@@ -184,12 +181,12 @@ final class Job implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param FormatShape $format
-     * @param Storage|StorageShape $storage
+     * @param JobFormatShape $format
+     * @param JobStorage|JobStorageShape $storage
      * @param Status|value-of<Status> $status
      * @param ChunkifyError|ChunkifyErrorShape|null $error
      * @param array<string,string>|null $metadata
-     * @param Transcoder|TranscoderShape|null $transcoder
+     * @param JobTranscoder|JobTranscoderShape|null $transcoder
      */
     public static function with(
         string $id,
@@ -198,14 +195,14 @@ final class Job implements BaseModel
         JobsMP4Av1|array|JobsMP4H264|JobsMP4H265|JobsWebmVp9|JobsHlsAv1|JobsHlsH264|JobsHlsH265|JobsJpg $format,
         float $progress,
         string $sourceID,
-        Storage|array $storage,
+        JobStorage|array $storage,
         \DateTimeInterface $updatedAt,
         Status|string $status = 'pending',
         ChunkifyError|array|null $error = null,
         ?string $hlsManifestID = null,
         ?array $metadata = null,
         ?\DateTimeInterface $startedAt = null,
-        Transcoder|array|null $transcoder = null,
+        JobTranscoder|array|null $transcoder = null,
     ): self {
         $self = new self;
 
@@ -264,7 +261,7 @@ final class Job implements BaseModel
     /**
      * The format parameters and settings for a job.
      *
-     * @param FormatShape $format
+     * @param JobFormatShape $format
      */
     public function withFormat(
         JobsMP4Av1|array|JobsMP4H264|JobsMP4H265|JobsWebmVp9|JobsHlsAv1|JobsHlsH264|JobsHlsH265|JobsJpg $format,
@@ -313,9 +310,9 @@ final class Job implements BaseModel
     /**
      * Storage settings for where the job output will be saved.
      *
-     * @param Storage|StorageShape $storage
+     * @param JobStorage|JobStorageShape $storage
      */
-    public function withStorage(Storage|array $storage): self
+    public function withStorage(JobStorage|array $storage): self
     {
         $self = clone $this;
         $self['storage'] = $storage;
@@ -385,9 +382,9 @@ final class Job implements BaseModel
     /**
      * The transcoder configuration for a job.
      *
-     * @param Transcoder|TranscoderShape $transcoder
+     * @param JobTranscoder|JobTranscoderShape $transcoder
      */
-    public function withTranscoder(Transcoder|array $transcoder): self
+    public function withTranscoder(JobTranscoder|array $transcoder): self
     {
         $self = clone $this;
         $self['transcoder'] = $transcoder;

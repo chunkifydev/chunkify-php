@@ -6,11 +6,11 @@ namespace Chunkify\ServiceContracts;
 
 use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Notifications\Notification;
-use Chunkify\Notifications\NotificationCreateParams\Event;
 use Chunkify\Notifications\NotificationListParams\Created;
 use Chunkify\Notifications\NotificationListParams\ResponseStatusCode;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
+use Chunkify\Webhooks\WebhookEvent;
 
 /**
  * @phpstan-import-type CreatedShape from \Chunkify\Notifications\NotificationListParams\Created
@@ -22,7 +22,7 @@ interface NotificationsContract
     /**
      * @api
      *
-     * @param Event|value-of<Event> $event event specifies the type of event that triggered the notification
+     * @param WebhookEvent|value-of<WebhookEvent> $event event specifies the type of event that triggered the notification
      * @param string $objectID ID of the resource that triggered the event. Use the caption, static rendition, or thumbnail ID for their Asset child events. Replaying asset events, job.created, or source.created requires a retained snapshot. Resource deletion does not prevent replay.
      * @param string $webhookID webhookId specifies the webhook endpoint that will receive the notification
      * @param RequestOpts|null $requestOptions
@@ -30,7 +30,7 @@ interface NotificationsContract
      * @throws APIException
      */
     public function create(
-        Event|string $event,
+        WebhookEvent|string $event,
         string $objectID,
         string $webhookID,
         RequestOptions|array|null $requestOptions = null,
@@ -54,7 +54,7 @@ interface NotificationsContract
      *
      * @param Created|CreatedShape $created
      * @param string $eventID filter deliveries by their originating event ID
-     * @param list<\Chunkify\Notifications\NotificationListParams\Event|value-of<\Chunkify\Notifications\NotificationListParams\Event>> $events Filter by events
+     * @param list<WebhookEvent|value-of<WebhookEvent>> $events Filter by events
      * @param int $limit Pagination limit (max 100)
      * @param string $objectID Filter by object ID
      * @param int $offset Pagination offset

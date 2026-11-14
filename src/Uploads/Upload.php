@@ -9,14 +9,13 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Uploads\Upload\CreatedVia;
-use Chunkify\Uploads\Upload\Multipart;
+use Chunkify\CreatedVia;
 use Chunkify\Uploads\Upload\Status;
 use Chunkify\Uploads\Upload\UploadMode;
 
 /**
  * @phpstan-import-type ChunkifyErrorShape from \Chunkify\ChunkifyError
- * @phpstan-import-type MultipartShape from \Chunkify\Uploads\Upload\Multipart
+ * @phpstan-import-type UploadMultipartSessionShape from \Chunkify\Uploads\UploadMultipartSession
  *
  * @phpstan-type UploadShape = array{
  *   id: string,
@@ -36,7 +35,7 @@ use Chunkify\Uploads\Upload\UploadMode;
  *   error?: null|ChunkifyError|ChunkifyErrorShape,
  *   fileSizeBytes?: int|null,
  *   metadata?: array<string,string>|null,
- *   multipart?: null|Multipart|MultipartShape,
+ *   multipart?: null|UploadMultipartSession|UploadMultipartSessionShape,
  *   sourceID?: string|null,
  *   storageID?: string|null,
  *   uploadURL?: string|null,
@@ -164,7 +163,7 @@ final class Upload implements BaseModel
      * Multipart transfer details, returned only on creation for multipart Uploads.
      */
     #[Optional]
-    public ?Multipart $multipart;
+    public ?UploadMultipartSession $multipart;
 
     /**
      * SourceId is the id of the source that was created from the upload.
@@ -232,7 +231,7 @@ final class Upload implements BaseModel
      * @param CreatedVia|value-of<CreatedVia>|null $createdVia
      * @param ChunkifyError|ChunkifyErrorShape|null $error
      * @param array<string,string>|null $metadata
-     * @param Multipart|MultipartShape|null $multipart
+     * @param UploadMultipartSession|UploadMultipartSessionShape|null $multipart
      */
     public static function with(
         string $id,
@@ -252,7 +251,7 @@ final class Upload implements BaseModel
         ChunkifyError|array|null $error = null,
         ?int $fileSizeBytes = null,
         ?array $metadata = null,
-        Multipart|array|null $multipart = null,
+        UploadMultipartSession|array|null $multipart = null,
         ?string $sourceID = null,
         ?string $storageID = null,
         ?string $uploadURL = null,
@@ -488,9 +487,9 @@ final class Upload implements BaseModel
     /**
      * Multipart transfer details, returned only on creation for multipart Uploads.
      *
-     * @param Multipart|MultipartShape $multipart
+     * @param UploadMultipartSession|UploadMultipartSessionShape $multipart
      */
-    public function withMultipart(Multipart|array $multipart): self
+    public function withMultipart(UploadMultipartSession|array $multipart): self
     {
         $self = clone $this;
         $self['multipart'] = $multipart;

@@ -7,18 +7,18 @@ namespace Chunkify\Storages\StorageCreateParams;
 use Chunkify\Core\Concerns\SdkUnion;
 use Chunkify\Core\Conversion\Contracts\Converter;
 use Chunkify\Core\Conversion\Contracts\ConverterSource;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageAwsCreateParams;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams;
+use Chunkify\Storages\StorageAwsCreateParams;
+use Chunkify\Storages\StorageChunkifyCreateParams;
+use Chunkify\Storages\StorageCloudflareCreateParams;
+use Chunkify\Storages\StorageS3CompatibleCreateParams;
 
 /**
  * The parameters for creating a new storage configuration.
  *
- * @phpstan-import-type StorageAwsCreateParamsShape from \Chunkify\Storages\StorageCreateParams\Storage\StorageAwsCreateParams
- * @phpstan-import-type StorageChunkifyCreateParamsShape from \Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams
- * @phpstan-import-type StorageCloudflareCreateParamsShape from \Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams
- * @phpstan-import-type StorageS3CompatibleCreateParamsShape from \Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams
+ * @phpstan-import-type StorageAwsCreateParamsShape from \Chunkify\Storages\StorageAwsCreateParams
+ * @phpstan-import-type StorageChunkifyCreateParamsShape from \Chunkify\Storages\StorageChunkifyCreateParams
+ * @phpstan-import-type StorageCloudflareCreateParamsShape from \Chunkify\Storages\StorageCloudflareCreateParams
+ * @phpstan-import-type StorageS3CompatibleCreateParamsShape from \Chunkify\Storages\StorageS3CompatibleCreateParams
  *
  * @phpstan-type StorageVariants = StorageAwsCreateParams|StorageChunkifyCreateParams|StorageCloudflareCreateParams|StorageS3CompatibleCreateParams
  * @phpstan-type StorageShape = StorageVariants|StorageAwsCreateParamsShape|StorageChunkifyCreateParamsShape|StorageCloudflareCreateParamsShape|StorageS3CompatibleCreateParamsShape

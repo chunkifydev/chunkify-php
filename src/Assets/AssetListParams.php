@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chunkify\Assets;
 
 use Chunkify\Assets\AssetListParams\Created;
-use Chunkify\Assets\AssetListParams\Status;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
@@ -25,7 +24,7 @@ use Chunkify\Core\Contracts\BaseModel;
  *   offset?: int|null,
  *   search?: string|null,
  *   sourceID?: string|null,
- *   status?: null|Status|value-of<Status>,
+ *   status?: null|AssetStatus|value-of<AssetStatus>,
  *   storageID?: string|null,
  * }
  */
@@ -73,9 +72,9 @@ final class AssetListParams implements BaseModel
     /**
      * Filter by Asset status.
      *
-     * @var value-of<Status>|null $status
+     * @var value-of<AssetStatus>|null $status
      */
-    #[Optional(enum: Status::class)]
+    #[Optional(enum: AssetStatus::class)]
     public ?string $status;
 
     /**
@@ -96,7 +95,7 @@ final class AssetListParams implements BaseModel
      *
      * @param Created|CreatedShape|null $created
      * @param list<string>|null $metadata
-     * @param Status|value-of<Status>|null $status
+     * @param AssetStatus|value-of<AssetStatus>|null $status
      */
     public static function with(
         Created|array|null $created = null,
@@ -105,7 +104,7 @@ final class AssetListParams implements BaseModel
         ?int $offset = null,
         ?string $search = null,
         ?string $sourceID = null,
-        Status|string|null $status = null,
+        AssetStatus|string|null $status = null,
         ?string $storageID = null,
     ): self {
         $self = new self;
@@ -193,9 +192,9 @@ final class AssetListParams implements BaseModel
     /**
      * Filter by Asset status.
      *
-     * @param Status|value-of<Status> $status
+     * @param AssetStatus|value-of<AssetStatus> $status
      */
-    public function withStatus(Status|string $status): self
+    public function withStatus(AssetStatus|string $status): self
     {
         $self = clone $this;
         $self['status'] = $status;

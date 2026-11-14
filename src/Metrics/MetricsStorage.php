@@ -7,15 +7,16 @@ namespace Chunkify\Metrics;
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Metrics\MetricsStorage\Storage;
 
 /**
  * Recorded additions and successful removals within event retention. Excludes external storage changes and does not measure current storage size.
  *
- * @phpstan-import-type StorageShape from \Chunkify\Metrics\MetricsStorage\Storage
+ * @phpstan-import-type MetricsStorageEntryShape from \Chunkify\Metrics\MetricsStorageEntry
  *
  * @phpstan-type MetricsStorageShape = array{
- *   from: string, storages: list<Storage|StorageShape>, to: string
+ *   from: string,
+ *   storages: list<MetricsStorageEntry|MetricsStorageEntryShape>,
+ *   to: string,
  * }
  */
 final class MetricsStorage implements BaseModel
@@ -32,9 +33,9 @@ final class MetricsStorage implements BaseModel
     /**
      * Storages specifies persistent project storage configurations, including those without recorded activity. Chunkify temporary storage is excluded.
      *
-     * @var list<Storage> $storages
+     * @var list<MetricsStorageEntry> $storages
      */
-    #[Required(list: Storage::class)]
+    #[Required(list: MetricsStorageEntry::class)]
     public array $storages;
 
     /**
@@ -67,7 +68,7 @@ final class MetricsStorage implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param list<Storage|StorageShape> $storages
+     * @param list<MetricsStorageEntry|MetricsStorageEntryShape> $storages
      */
     public static function with(string $from, array $storages, string $to): self
     {
@@ -94,7 +95,7 @@ final class MetricsStorage implements BaseModel
     /**
      * Storages specifies persistent project storage configurations, including those without recorded activity. Chunkify temporary storage is excluded.
      *
-     * @param list<Storage|StorageShape> $storages
+     * @param list<MetricsStorageEntry|MetricsStorageEntryShape> $storages
      */
     public function withStorages(array $storages): self
     {

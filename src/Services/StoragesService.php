@@ -9,15 +9,15 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Omit;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\StoragesContract;
-use Chunkify\Storages\Storage\StorageAws;
-use Chunkify\Storages\Storage\StorageChunkify;
-use Chunkify\Storages\Storage\StorageCloudflare;
-use Chunkify\Storages\Storage\StorageS3Compatible;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageAwsCreateParams;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageChunkifyCreateParams;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageCloudflareCreateParams;
-use Chunkify\Storages\StorageCreateParams\Storage\StorageS3CompatibleCreateParams;
+use Chunkify\Storages\StorageAws;
+use Chunkify\Storages\StorageAwsCreateParams;
+use Chunkify\Storages\StorageChunkify;
+use Chunkify\Storages\StorageChunkifyCreateParams;
+use Chunkify\Storages\StorageCloudflare;
+use Chunkify\Storages\StorageCloudflareCreateParams;
 use Chunkify\Storages\StorageListResponse;
+use Chunkify\Storages\StorageS3Compatible;
+use Chunkify\Storages\StorageS3CompatibleCreateParams;
 
 /**
  * @phpstan-import-type StorageShape from \Chunkify\Storages\StorageCreateParams\Storage

@@ -11,8 +11,8 @@ use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\TokensRawContract;
 use Chunkify\Tokens\Token;
 use Chunkify\Tokens\TokenCreateParams;
-use Chunkify\Tokens\TokenCreateParams\Scope;
 use Chunkify\Tokens\TokenListResponse;
+use Chunkify\Tokens\TokenScope;
 
 /**
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
@@ -31,7 +31,7 @@ final class TokensRawService implements TokensRawContract
      * Create a new access token for either account-wide or project-specific access. Project tokens require a valid project slug.
      *
      * @param array{
-     *   scope: Scope|value-of<Scope>, name?: string, projectID?: string
+     *   scope: TokenScope|value-of<TokenScope>, name?: string, projectID?: string
      * }|TokenCreateParams $params
      * @param RequestOpts|null $requestOptions
      *

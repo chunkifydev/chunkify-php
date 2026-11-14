@@ -13,12 +13,11 @@ use Chunkify\ServiceContracts\WorkflowsContract;
 use Chunkify\Services\Workflows\RevisionsService;
 use Chunkify\Services\Workflows\RunsService;
 use Chunkify\Workflows\Workflow;
-use Chunkify\Workflows\WorkflowCreateParams\Rule;
 use Chunkify\Workflows\WorkflowCreateParams\SchemaVersion;
+use Chunkify\Workflows\WorkflowRuleParams;
 
 /**
- * @phpstan-import-type RuleShape from \Chunkify\Workflows\WorkflowCreateParams\Rule
- * @phpstan-import-type RuleShape from \Chunkify\Workflows\WorkflowUpdateParams\Rule as RuleShape1
+ * @phpstan-import-type WorkflowRuleParamsShape from \Chunkify\Workflows\WorkflowRuleParams
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class WorkflowsService implements WorkflowsContract
@@ -55,7 +54,7 @@ final class WorkflowsService implements WorkflowsContract
      *
      * @param string $name Name specifies the Workflow name.
      * Use 1 to 128 characters.
-     * @param list<Rule|RuleShape> $rules Rules specifies the event subscriptions and actions in this definition.
+     * @param list<WorkflowRuleParams|WorkflowRuleParamsShape> $rules Rules specifies the event subscriptions and actions in this definition.
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      * @param SchemaVersion|value-of<SchemaVersion> $schemaVersion SchemaVersion specifies the Workflow definition format. The supported version is 1.
      * @param RequestOpts|null $requestOptions
@@ -109,7 +108,7 @@ final class WorkflowsService implements WorkflowsContract
      * Required when rules is provided. Must be at least 1.
      * @param string $name Name specifies the Workflow name.
      * Use 1 to 128 characters.
-     * @param list<\Chunkify\Workflows\WorkflowUpdateParams\Rule|RuleShape1> $rules Rules specifies the event subscriptions and actions in this definition.
+     * @param list<WorkflowRuleParams|WorkflowRuleParamsShape> $rules Rules specifies the event subscriptions and actions in this definition.
      * Provide exactly one asset.ready rule and up to 15 connected rules, with at most 32 actions and 65536 encoded bytes across all rules. Array order affects display only.
      * Replaces the complete definition and requires schema_version and expected_revision. Existing Assets and Uploads keep their pinned revision.
      * @param \Chunkify\Workflows\WorkflowUpdateParams\SchemaVersion|value-of<\Chunkify\Workflows\WorkflowUpdateParams\SchemaVersion> $schemaVersion SchemaVersion specifies the Workflow definition format. The supported version is 1. Required when rules is provided.

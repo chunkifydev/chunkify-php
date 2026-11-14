@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace Chunkify\Projects;
 
+use Chunkify\Assets\AssetDefaultsParams;
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Omit;
-use Chunkify\Projects\ProjectUpdateParams\AssetDefaults;
 
 /**
  * Update a project's name or storage settings. Only team owners can update projects.
  *
  * @see Chunkify\Services\ProjectsService::update()
  *
- * @phpstan-import-type AssetDefaultsShape from \Chunkify\Projects\ProjectUpdateParams\AssetDefaults
+ * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
  *
  * @phpstan-type ProjectUpdateParamsShape = array{
- *   assetDefaults?: null|AssetDefaults|AssetDefaultsShape,
+ *   assetDefaults?: null|AssetDefaultsParams|AssetDefaultsParamsShape,
  *   defaultWorkflowID?: string|null,
  *   name?: string|null,
  *   storageID?: string|null,
@@ -35,7 +35,7 @@ final class ProjectUpdateParams implements BaseModel
      * Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
      */
     #[Optional('asset_defaults')]
-    public ?AssetDefaults $assetDefaults;
+    public ?AssetDefaultsParams $assetDefaults;
 
     /**
      * DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
@@ -65,10 +65,10 @@ final class ProjectUpdateParams implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param AssetDefaults|AssetDefaultsShape|null $assetDefaults
+     * @param AssetDefaultsParams|AssetDefaultsParamsShape|null $assetDefaults
      */
     public static function with(
-        AssetDefaults|array|null $assetDefaults = null,
+        AssetDefaultsParams|array|null $assetDefaults = null,
         string|Omit|null $defaultWorkflowID = Omit::Value,
         ?string $name = null,
         ?string $storageID = null,
@@ -86,10 +86,11 @@ final class ProjectUpdateParams implements BaseModel
     /**
      * Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
      *
-     * @param AssetDefaults|AssetDefaultsShape $assetDefaults
+     * @param AssetDefaultsParams|AssetDefaultsParamsShape $assetDefaults
      */
-    public function withAssetDefaults(AssetDefaults|array $assetDefaults): self
-    {
+    public function withAssetDefaults(
+        AssetDefaultsParams|array $assetDefaults
+    ): self {
         $self = clone $this;
         $self['assetDefaults'] = $assetDefaults;
 

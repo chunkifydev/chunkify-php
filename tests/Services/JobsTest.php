@@ -4,6 +4,7 @@ namespace Tests\Services;
 
 use Chunkify\Client;
 use Chunkify\Core\Util;
+use Chunkify\InstanceType;
 use Chunkify\Jobs\Job;
 use Chunkify\PaginatedResults;
 use PHPUnit\Framework\Attributes\CoversNothing;
@@ -85,7 +86,7 @@ final class JobsTest extends TestCase
             hlsManifestID: 'hls_2v6EIgcNAycdS5g0IUm0TXBjvHV',
             metadata: ['key' => 'value', 'key2' => 'value2'],
             storage: ['id' => 'stor_example', 'path' => 'exports/video.mp4'],
-            transcoder: ['quantity' => 2, 'type' => '4vCPU'],
+            transcoder: ['quantity' => 2, 'type' => InstanceType::_4V_CPU],
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

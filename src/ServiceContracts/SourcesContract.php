@@ -8,7 +8,7 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\PaginatedResults;
 use Chunkify\RequestOptions;
 use Chunkify\Sources\Source;
-use Chunkify\Sources\SourceCreateParams\Storage;
+use Chunkify\Sources\SourceCreateStorageParams;
 use Chunkify\Sources\SourceListParams\Created;
 use Chunkify\Sources\SourceListParams\Device;
 use Chunkify\Sources\SourceListParams\Duration;
@@ -17,7 +17,7 @@ use Chunkify\Sources\SourceListParams\Size;
 use Chunkify\Sources\SourceListParams\Width;
 
 /**
- * @phpstan-import-type StorageShape from \Chunkify\Sources\SourceCreateParams\Storage
+ * @phpstan-import-type SourceCreateStorageParamsShape from \Chunkify\Sources\SourceCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Sources\SourceListParams\Created
  * @phpstan-import-type DurationShape from \Chunkify\Sources\SourceListParams\Duration
  * @phpstan-import-type HeightShape from \Chunkify\Sources\SourceListParams\Height
@@ -31,7 +31,7 @@ interface SourcesContract
      * @api
      *
      * @param array<string,string> $metadata metadata allows for additional information to be attached to the source, with a maximum size of 2048 bytes
-     * @param Storage|StorageShape $storage Storage input configuration. Provide this or url, never both.
+     * @param SourceCreateStorageParams|SourceCreateStorageParamsShape $storage Storage input configuration. Provide this or url, never both.
      * @param string $url url is the URL of the source, which must be a valid HTTP URL
      * @param RequestOpts|null $requestOptions
      *
@@ -39,7 +39,7 @@ interface SourcesContract
      */
     public function create(
         ?array $metadata = null,
-        Storage|array|null $storage = null,
+        SourceCreateStorageParams|array|null $storage = null,
         ?string $url = null,
         RequestOptions|array|null $requestOptions = null,
     ): Source;
@@ -67,7 +67,7 @@ interface SourcesContract
      * @param Duration|DurationShape $duration
      * @param Height|HeightShape $height
      * @param int $limit Pagination limit (max 100)
-     * @param list<list<string>> $metadata Filter by metadata
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset Pagination offset
      * @param Size|SizeShape $size
      * @param string $videoCodec Filter by video codec

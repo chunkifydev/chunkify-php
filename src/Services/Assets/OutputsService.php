@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Chunkify\Services\Assets;
 
-use Chunkify\Assets\Outputs\AssetOutput\AssetCaptionOutput;
-use Chunkify\Assets\Outputs\AssetOutput\AssetStaticRenditionOutput;
-use Chunkify\Assets\Outputs\AssetOutput\AssetThumbnailOutput;
-use Chunkify\Assets\Outputs\AssetOutput\AssetTranscriptOutput;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetCaptionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetStaticRenditionOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetThumbnailOutputCreateParams;
-use Chunkify\Assets\Outputs\OutputCreateParams\Output\AssetTranscriptOutputCreateParams;
+use Chunkify\Assets\AssetCaptionOutput;
+use Chunkify\Assets\AssetCaptionOutputCreateParams;
+use Chunkify\Assets\AssetStaticRenditionOutput;
+use Chunkify\Assets\AssetStaticRenditionOutputCreateParams;
+use Chunkify\Assets\AssetThumbnailOutput;
+use Chunkify\Assets\AssetThumbnailOutputCreateParams;
+use Chunkify\Assets\AssetTranscriptOutput;
+use Chunkify\Assets\AssetTranscriptOutputCreateParams;
 use Chunkify\Assets\Outputs\OutputListParams\Status;
 use Chunkify\Assets\Outputs\OutputListParams\Type;
 use Chunkify\Client;

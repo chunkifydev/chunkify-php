@@ -8,11 +8,11 @@ use Chunkify\Assets\Asset;
 use Chunkify\Assets\AssetCreateParams;
 use Chunkify\Assets\AssetCreateParams\MaxResolution;
 use Chunkify\Assets\AssetCreateParams\MinResolution;
-use Chunkify\Assets\AssetCreateParams\Storage;
+use Chunkify\Assets\AssetCreateStorageParams;
 use Chunkify\Assets\AssetDeleteParams;
 use Chunkify\Assets\AssetListParams;
 use Chunkify\Assets\AssetListParams\Created;
-use Chunkify\Assets\AssetListParams\Status;
+use Chunkify\Assets\AssetStatus;
 use Chunkify\Assets\AssetUpdateParams;
 use Chunkify\Client;
 use Chunkify\Core\Contracts\BaseResponse;
@@ -25,7 +25,7 @@ use Chunkify\ServiceContracts\AssetsRawContract;
 /**
  * Automatic video-on-demand Assets and independent H.264 MP4 static renditions.
  *
- * @phpstan-import-type StorageShape from \Chunkify\Assets\AssetCreateParams\Storage
+ * @phpstan-import-type AssetCreateStorageParamsShape from \Chunkify\Assets\AssetCreateStorageParams
  * @phpstan-import-type CreatedShape from \Chunkify\Assets\AssetListParams\Created
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
@@ -49,7 +49,7 @@ final class AssetsRawService implements AssetsRawContract
      *   minResolution?: MinResolution|value-of<MinResolution>,
      *   pathTemplate?: string,
      *   previewEnabled?: bool,
-     *   storage?: Storage|StorageShape,
+     *   storage?: AssetCreateStorageParams|AssetCreateStorageParamsShape,
      *   title?: string,
      *   workflowID?: string|null,
      * }|AssetCreateParams $params
@@ -153,7 +153,7 @@ final class AssetsRawService implements AssetsRawContract
      *   offset?: int,
      *   search?: string,
      *   sourceID?: string,
-     *   status?: Status|value-of<Status>,
+     *   status?: AssetStatus|value-of<AssetStatus>,
      *   storageID?: string,
      * }|AssetListParams $params
      * @param RequestOpts|null $requestOptions
