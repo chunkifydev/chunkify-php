@@ -116,7 +116,7 @@ final class SourcesRawService implements SourcesRawContract
      *   duration?: Duration|DurationShape,
      *   height?: Height|HeightShape,
      *   limit?: int,
-     *   metadata?: list<list<string>>,
+     *   metadata?: list<string>,
      *   offset?: int,
      *   size?: Size|SizeShape,
      *   videoCodec?: string,

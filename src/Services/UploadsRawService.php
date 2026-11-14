@@ -112,7 +112,7 @@ final class UploadsRawService implements UploadsRawContract
      *   id?: string,
      *   created?: Created|CreatedShape,
      *   limit?: int,
-     *   metadata?: list<list<string>>,
+     *   metadata?: list<string>,
      *   offset?: int,
      *   sourceID?: string,
      *   status?: Status|value-of<Status>,

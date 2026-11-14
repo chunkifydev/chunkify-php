@@ -68,7 +68,7 @@ interface UploadsContract
      * @param string $id Filter by upload ID
      * @param Created|CreatedShape $created
      * @param int $limit Pagination limit (max 100)
-     * @param list<list<string>> $metadata Filter by metadata
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset Pagination offset
      * @param string $sourceID Filter by source ID
      * @param Status|value-of<Status> $status Filter by status (pending, completed, error)

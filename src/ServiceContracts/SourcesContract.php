@@ -67,7 +67,7 @@ interface SourcesContract
      * @param Duration|DurationShape $duration
      * @param Height|HeightShape $height
      * @param int $limit Pagination limit (max 100)
-     * @param list<list<string>> $metadata Filter by metadata
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset Pagination offset
      * @param Size|SizeShape $size
      * @param string $videoCodec Filter by video codec
