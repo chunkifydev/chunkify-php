@@ -22,6 +22,7 @@ use Chunkify\Uploads\Upload\UploadMode;
  *   createAsset: bool,
  *   createdAt: \DateTimeInterface,
  *   expiresAt: \DateTimeInterface,
+ *   metadata: array<string,string>,
  *   status: Status|value-of<Status>,
  *   updatedAt: \DateTimeInterface,
  *   uploadMode: UploadMode|value-of<UploadMode>,
@@ -34,7 +35,6 @@ use Chunkify\Uploads\Upload\UploadMode;
  *   createdVia?: null|CreatedVia|value-of<CreatedVia>,
  *   error?: null|ChunkifyError|ChunkifyErrorShape,
  *   fileSizeBytes?: int|null,
- *   metadata?: array<string,string>|null,
  *   multipart?: null|UploadMultipartSession|UploadMultipartSessionShape,
  *   sourceID?: string|null,
  *   storageID?: string|null,
@@ -69,6 +69,14 @@ final class Upload implements BaseModel
      */
     #[Required('expires_at')]
     public \DateTimeInterface $expiresAt;
+
+    /**
+     * Additional metadata for the upload.
+     *
+     * @var array<string,string> $metadata
+     */
+    #[Required(map: 'string')]
+    public array $metadata;
 
     /**
      * Current status of the upload.
@@ -152,14 +160,6 @@ final class Upload implements BaseModel
     public ?int $fileSizeBytes;
 
     /**
-     * Additional metadata for the upload.
-     *
-     * @var array<string,string>|null $metadata
-     */
-    #[Optional(map: 'string')]
-    public ?array $metadata;
-
-    /**
      * Multipart transfer details, returned only on creation for multipart Uploads.
      */
     #[Optional]
@@ -193,6 +193,7 @@ final class Upload implements BaseModel
      *   createAsset: ...,
      *   createdAt: ...,
      *   expiresAt: ...,
+     *   metadata: ...,
      *   status: ...,
      *   updatedAt: ...,
      *   uploadMode: ...,
@@ -209,6 +210,7 @@ final class Upload implements BaseModel
      *   ->withCreateAsset(...)
      *   ->withCreatedAt(...)
      *   ->withExpiresAt(...)
+     *   ->withMetadata(...)
      *   ->withStatus(...)
      *   ->withUpdatedAt(...)
      *   ->withUploadMode(...)
@@ -226,11 +228,11 @@ final class Upload implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
+     * @param array<string,string> $metadata
      * @param Status|value-of<Status> $status
      * @param UploadMode|value-of<UploadMode> $uploadMode
      * @param CreatedVia|value-of<CreatedVia>|null $createdVia
      * @param ChunkifyError|ChunkifyErrorShape|null $error
-     * @param array<string,string>|null $metadata
      * @param UploadMultipartSession|UploadMultipartSessionShape|null $multipart
      */
     public static function with(
@@ -238,6 +240,7 @@ final class Upload implements BaseModel
         bool $createAsset,
         \DateTimeInterface $createdAt,
         \DateTimeInterface $expiresAt,
+        array $metadata,
         Status|string $status,
         \DateTimeInterface $updatedAt,
         UploadMode|string $uploadMode,
@@ -250,7 +253,6 @@ final class Upload implements BaseModel
         CreatedVia|string|null $createdVia = null,
         ChunkifyError|array|null $error = null,
         ?int $fileSizeBytes = null,
-        ?array $metadata = null,
         UploadMultipartSession|array|null $multipart = null,
         ?string $sourceID = null,
         ?string $storageID = null,
@@ -262,6 +264,7 @@ final class Upload implements BaseModel
         $self['createAsset'] = $createAsset;
         $self['createdAt'] = $createdAt;
         $self['expiresAt'] = $expiresAt;
+        $self['metadata'] = $metadata;
         $self['status'] = $status;
         $self['updatedAt'] = $updatedAt;
         $self['uploadMode'] = $uploadMode;
@@ -275,7 +278,6 @@ final class Upload implements BaseModel
         null !== $createdVia && $self['createdVia'] = $createdVia;
         null !== $error && $self['error'] = $error;
         null !== $fileSizeBytes && $self['fileSizeBytes'] = $fileSizeBytes;
-        null !== $metadata && $self['metadata'] = $metadata;
         null !== $multipart && $self['multipart'] = $multipart;
         null !== $sourceID && $self['sourceID'] = $sourceID;
         null !== $storageID && $self['storageID'] = $storageID;
@@ -324,6 +326,19 @@ final class Upload implements BaseModel
     {
         $self = clone $this;
         $self['expiresAt'] = $expiresAt;
+
+        return $self;
+    }
+
+    /**
+     * Additional metadata for the upload.
+     *
+     * @param array<string,string> $metadata
+     */
+    public function withMetadata(array $metadata): self
+    {
+        $self = clone $this;
+        $self['metadata'] = $metadata;
 
         return $self;
     }
@@ -467,19 +482,6 @@ final class Upload implements BaseModel
     {
         $self = clone $this;
         $self['fileSizeBytes'] = $fileSizeBytes;
-
-        return $self;
-    }
-
-    /**
-     * Additional metadata for the upload.
-     *
-     * @param array<string,string> $metadata
-     */
-    public function withMetadata(array $metadata): self
-    {
-        $self = clone $this;
-        $self['metadata'] = $metadata;
 
         return $self;
     }

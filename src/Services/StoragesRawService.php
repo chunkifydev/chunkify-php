@@ -156,7 +156,7 @@ final class StoragesRawService implements StoragesRawContract
     /**
      * @api
      *
-     * Delete a storage configuration. The storage must not be currently attached to the project.
+     * Delete a storage configuration. The storage must not be attached to the project or used by an upload, source, asset, transcoding or thumbnail; otherwise the request returns 403.
      *
      * @param string $storageID Storage id
      * @param RequestOpts|null $requestOptions

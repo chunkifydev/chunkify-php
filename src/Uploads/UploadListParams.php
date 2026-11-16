@@ -8,7 +8,6 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Core\Conversion\ListOf;
 use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
 
@@ -23,7 +22,7 @@ use Chunkify\Uploads\UploadListParams\Status;
  *   id?: string|null,
  *   created?: null|Created|CreatedShape,
  *   limit?: int|null,
- *   metadata?: list<list<string>>|null,
+ *   metadata?: list<string>|null,
  *   offset?: int|null,
  *   sourceID?: string|null,
  *   status?: null|Status|value-of<Status>,
@@ -51,11 +50,11 @@ final class UploadListParams implements BaseModel
     public ?int $limit;
 
     /**
-     * Filter by metadata.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
-     * @var list<list<string>>|null $metadata
+     * @var list<string>|null $metadata
      */
-    #[Optional(list: new ListOf('string'))]
+    #[Optional(list: 'string')]
     public ?array $metadata;
 
     /**
@@ -89,7 +88,7 @@ final class UploadListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
-     * @param list<list<string>>|null $metadata
+     * @param list<string>|null $metadata
      * @param Status|value-of<Status>|null $status
      */
     public static function with(
@@ -148,9 +147,9 @@ final class UploadListParams implements BaseModel
     }
 
     /**
-     * Filter by metadata.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
-     * @param list<list<string>> $metadata
+     * @param list<string> $metadata
      */
     public function withMetadata(array $metadata): self
     {
