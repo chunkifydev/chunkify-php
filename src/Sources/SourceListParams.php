@@ -8,7 +8,6 @@ use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Core\Conversion\ListOf;
 use Chunkify\Sources\SourceListParams\Created;
 use Chunkify\Sources\SourceListParams\Device;
 use Chunkify\Sources\SourceListParams\Duration;
@@ -35,7 +34,7 @@ use Chunkify\Sources\SourceListParams\Width;
  *   duration?: null|Duration|DurationShape,
  *   height?: null|Height|HeightShape,
  *   limit?: int|null,
- *   metadata?: list<list<string>>|null,
+ *   metadata?: list<string>|null,
  *   offset?: int|null,
  *   size?: null|Size|SizeShape,
  *   videoCodec?: string|null,
@@ -84,11 +83,11 @@ final class SourceListParams implements BaseModel
     public ?int $limit;
 
     /**
-     * Filter by metadata.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
-     * @var list<list<string>>|null $metadata
+     * @var list<string>|null $metadata
      */
-    #[Optional(list: new ListOf('string'))]
+    #[Optional(list: 'string')]
     public ?array $metadata;
 
     /**
@@ -123,7 +122,7 @@ final class SourceListParams implements BaseModel
      * @param Device|value-of<Device>|null $device
      * @param Duration|DurationShape|null $duration
      * @param Height|HeightShape|null $height
-     * @param list<list<string>>|null $metadata
+     * @param list<string>|null $metadata
      * @param Size|SizeShape|null $size
      * @param Width|WidthShape|null $width
      */
@@ -239,9 +238,9 @@ final class SourceListParams implements BaseModel
     }
 
     /**
-     * Filter by metadata.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
-     * @param list<list<string>> $metadata
+     * @param list<string> $metadata
      */
     public function withMetadata(array $metadata): self
     {
