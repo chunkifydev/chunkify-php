@@ -57,7 +57,7 @@ final class TokensTest extends TestCase
         $result = $this->client->tokens->create(
             scope: TokenScope::PROJECT,
             name: 'My Token',
-            projectID: 'proj_A1cce6120E56e7Tu9ioP09Nhjk1',
+            projectID: 'proj_3MldVj0UeQPlZ06hDcDi6CWrKJZ',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType

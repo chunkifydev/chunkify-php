@@ -42,7 +42,7 @@ final class TranscodingsTest extends TestCase
 
         $result = $this->client->transcodings->create(
             format: ['id' => 'mp4_h264'],
-            sourceID: 'src_example'
+            sourceID: 'src_3A0yDPVjACk8FkYZFnP7Ab5DSDV'
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -82,9 +82,12 @@ final class TranscodingsTest extends TestCase
                 'width' => -2,
                 'x264Keyint' => 60,
             ],
-            sourceID: 'src_example',
+            sourceID: 'src_3A0yDPVjACk8FkYZFnP7Ab5DSDV',
             metadata: ['foo' => 'string'],
-            storage: ['id' => 'stor_example', 'path' => 'exports/video.mp4'],
+            storage: [
+                'id' => 'stor_3GldXEVxF304PlE1B1cFKKiykDN',
+                'path' => 'exports/video.mp4',
+            ],
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
