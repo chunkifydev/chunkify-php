@@ -43,8 +43,8 @@ final class NotificationsTest extends TestCase
 
         $result = $this->client->notifications->create(
             event: WebhookEvent::ASSET_PLAYBACK_READY,
-            objectID: 'ast_A1cce6120E56e7Tu9ioP09Nhjk9',
-            webhookID: 'wh_A1cce6120E56e7Tu9ioP09Nhjk9',
+            objectID: 'ast_3DyDePsxLWfKa0WCi0mXWeaNWyF',
+            webhookID: 'wh_3FzKFC3SMYiIEIzN1REhY1wpEx0',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
@@ -60,8 +60,8 @@ final class NotificationsTest extends TestCase
 
         $result = $this->client->notifications->create(
             event: WebhookEvent::ASSET_PLAYBACK_READY,
-            objectID: 'ast_A1cce6120E56e7Tu9ioP09Nhjk9',
-            webhookID: 'wh_A1cce6120E56e7Tu9ioP09Nhjk9',
+            objectID: 'ast_3DyDePsxLWfKa0WCi0mXWeaNWyF',
+            webhookID: 'wh_3FzKFC3SMYiIEIzN1REhY1wpEx0',
         );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
