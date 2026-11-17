@@ -42,7 +42,9 @@ final class ThumbnailsTest extends TestCase
             $this->markTestSkipped('Mock server tests are disabled');
         }
 
-        $result = $this->client->thumbnails->create(sourceID: 'src_example');
+        $result = $this->client->thumbnails->create(
+            sourceID: 'src_3A0yDPVjACk8FkYZFnP7Ab5DSDV'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Thumbnail::class, $result);
@@ -56,7 +58,7 @@ final class ThumbnailsTest extends TestCase
         }
 
         $result = $this->client->thumbnails->create(
-            sourceID: 'src_example',
+            sourceID: 'src_3A0yDPVjACk8FkYZFnP7Ab5DSDV',
             count: 10,
             format: ThumbnailFormat::JPEG,
             metadata: ['foo' => 'string'],

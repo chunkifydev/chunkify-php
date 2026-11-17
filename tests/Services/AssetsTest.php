@@ -40,7 +40,9 @@ final class AssetsTest extends TestCase
             $this->markTestSkipped('Mock server tests are disabled');
         }
 
-        $result = $this->client->assets->create(sourceID: 'src_example');
+        $result = $this->client->assets->create(
+            sourceID: 'src_3A0yDPVjACk8FkYZFnP7Ab5DSDV'
+        );
 
         // @phpstan-ignore-next-line method.alreadyNarrowedType
         $this->assertInstanceOf(Asset::class, $result);
@@ -54,13 +56,13 @@ final class AssetsTest extends TestCase
         }
 
         $result = $this->client->assets->create(
-            sourceID: 'src_example',
+            sourceID: 'src_3A0yDPVjACk8FkYZFnP7Ab5DSDV',
             maxResolution: '1080p',
             metadata: ['key' => 'value', 'key2' => 'value2'],
             minResolution: 'auto',
             pathTemplate: 'videos/{metadata.VideoID}',
             previewEnabled: true,
-            storage: ['id' => 'stor_example'],
+            storage: ['id' => 'stor_3GldXEVxF304PlE1B1cFKKiykDN'],
             title: 'Launch video',
             workflowID: 'x',
         );
