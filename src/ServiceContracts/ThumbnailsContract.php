@@ -71,6 +71,7 @@ interface ThumbnailsContract
      * @param string $id Id filters by an exact Thumbnail ID. Omit to include all matching resources.
      * @param Created|CreatedShape $created
      * @param int $limit maximum number of Thumbnails to return
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset number of Thumbnails to skip
      * @param string $sourceID Filter Thumbnails linked to this Source. Omit to include Thumbnails from all Sources in the Project.
      * @param ThumbnailStatus|value-of<ThumbnailStatus> $status filter by Thumbnail status
@@ -85,6 +86,7 @@ interface ThumbnailsContract
         ?string $id = null,
         Created|array|null $created = null,
         int $limit = 100,
+        ?array $metadata = null,
         int $offset = 0,
         ?string $sourceID = null,
         ThumbnailStatus|string|null $status = null,

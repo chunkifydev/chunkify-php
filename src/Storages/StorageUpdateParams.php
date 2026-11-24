@@ -41,7 +41,7 @@ final class StorageUpdateParams implements BaseModel
     public ?string $basePrefix;
 
     /**
-     * Customer-managed HTTPS delivery origin, or null to remove the current value.
+     * Customer-managed HTTPS delivery base URL, or null to remove the current value.
      */
     #[Optional('cdn_base_url', nullable: true)]
     public ?string $cdnBaseURL;
@@ -101,7 +101,7 @@ final class StorageUpdateParams implements BaseModel
     }
 
     /**
-     * Customer-managed HTTPS delivery origin, or null to remove the current value.
+     * Customer-managed HTTPS delivery base URL, or null to remove the current value.
      */
     public function withCdnBaseURL(?string $cdnBaseURL): self
     {
