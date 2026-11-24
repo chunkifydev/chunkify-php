@@ -119,6 +119,7 @@ final class SourcesRawService implements SourcesRawContract
      *   metadata?: list<string>,
      *   offset?: int,
      *   size?: Size|SizeShape,
+     *   storageID?: string,
      *   videoCodec?: string,
      *   width?: Width|WidthShape,
      * }|SourceListParams $params
@@ -143,7 +144,11 @@ final class SourcesRawService implements SourcesRawContract
             path: 'sources',
             query: Util::array_transform_keys(
                 $parsed,
-                ['audioCodec' => 'audio_codec', 'videoCodec' => 'video_codec']
+                [
+                    'audioCodec' => 'audio_codec',
+                    'storageID' => 'storage_id',
+                    'videoCodec' => 'video_codec',
+                ],
             ),
             options: $options,
             convert: Source::class,
