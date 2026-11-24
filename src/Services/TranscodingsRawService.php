@@ -17,6 +17,7 @@ use Chunkify\Transcodings\TranscodingCreateStorageParams;
 use Chunkify\Transcodings\TranscodingDeleteParams;
 use Chunkify\Transcodings\TranscodingListParams;
 use Chunkify\Transcodings\TranscodingListParams\Created;
+use Chunkify\Transcodings\TranscodingListParams\Format;
 use Chunkify\Transcodings\TranscodingStatus;
 
 /**
@@ -106,7 +107,9 @@ final class TranscodingsRawService implements TranscodingsRawContract
      * @param array{
      *   id?: string,
      *   created?: Created|CreatedShape,
+     *   format?: Format|value-of<Format>,
      *   limit?: int,
+     *   metadata?: list<string>,
      *   offset?: int,
      *   sourceID?: string,
      *   status?: TranscodingStatus|value-of<TranscodingStatus>,

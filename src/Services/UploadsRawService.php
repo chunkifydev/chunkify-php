@@ -116,6 +116,7 @@ final class UploadsRawService implements UploadsRawContract
      *   offset?: int,
      *   sourceID?: string,
      *   status?: Status|value-of<Status>,
+     *   storageID?: string,
      * }|UploadListParams $params
      * @param RequestOpts|null $requestOptions
      *
@@ -136,7 +137,10 @@ final class UploadsRawService implements UploadsRawContract
         return $this->client->request(
             method: 'get',
             path: 'uploads',
-            query: Util::array_transform_keys($parsed, ['sourceID' => 'source_id']),
+            query: Util::array_transform_keys(
+                $parsed,
+                ['sourceID' => 'source_id', 'storageID' => 'storage_id']
+            ),
             options: $options,
             convert: Upload::class,
             page: PaginatedResults::class,

@@ -160,7 +160,7 @@ final class AssetsService implements AssetsContract
      *
      * @param Created|CreatedShape $created
      * @param int $limit maximum number of Assets to return
-     * @param list<string> $metadata repeat key:value pairs to match all supplied metadata conditions
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset number of Assets to skip
      * @param string $search case-insensitive search of Asset IDs and titles
      * @param string $sourceID Filter Assets linked to this Source. Omit to include Assets from all Sources in the Project.
