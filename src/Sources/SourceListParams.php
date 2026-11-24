@@ -37,6 +37,7 @@ use Chunkify\Sources\SourceListParams\Width;
  *   metadata?: list<string>|null,
  *   offset?: int|null,
  *   size?: null|Size|SizeShape,
+ *   storageID?: string|null,
  *   videoCodec?: string|null,
  *   width?: null|Width|WidthShape,
  * }
@@ -100,6 +101,12 @@ final class SourceListParams implements BaseModel
     public ?Size $size;
 
     /**
+     * Filter by input Storage ID.
+     */
+    #[Optional]
+    public ?string $storageID;
+
+    /**
      * Filter by video codec.
      */
     #[Optional]
@@ -137,6 +144,7 @@ final class SourceListParams implements BaseModel
         ?array $metadata = null,
         ?int $offset = null,
         Size|array|null $size = null,
+        ?string $storageID = null,
         ?string $videoCodec = null,
         Width|array|null $width = null,
     ): self {
@@ -152,6 +160,7 @@ final class SourceListParams implements BaseModel
         null !== $metadata && $self['metadata'] = $metadata;
         null !== $offset && $self['offset'] = $offset;
         null !== $size && $self['size'] = $size;
+        null !== $storageID && $self['storageID'] = $storageID;
         null !== $videoCodec && $self['videoCodec'] = $videoCodec;
         null !== $width && $self['width'] = $width;
 
@@ -268,6 +277,17 @@ final class SourceListParams implements BaseModel
     {
         $self = clone $this;
         $self['size'] = $size;
+
+        return $self;
+    }
+
+    /**
+     * Filter by input Storage ID.
+     */
+    public function withStorageID(string $storageID): self
+    {
+        $self = clone $this;
+        $self['storageID'] = $storageID;
 
         return $self;
     }

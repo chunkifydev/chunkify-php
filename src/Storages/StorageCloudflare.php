@@ -97,7 +97,7 @@ final class StorageCloudflare implements BaseModel
     public string $slug;
 
     /**
-     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     * Optional customer-managed HTTPS delivery base URL used to build stable CDN URLs for objects in this storage.
      */
     #[Optional('cdn_base_url', nullable: true)]
     public ?string $cdnBaseURL;
@@ -289,7 +289,7 @@ final class StorageCloudflare implements BaseModel
     }
 
     /**
-     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     * Optional customer-managed HTTPS delivery base URL used to build stable CDN URLs for objects in this storage.
      */
     public function withCdnBaseURL(?string $cdnBaseURL): self
     {

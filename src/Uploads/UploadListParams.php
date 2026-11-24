@@ -26,6 +26,7 @@ use Chunkify\Uploads\UploadListParams\Status;
  *   offset?: int|null,
  *   sourceID?: string|null,
  *   status?: null|Status|value-of<Status>,
+ *   storageID?: string|null,
  * }
  */
 final class UploadListParams implements BaseModel
@@ -77,6 +78,12 @@ final class UploadListParams implements BaseModel
     #[Optional(enum: Status::class)]
     public ?string $status;
 
+    /**
+     * Filter by input Storage ID.
+     */
+    #[Optional]
+    public ?string $storageID;
+
     public function __construct()
     {
         $this->initialize();
@@ -99,6 +106,7 @@ final class UploadListParams implements BaseModel
         ?int $offset = null,
         ?string $sourceID = null,
         Status|string|null $status = null,
+        ?string $storageID = null,
     ): self {
         $self = new self;
 
@@ -109,6 +117,7 @@ final class UploadListParams implements BaseModel
         null !== $offset && $self['offset'] = $offset;
         null !== $sourceID && $self['sourceID'] = $sourceID;
         null !== $status && $self['status'] = $status;
+        null !== $storageID && $self['storageID'] = $storageID;
 
         return $self;
     }
@@ -190,6 +199,17 @@ final class UploadListParams implements BaseModel
     {
         $self = clone $this;
         $self['status'] = $status;
+
+        return $self;
+    }
+
+    /**
+     * Filter by input Storage ID.
+     */
+    public function withStorageID(string $storageID): self
+    {
+        $self = clone $this;
+        $self['storageID'] = $storageID;
 
         return $self;
     }

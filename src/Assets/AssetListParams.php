@@ -44,7 +44,7 @@ final class AssetListParams implements BaseModel
     public ?int $limit;
 
     /**
-     * Repeat key:value pairs to match all supplied metadata conditions.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
      * @var list<string>|null $metadata
      */
@@ -144,7 +144,7 @@ final class AssetListParams implements BaseModel
     }
 
     /**
-     * Repeat key:value pairs to match all supplied metadata conditions.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
      * @param list<string> $metadata
      */

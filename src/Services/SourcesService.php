@@ -107,6 +107,7 @@ final class SourcesService implements SourcesContract
      * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset Pagination offset
      * @param Size|SizeShape $size
+     * @param string $storageID filter by input Storage ID
      * @param string $videoCodec Filter by video codec
      * @param Width|WidthShape $width
      * @param RequestOpts|null $requestOptions
@@ -126,6 +127,7 @@ final class SourcesService implements SourcesContract
         ?array $metadata = null,
         int $offset = 0,
         Size|array|null $size = null,
+        ?string $storageID = null,
         ?string $videoCodec = null,
         Width|array|null $width = null,
         RequestOptions|array|null $requestOptions = null,
@@ -142,6 +144,7 @@ final class SourcesService implements SourcesContract
                 'metadata' => $metadata,
                 'offset' => $offset,
                 'size' => $size,
+                'storageID' => $storageID,
                 'videoCodec' => $videoCodec,
                 'width' => $width,
             ],
