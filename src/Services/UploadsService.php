@@ -113,6 +113,7 @@ final class UploadsService implements UploadsContract
      * @param int $offset Pagination offset
      * @param string $sourceID Filter by source ID
      * @param Status|value-of<Status> $status Filter by status (pending, completed, error)
+     * @param string $storageID filter by input Storage ID
      * @param RequestOpts|null $requestOptions
      *
      * @return PaginatedResults<Upload>
@@ -127,6 +128,7 @@ final class UploadsService implements UploadsContract
         int $offset = 0,
         ?string $sourceID = null,
         Status|string|null $status = null,
+        ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): PaginatedResults {
         $params = Util::removeNulls(
@@ -138,6 +140,7 @@ final class UploadsService implements UploadsContract
                 'offset' => $offset,
                 'sourceID' => $sourceID,
                 'status' => $status,
+                'storageID' => $storageID,
             ],
         );
 
