@@ -13,6 +13,7 @@ use Chunkify\ServiceContracts\TranscodingsContract;
 use Chunkify\Transcodings\Transcoding;
 use Chunkify\Transcodings\TranscodingCreateStorageParams;
 use Chunkify\Transcodings\TranscodingListParams\Created;
+use Chunkify\Transcodings\TranscodingListParams\Format;
 use Chunkify\Transcodings\TranscodingM4aAac;
 use Chunkify\Transcodings\TranscodingMP4Av1;
 use Chunkify\Transcodings\TranscodingMP4H264;
@@ -100,7 +101,9 @@ final class TranscodingsService implements TranscodingsContract
      *
      * @param string $id Id filters by an exact Transcoding ID. Omit to include all matching resources.
      * @param Created|CreatedShape $created
+     * @param Format|value-of<Format> $format filter by Transcoding format ID
      * @param int $limit maximum number of Transcodings to return
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset number of Transcodings to skip
      * @param string $sourceID Filter Transcodings linked to this Source. Omit to include Transcodings from all Sources in the Project.
      * @param TranscodingStatus|value-of<TranscodingStatus> $status filter by Transcoding status
@@ -114,7 +117,9 @@ final class TranscodingsService implements TranscodingsContract
     public function list(
         ?string $id = null,
         Created|array|null $created = null,
+        Format|string|null $format = null,
         int $limit = 100,
+        ?array $metadata = null,
         int $offset = 0,
         ?string $sourceID = null,
         TranscodingStatus|string|null $status = null,
@@ -125,7 +130,9 @@ final class TranscodingsService implements TranscodingsContract
             [
                 'id' => $id,
                 'created' => $created,
+                'format' => $format,
                 'limit' => $limit,
+                'metadata' => $metadata,
                 'offset' => $offset,
                 'sourceID' => $sourceID,
                 'status' => $status,

@@ -75,7 +75,7 @@ final class StorageS3Compatible implements BaseModel
     public \DateTimeInterface $createdAt;
 
     /**
-     * Public HTTPS origin for the S3-compatible service. Credentials, paths, queries, fragments, and non-public destinations are rejected.
+     * Public HTTPS URL of the S3-compatible service, including any fixed path prefix the service requires. Credentials, queries, fragments, and non-public destinations are rejected.
      */
     #[Required]
     public string $endpoint;
@@ -107,7 +107,7 @@ final class StorageS3Compatible implements BaseModel
     public string $slug;
 
     /**
-     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     * Optional customer-managed HTTPS delivery base URL used to build stable CDN URLs for objects in this storage.
      */
     #[Optional('cdn_base_url', nullable: true)]
     public ?string $cdnBaseURL;
@@ -250,7 +250,7 @@ final class StorageS3Compatible implements BaseModel
     }
 
     /**
-     * Public HTTPS origin for the S3-compatible service. Credentials, paths, queries, fragments, and non-public destinations are rejected.
+     * Public HTTPS URL of the S3-compatible service, including any fixed path prefix the service requires. Credentials, queries, fragments, and non-public destinations are rejected.
      */
     public function withEndpoint(string $endpoint): self
     {
@@ -320,7 +320,7 @@ final class StorageS3Compatible implements BaseModel
     }
 
     /**
-     * Optional customer-managed HTTPS delivery origin used to build stable CDN URLs for objects in this storage.
+     * Optional customer-managed HTTPS delivery base URL used to build stable CDN URLs for objects in this storage.
      */
     public function withCdnBaseURL(?string $cdnBaseURL): self
     {

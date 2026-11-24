@@ -115,6 +115,7 @@ final class ThumbnailsRawService implements ThumbnailsRawContract
      *   id?: string,
      *   created?: Created|CreatedShape,
      *   limit?: int,
+     *   metadata?: list<string>,
      *   offset?: int,
      *   sourceID?: string,
      *   status?: ThumbnailStatus|value-of<ThumbnailStatus>,

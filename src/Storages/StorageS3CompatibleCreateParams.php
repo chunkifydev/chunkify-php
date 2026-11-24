@@ -52,7 +52,7 @@ final class StorageS3CompatibleCreateParams implements BaseModel
     public string $bucket;
 
     /**
-     * Public HTTPS origin for the S3-compatible service. Credentials, paths, queries, fragments, and non-public destinations are rejected.
+     * Public HTTPS URL of the S3-compatible service, including any fixed path prefix the service requires. Credentials, queries, fragments, and non-public destinations are rejected.
      */
     #[Required]
     public string $endpoint;
@@ -84,7 +84,8 @@ final class StorageS3CompatibleCreateParams implements BaseModel
     public ?string $basePrefix;
 
     /**
-     * Optional customer-managed HTTPS delivery origin. It must not contain credentials, a path, query string, or fragment.
+     * Optional customer-managed HTTPS delivery base URL. Object keys are appended to it.
+     * It may include a path prefix, but must not contain credentials, a query string, or a fragment.
      */
     #[Optional('cdn_base_url', nullable: true)]
     public ?string $cdnBaseURL;
@@ -184,7 +185,7 @@ final class StorageS3CompatibleCreateParams implements BaseModel
     }
 
     /**
-     * Public HTTPS origin for the S3-compatible service. Credentials, paths, queries, fragments, and non-public destinations are rejected.
+     * Public HTTPS URL of the S3-compatible service, including any fixed path prefix the service requires. Credentials, queries, fragments, and non-public destinations are rejected.
      */
     public function withEndpoint(string $endpoint): self
     {
@@ -254,7 +255,8 @@ final class StorageS3CompatibleCreateParams implements BaseModel
     }
 
     /**
-     * Optional customer-managed HTTPS delivery origin. It must not contain credentials, a path, query string, or fragment.
+     * Optional customer-managed HTTPS delivery base URL. Object keys are appended to it.
+     * It may include a path prefix, but must not contain credentials, a query string, or a fragment.
      */
     public function withCdnBaseURL(?string $cdnBaseURL): self
     {
