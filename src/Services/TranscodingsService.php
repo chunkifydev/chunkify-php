@@ -13,6 +13,7 @@ use Chunkify\ServiceContracts\TranscodingsContract;
 use Chunkify\Transcodings\Transcoding;
 use Chunkify\Transcodings\TranscodingCreateStorageParams;
 use Chunkify\Transcodings\TranscodingListParams\Created;
+use Chunkify\Transcodings\TranscodingListParams\Format;
 use Chunkify\Transcodings\TranscodingM4aAac;
 use Chunkify\Transcodings\TranscodingMP4Av1;
 use Chunkify\Transcodings\TranscodingMP4H264;
@@ -44,7 +45,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * Create a standalone file export with resolved encoding settings.
+     * Create a standalone Transcoding that exports a Source as an MP4, WebM, or M4A file. Encoding settings are resolved and processing starts asynchronously.
      *
      * @param TranscodingCreateFormatParamsShape $format format specifies the requested encoding settings
      * @param string $sourceID sourceId identifies a Source in this Project
@@ -76,7 +77,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * Retrieve the accepted settings, published files and current state of one Transcoding.
+     * Retrieve one Transcoding with its accepted encoding settings, current status and progress, and published files with their delivery URLs.
      *
      * @param string $transcodingID transcodingId identifies a Transcoding in the authenticated Project
      * @param RequestOpts|null $requestOptions
@@ -96,11 +97,13 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * List Transcodings in the authenticated Project, newest first by default.
+     * List Transcodings in the authenticated Project, newest first by default. Filter by status, format, Source, Storage, metadata, or creation date.
      *
      * @param string $id Id filters by an exact Transcoding ID. Omit to include all matching resources.
      * @param Created|CreatedShape $created
+     * @param Format|value-of<Format> $format filter by Transcoding format ID
      * @param int $limit maximum number of Transcodings to return
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset number of Transcodings to skip
      * @param string $sourceID Filter Transcodings linked to this Source. Omit to include Transcodings from all Sources in the Project.
      * @param TranscodingStatus|value-of<TranscodingStatus> $status filter by Transcoding status
@@ -114,7 +117,9 @@ final class TranscodingsService implements TranscodingsContract
     public function list(
         ?string $id = null,
         Created|array|null $created = null,
+        Format|string|null $format = null,
         int $limit = 100,
+        ?array $metadata = null,
         int $offset = 0,
         ?string $sourceID = null,
         TranscodingStatus|string|null $status = null,
@@ -125,7 +130,9 @@ final class TranscodingsService implements TranscodingsContract
             [
                 'id' => $id,
                 'created' => $created,
+                'format' => $format,
                 'limit' => $limit,
+                'metadata' => $metadata,
                 'offset' => $offset,
                 'sourceID' => $sourceID,
                 'status' => $status,
@@ -166,7 +173,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * Cancel a preparing Transcoding and release its unpaid reservation. Repeating an accepted cancellation succeeds.
+     * Cancel a Transcoding that is still preparing and release its unpaid reservation. Repeating an accepted cancellation succeeds without changes.
      *
      * @param string $transcodingID transcodingId identifies a Transcoding in the authenticated Project
      * @param RequestOpts|null $requestOptions

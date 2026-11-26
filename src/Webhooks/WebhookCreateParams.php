@@ -11,7 +11,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Create a new webhook for a project. The webhook will receive notifications for specified events.
+ * Create a webhook for the Project. Chunkify sends a notification to its URL for each subscribed event, and you can create it enabled or disabled.
  *
  * @see Chunkify\Services\WebhooksService::create()
  *

@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Retrieve an immutable definition revision, including revisions of archived Workflows.
+ * Retrieve an immutable Workflow definition revision and its rules, including revisions of archived Workflows, to see what a past run executed.
  *
  * @see Chunkify\Services\Workflows\RevisionsService::retrieve()
  *

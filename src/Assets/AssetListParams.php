@@ -11,7 +11,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * List Assets in the Project, with filtering and pagination.
+ * List Assets in the Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date, and search by ID or title.
  *
  * @see Chunkify\Services\AssetsService::list()
  *
@@ -44,7 +44,7 @@ final class AssetListParams implements BaseModel
     public ?int $limit;
 
     /**
-     * Repeat key:value pairs to match all supplied metadata conditions.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
      * @var list<string>|null $metadata
      */
@@ -144,7 +144,7 @@ final class AssetListParams implements BaseModel
     }
 
     /**
-     * Repeat key:value pairs to match all supplied metadata conditions.
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      *
      * @param list<string> $metadata
      */

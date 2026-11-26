@@ -69,7 +69,7 @@ final class WorkflowsRawService implements WorkflowsRawContract
     /**
      * @api
      *
-     * Retrieve a Workflow and its current definition, including archived Workflows.
+     * Retrieve a Workflow with its name, current revision, and rules. Archived Workflows can still be retrieved and include the date they were archived.
      *
      * @param string $workflowID ID of the Workflow
      * @param RequestOpts|null $requestOptions
@@ -135,7 +135,7 @@ final class WorkflowsRawService implements WorkflowsRawContract
     /**
      * @api
      *
-     * List Workflows in the Project, newest first. Archived Workflows are excluded unless archived is true.
+     * List the Workflows in the Project, newest first, with their current revision and rules. Archived Workflows are included only when archived is true.
      *
      * @param array{
      *   archived?: bool, limit?: int, offset?: int

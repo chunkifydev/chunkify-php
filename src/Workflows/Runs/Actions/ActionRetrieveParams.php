@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Retrieve one action execution in a retained Workflow run, including its resolved inputs, status, and result.
+ * Retrieve one action execution in a retained Workflow run, including the Asset it ran on, its resolved inputs, status, result, and error.
  *
  * @see Chunkify\Services\Workflows\Runs\ActionsService::retrieve()
  *

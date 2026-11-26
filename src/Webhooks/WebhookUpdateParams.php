@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Update the enabled status of a webhook. The webhook must belong to the current project.
+ * Update a webhook's subscribed events or enable and disable its deliveries. The webhook must belong to the current Project.
  *
  * @see Chunkify\Services\WebhooksService::update()
  *

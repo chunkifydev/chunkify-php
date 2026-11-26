@@ -70,7 +70,8 @@ final class StorageAwsCreateParams implements BaseModel
     public ?string $basePrefix;
 
     /**
-     * Optional customer-managed HTTPS delivery origin. It must not contain credentials, a path, query string, or fragment.
+     * Optional customer-managed HTTPS delivery base URL. Object keys are appended to it.
+     * It may include a path prefix, but must not contain credentials, a query string, or a fragment.
      */
     #[Optional('cdn_base_url', nullable: true)]
     public ?string $cdnBaseURL;
@@ -207,7 +208,8 @@ final class StorageAwsCreateParams implements BaseModel
     }
 
     /**
-     * Optional customer-managed HTTPS delivery origin. It must not contain credentials, a path, query string, or fragment.
+     * Optional customer-managed HTTPS delivery base URL. Object keys are appended to it.
+     * It may include a path prefix, but must not contain credentials, a query string, or a fragment.
      */
     public function withCdnBaseURL(?string $cdnBaseURL): self
     {

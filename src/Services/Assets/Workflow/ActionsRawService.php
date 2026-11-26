@@ -34,7 +34,7 @@ final class ActionsRawService implements ActionsRawContract
     /**
      * @api
      *
-     * List retained Workflow actions for an Asset, newest first. Direct output requests are excluded.
+     * List the retained Workflow actions for an Asset, newest first, with status, type, and date filters. Direct output requests are excluded.
      *
      * @param string $assetID ID of the Asset
      * @param array{

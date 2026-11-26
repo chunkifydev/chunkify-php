@@ -64,7 +64,7 @@ final class StoragesService implements StoragesContract
     /**
      * @api
      *
-     * Retrieve details of a specific storage configuration by its id.
+     * Retrieve a Storage in the current Project by its ID, with its provider and region, and for connected buckets, the bucket, base prefix, and CDN base URL.
      *
      * @param string $storageID Storage id
      * @param RequestOpts|null $requestOptions
@@ -89,7 +89,7 @@ final class StoragesService implements StoragesContract
      * @param string $storageID Storage id
      * @param string $accessKeyID Replacement access key ID for customer-managed storage. Send with a non-empty secret_access_key. Omit both credential fields to keep the saved pair. Null and empty values are rejected. Credentials are validated before either value is saved and are never returned.
      * @param string $basePrefix Object-key prefix for future final job outputs. Existing files keep their stored object keys. Send an empty string to use the bucket root.
-     * @param string|Omit|null $cdnBaseURL customer-managed HTTPS delivery origin, or null to remove the current value
+     * @param string|Omit|null $cdnBaseURL customer-managed HTTPS delivery base URL, or null to remove the current value
      * @param string $secretAccessKey Replacement secret access key. Required with access_key_id; cannot be null or empty. The pair is encrypted and saved atomically only after validation succeeds.
      * @param RequestOpts|null $requestOptions
      *
@@ -118,7 +118,7 @@ final class StoragesService implements StoragesContract
     /**
      * @api
      *
-     * Retrieve a list of all storage configurations for the current project.
+     * List the Storage configurations in the current Project, with each one's provider and region, and the bucket and CDN base URL for connected buckets.
      *
      * @param RequestOpts|null $requestOptions
      *

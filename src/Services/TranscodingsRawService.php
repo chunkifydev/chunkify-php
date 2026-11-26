@@ -17,6 +17,7 @@ use Chunkify\Transcodings\TranscodingCreateStorageParams;
 use Chunkify\Transcodings\TranscodingDeleteParams;
 use Chunkify\Transcodings\TranscodingListParams;
 use Chunkify\Transcodings\TranscodingListParams\Created;
+use Chunkify\Transcodings\TranscodingListParams\Format;
 use Chunkify\Transcodings\TranscodingStatus;
 
 /**
@@ -36,7 +37,7 @@ final class TranscodingsRawService implements TranscodingsRawContract
     /**
      * @api
      *
-     * Create a standalone file export with resolved encoding settings.
+     * Create a standalone Transcoding that exports a Source as an MP4, WebM, or M4A file. Encoding settings are resolved and processing starts asynchronously.
      *
      * @param array{
      *   format: TranscodingCreateFormatParamsShape,
@@ -74,7 +75,7 @@ final class TranscodingsRawService implements TranscodingsRawContract
     /**
      * @api
      *
-     * Retrieve the accepted settings, published files and current state of one Transcoding.
+     * Retrieve one Transcoding with its accepted encoding settings, current status and progress, and published files with their delivery URLs.
      *
      * @param string $transcodingID transcodingId identifies a Transcoding in the authenticated Project
      * @param RequestOpts|null $requestOptions
@@ -101,12 +102,14 @@ final class TranscodingsRawService implements TranscodingsRawContract
     /**
      * @api
      *
-     * List Transcodings in the authenticated Project, newest first by default.
+     * List Transcodings in the authenticated Project, newest first by default. Filter by status, format, Source, Storage, metadata, or creation date.
      *
      * @param array{
      *   id?: string,
      *   created?: Created|CreatedShape,
+     *   format?: Format|value-of<Format>,
      *   limit?: int,
+     *   metadata?: list<string>,
      *   offset?: int,
      *   sourceID?: string,
      *   status?: TranscodingStatus|value-of<TranscodingStatus>,
@@ -182,7 +185,7 @@ final class TranscodingsRawService implements TranscodingsRawContract
     /**
      * @api
      *
-     * Cancel a preparing Transcoding and release its unpaid reservation. Repeating an accepted cancellation succeeds.
+     * Cancel a Transcoding that is still preparing and release its unpaid reservation. Repeating an accepted cancellation succeeds without changes.
      *
      * @param string $transcodingID transcodingId identifies a Transcoding in the authenticated Project
      * @param RequestOpts|null $requestOptions

@@ -89,7 +89,7 @@ final class ThumbnailsService implements ThumbnailsContract
     /**
      * @api
      *
-     * Retrieve the accepted settings, published files and current state of one Thumbnail.
+     * Retrieve one Thumbnail request with its accepted settings, current status, sampled frames, and published image files with their delivery URLs.
      *
      * @param string $thumbnailID thumbnailId identifies a Thumbnail in the authenticated Project
      * @param RequestOpts|null $requestOptions
@@ -109,11 +109,12 @@ final class ThumbnailsService implements ThumbnailsContract
     /**
      * @api
      *
-     * List Thumbnails in the authenticated Project, newest first by default.
+     * List Thumbnails in the authenticated Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date.
      *
      * @param string $id Id filters by an exact Thumbnail ID. Omit to include all matching resources.
      * @param Created|CreatedShape $created
      * @param int $limit maximum number of Thumbnails to return
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset number of Thumbnails to skip
      * @param string $sourceID Filter Thumbnails linked to this Source. Omit to include Thumbnails from all Sources in the Project.
      * @param ThumbnailStatus|value-of<ThumbnailStatus> $status filter by Thumbnail status
@@ -128,6 +129,7 @@ final class ThumbnailsService implements ThumbnailsContract
         ?string $id = null,
         Created|array|null $created = null,
         int $limit = 100,
+        ?array $metadata = null,
         int $offset = 0,
         ?string $sourceID = null,
         ThumbnailStatus|string|null $status = null,
@@ -139,6 +141,7 @@ final class ThumbnailsService implements ThumbnailsContract
                 'id' => $id,
                 'created' => $created,
                 'limit' => $limit,
+                'metadata' => $metadata,
                 'offset' => $offset,
                 'sourceID' => $sourceID,
                 'status' => $status,

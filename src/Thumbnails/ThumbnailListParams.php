@@ -11,7 +11,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Thumbnails\ThumbnailListParams\Created;
 
 /**
- * List Thumbnails in the authenticated Project, newest first by default.
+ * List Thumbnails in the authenticated Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date.
  *
  * @see Chunkify\Services\ThumbnailsService::list()
  *
@@ -21,6 +21,7 @@ use Chunkify\Thumbnails\ThumbnailListParams\Created;
  *   id?: string|null,
  *   created?: null|Created|CreatedShape,
  *   limit?: int|null,
+ *   metadata?: list<string>|null,
  *   offset?: int|null,
  *   sourceID?: string|null,
  *   status?: null|ThumbnailStatus|value-of<ThumbnailStatus>,
@@ -47,6 +48,14 @@ final class ThumbnailListParams implements BaseModel
      */
     #[Optional]
     public ?int $limit;
+
+    /**
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
+     *
+     * @var list<string>|null $metadata
+     */
+    #[Optional(list: 'string')]
+    public ?array $metadata;
 
     /**
      * Number of Thumbnails to skip.
@@ -85,12 +94,14 @@ final class ThumbnailListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
+     * @param list<string>|null $metadata
      * @param ThumbnailStatus|value-of<ThumbnailStatus>|null $status
      */
     public static function with(
         ?string $id = null,
         Created|array|null $created = null,
         ?int $limit = null,
+        ?array $metadata = null,
         ?int $offset = null,
         ?string $sourceID = null,
         ThumbnailStatus|string|null $status = null,
@@ -101,6 +112,7 @@ final class ThumbnailListParams implements BaseModel
         null !== $id && $self['id'] = $id;
         null !== $created && $self['created'] = $created;
         null !== $limit && $self['limit'] = $limit;
+        null !== $metadata && $self['metadata'] = $metadata;
         null !== $offset && $self['offset'] = $offset;
         null !== $sourceID && $self['sourceID'] = $sourceID;
         null !== $status && $self['status'] = $status;
@@ -138,6 +150,19 @@ final class ThumbnailListParams implements BaseModel
     {
         $self = clone $this;
         $self['limit'] = $limit;
+
+        return $self;
+    }
+
+    /**
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
+     *
+     * @param list<string> $metadata
+     */
+    public function withMetadata(array $metadata): self
+    {
+        $self = clone $this;
+        $self['metadata'] = $metadata;
 
         return $self;
     }

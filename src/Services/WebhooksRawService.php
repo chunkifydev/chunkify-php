@@ -29,7 +29,7 @@ final class WebhooksRawService implements WebhooksRawContract
     /**
      * @api
      *
-     * Create a new webhook for a project. The webhook will receive notifications for specified events.
+     * Create a webhook for the Project. Chunkify sends a notification to its URL for each subscribed event, and you can create it enabled or disabled.
      *
      * @param array{
      *   url: string,
@@ -66,7 +66,7 @@ final class WebhooksRawService implements WebhooksRawContract
     /**
      * @api
      *
-     * Retrieve details of a specific webhook configuration by its ID. The webhook must belong to the current project.
+     * Retrieve a webhook in the current Project by its ID, including its endpoint URL, subscribed events, and whether deliveries are enabled.
      *
      * @param string $webhookID Webhook ID
      * @param RequestOpts|null $requestOptions
@@ -93,7 +93,7 @@ final class WebhooksRawService implements WebhooksRawContract
     /**
      * @api
      *
-     * Update the enabled status of a webhook. The webhook must belong to the current project.
+     * Update a webhook's subscribed events or enable and disable its deliveries. The webhook must belong to the current Project.
      *
      * @param string $webhookID Webhook ID
      * @param array{

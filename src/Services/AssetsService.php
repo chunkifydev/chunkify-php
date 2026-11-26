@@ -57,7 +57,7 @@ final class AssetsService implements AssetsContract
     /**
      * @api
      *
-     * Create an Asset from a video Source. Processing starts asynchronously.
+     * Create an Asset from a video Source to prepare it for streaming. Processing starts asynchronously, and the Asset is returned while it is preparing.
      *
      * @param string $sourceID ID of the video Source to process
      * @param MaxResolution|value-of<MaxResolution> $maxResolution Maximum streaming resolution. Omit to use the Project default, or the plan maximum if unset. 2160p requires Starter or above. Smaller sources are not upscaled. Does not affect static renditions.
@@ -107,7 +107,7 @@ final class AssetsService implements AssetsContract
     /**
      * @api
      *
-     * Retrieve an Asset and its streaming, static, poster, and timeline outputs.
+     * Retrieve an Asset with its status, source metadata, and its streaming, static, poster, and timeline outputs, including their delivery URLs.
      *
      * @param RequestOpts|null $requestOptions
      *
@@ -126,7 +126,7 @@ final class AssetsService implements AssetsContract
     /**
      * @api
      *
-     * Update the title, metadata, or public preview access. Omitted fields remain unchanged.
+     * Update an Asset's title, metadata, or whether its preview can be watched without an API token. Omitted fields remain unchanged.
      *
      * @param array<string,string> $metadata Replaces all metadata. Send {} to clear it; omit to leave unchanged. Maximum encoded JSON size: 2,048 bytes.
      * @param bool $previewEnabled Allow public preview access without an API token. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
@@ -156,11 +156,11 @@ final class AssetsService implements AssetsContract
     /**
      * @api
      *
-     * List Assets in the Project, with filtering and pagination.
+     * List Assets in the Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date, and search by ID or title.
      *
      * @param Created|CreatedShape $created
      * @param int $limit maximum number of Assets to return
-     * @param list<string> $metadata repeat key:value pairs to match all supplied metadata conditions
+     * @param list<string> $metadata Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
      * @param int $offset number of Assets to skip
      * @param string $search case-insensitive search of Asset IDs and titles
      * @param string $sourceID Filter Assets linked to this Source. Omit to include Assets from all Sources in the Project.
@@ -205,7 +205,7 @@ final class AssetsService implements AssetsContract
     /**
      * @api
      *
-     * Delete an Asset after all processing finishes. Files remain in Storage unless delete_files is true.
+     * Delete an Asset after all processing finishes. Its streaming and static files remain in your Storage unless delete_files is true.
      *
      * @param bool $deleteFiles Also delete all files under the Asset's storage prefix, including streaming and static outputs. Other files and the original input are preserved. Defaults to false, which preserves published media files. Private transcript text and saved subtitle copies are always scheduled for removal. File deletion is irreversible. If cleanup fails, records remain for retry, but files may already be deleted.
      * @param RequestOpts|null $requestOptions

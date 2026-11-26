@@ -9,9 +9,10 @@ use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Transcodings\TranscodingListParams\Created;
+use Chunkify\Transcodings\TranscodingListParams\Format;
 
 /**
- * List Transcodings in the authenticated Project, newest first by default.
+ * List Transcodings in the authenticated Project, newest first by default. Filter by status, format, Source, Storage, metadata, or creation date.
  *
  * @see Chunkify\Services\TranscodingsService::list()
  *
@@ -20,7 +21,9 @@ use Chunkify\Transcodings\TranscodingListParams\Created;
  * @phpstan-type TranscodingListParamsShape = array{
  *   id?: string|null,
  *   created?: null|Created|CreatedShape,
+ *   format?: null|Format|value-of<Format>,
  *   limit?: int|null,
+ *   metadata?: list<string>|null,
  *   offset?: int|null,
  *   sourceID?: string|null,
  *   status?: null|TranscodingStatus|value-of<TranscodingStatus>,
@@ -43,10 +46,26 @@ final class TranscodingListParams implements BaseModel
     public ?Created $created;
 
     /**
+     * Filter by Transcoding format ID.
+     *
+     * @var value-of<Format>|null $format
+     */
+    #[Optional(enum: Format::class)]
+    public ?string $format;
+
+    /**
      * Maximum number of Transcodings to return.
      */
     #[Optional]
     public ?int $limit;
+
+    /**
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
+     *
+     * @var list<string>|null $metadata
+     */
+    #[Optional(list: 'string')]
+    public ?array $metadata;
 
     /**
      * Number of Transcodings to skip.
@@ -85,12 +104,16 @@ final class TranscodingListParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param Created|CreatedShape|null $created
+     * @param Format|value-of<Format>|null $format
+     * @param list<string>|null $metadata
      * @param TranscodingStatus|value-of<TranscodingStatus>|null $status
      */
     public static function with(
         ?string $id = null,
         Created|array|null $created = null,
+        Format|string|null $format = null,
         ?int $limit = null,
+        ?array $metadata = null,
         ?int $offset = null,
         ?string $sourceID = null,
         TranscodingStatus|string|null $status = null,
@@ -100,7 +123,9 @@ final class TranscodingListParams implements BaseModel
 
         null !== $id && $self['id'] = $id;
         null !== $created && $self['created'] = $created;
+        null !== $format && $self['format'] = $format;
         null !== $limit && $self['limit'] = $limit;
+        null !== $metadata && $self['metadata'] = $metadata;
         null !== $offset && $self['offset'] = $offset;
         null !== $sourceID && $self['sourceID'] = $sourceID;
         null !== $status && $self['status'] = $status;
@@ -132,12 +157,38 @@ final class TranscodingListParams implements BaseModel
     }
 
     /**
+     * Filter by Transcoding format ID.
+     *
+     * @param Format|value-of<Format> $format
+     */
+    public function withFormat(Format|string $format): self
+    {
+        $self = clone $this;
+        $self['format'] = $format;
+
+        return $self;
+    }
+
+    /**
      * Maximum number of Transcodings to return.
      */
     public function withLimit(int $limit): self
     {
         $self = clone $this;
         $self['limit'] = $limit;
+
+        return $self;
+    }
+
+    /**
+     * Filter by metadata. Repeat key:value pairs to match all supplied metadata conditions.
+     *
+     * @param list<string> $metadata
+     */
+    public function withMetadata(array $metadata): self
+    {
+        $self = clone $this;
+        $self['metadata'] = $metadata;
 
         return $self;
     }
