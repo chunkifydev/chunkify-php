@@ -11,7 +11,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Metrics\MetricAssetsParams\Format;
 
 /**
- * Retrieve Asset outcomes, timings, output sizes and source profiles by UTC creation date.
+ * Retrieve Asset outcomes, processing timings, output sizes, and source profiles by UTC creation date, as JSON or CSV, for the past 7 days by default.
  *
  * @see Chunkify\Services\MetricsService::assets()
  *

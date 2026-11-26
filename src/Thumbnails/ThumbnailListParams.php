@@ -11,7 +11,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Thumbnails\ThumbnailListParams\Created;
 
 /**
- * List Thumbnails in the authenticated Project, newest first by default.
+ * List Thumbnails in the authenticated Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date.
  *
  * @see Chunkify\Services\ThumbnailsService::list()
  *

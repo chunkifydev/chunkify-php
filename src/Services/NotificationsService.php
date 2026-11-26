@@ -38,7 +38,7 @@ final class NotificationsService implements NotificationsContract
     /**
      * @api
      *
-     * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
+     * Send an event notification to one of the Project's webhook endpoints. Recorded events are replayed with their original payload.
      *
      * @param WebhookEvent|value-of<WebhookEvent> $event event specifies the type of event that triggered the notification
      * @param string $objectID ID of the resource that triggered the event. Use the caption, static rendition, or thumbnail ID for their Asset child events. Replaying asset events, job.created, or source.created requires a retained snapshot. Resource deletion does not prevent replay.
@@ -67,7 +67,7 @@ final class NotificationsService implements NotificationsContract
     /**
      * @api
      *
-     * Retrieve details of a specific notification
+     * Retrieve a notification delivery, including its event, payload, target webhook, and the response status code returned by your endpoint.
      *
      * @param string $notificationID Notification ID
      * @param RequestOpts|null $requestOptions
@@ -87,7 +87,7 @@ final class NotificationsService implements NotificationsContract
     /**
      * @api
      *
-     * Retrieve a list of notifications with optional filtering and pagination
+     * List webhook notification deliveries in the Project. Filter by event, object, webhook, response status code, or creation date, with pagination.
      *
      * @param Created|CreatedShape $created
      * @param string $eventID filter deliveries by their originating event ID
@@ -136,7 +136,7 @@ final class NotificationsService implements NotificationsContract
     /**
      * @api
      *
-     * Delete a notification.
+     * Delete a delivered notification from the Project's history. Notifications still being processed cannot be deleted, and the webhook is unchanged.
      *
      * @param string $notificationID Notification id
      * @param RequestOpts|null $requestOptions

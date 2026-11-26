@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Delete an Asset after all processing finishes. Files remain in Storage unless delete_files is true.
+ * Delete an Asset after all processing finishes. Its streaming and static files remain in your Storage unless delete_files is true.
  *
  * @see Chunkify\Services\AssetsService::delete()
  *

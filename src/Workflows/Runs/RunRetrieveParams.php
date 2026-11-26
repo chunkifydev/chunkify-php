@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Retrieve a retained run with its triggering event, status, and action counts.
+ * Retrieve a retained Workflow run with its triggering event, Asset, revision, status, and action counts, plus any error the run reported.
  *
  * @see Chunkify\Services\Workflows\RunsService::retrieve()
  *

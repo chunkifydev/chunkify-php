@@ -30,7 +30,7 @@ final class ProjectsRawService implements ProjectsRawContract
     /**
      * @api
      *
-     * Create a new project with the specified name. The project will be created with default Chunkify storage settings.
+     * Create a Project in your team with a name of 4 to 32 characters. New Projects start with Chunkify storage until you connect your own Storage.
      *
      * @param array{name: string}|ProjectCreateParams $params
      * @param RequestOpts|null $requestOptions
@@ -63,7 +63,7 @@ final class ProjectsRawService implements ProjectsRawContract
     /**
      * @api
      *
-     * Retrieve details of a specific project by its slug
+     * Retrieve a Project in your team by its ID, including its name, slug, default Storage, Asset defaults, and default Workflow.
      *
      * @param string $projectID Project Id
      * @param RequestOpts|null $requestOptions
@@ -90,7 +90,7 @@ final class ProjectsRawService implements ProjectsRawContract
     /**
      * @api
      *
-     * Update a project's name or storage settings. Only team owners can update projects.
+     * Update a Project's name, default Storage, Asset defaults, or default Workflow. Only team owners can update Projects, and project names must be unique.
      *
      * @param string $projectID Project Id
      * @param array{
@@ -129,7 +129,7 @@ final class ProjectsRawService implements ProjectsRawContract
     /**
      * @api
      *
-     * Retrieve a list of all projects for a team
+     * List the Projects in the team that owns the access token, with each Project's name, slug, default Storage, and Asset defaults.
      *
      * @param RequestOpts|null $requestOptions
      *
