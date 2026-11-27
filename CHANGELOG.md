@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.2](https://github.com/chunkifydev/chunkify-php/compare/v1.0.1...v1.0.2) (2026-11-27)
+
+
+### Chores
+
+* sync OpenAPI schema from Chunkify v3.6.1 ([8e9e819](https://github.com/chunkifydev/chunkify-php/commit/8e9e819822b2d7139c14d3d53914fd714715a223))
+* sync OpenAPI schema from Chunkify v4.0.0 ([eb50a86](https://github.com/chunkifydev/chunkify-php/commit/eb50a8647c2a39312b34bb764a79580af85f0a11))
+
 ## [1.0.1](https://github.com/chunkifydev/chunkify-php/compare/v1.0.0...v1.0.1) (2026-11-24)
 
 
