@@ -26,7 +26,7 @@ use Chunkify\CreatedVia;
  *   metadata: array<string,string>,
  *   minResolution: MinResolution|value-of<MinResolution>,
  *   playbackReady: bool,
- *   previewEnabled: bool,
+ *   publicPlayback: bool,
  *   sourceMetadata: AssetSourceMetadata|AssetSourceMetadataShape,
  *   status: AssetStatus|value-of<AssetStatus>,
  *   storageID: string,
@@ -104,10 +104,10 @@ final class Asset implements BaseModel
     public bool $playbackReady;
 
     /**
-     * Allow public preview access without an API token. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
+     * Allow public playback without an API token, through the public preview page and embeds. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
      */
-    #[Required('preview_enabled')]
-    public bool $previewEnabled;
+    #[Required('public_playback')]
+    public bool $publicPlayback;
 
     /**
      * Original media metadata saved at Asset creation and preserved after Source deletion.
@@ -210,7 +210,7 @@ final class Asset implements BaseModel
     public ?AssetPoster $poster;
 
     /**
-     * Public HLS preview URL. Available when playback_ready and preview_enabled are true. No API token is required.
+     * Public HLS preview URL. Available when playback_ready and public_playback are true. No API token is required.
      */
     #[Optional('preview_url')]
     public ?string $previewURL;
@@ -252,7 +252,7 @@ final class Asset implements BaseModel
      *   metadata: ...,
      *   minResolution: ...,
      *   playbackReady: ...,
-     *   previewEnabled: ...,
+     *   publicPlayback: ...,
      *   sourceMetadata: ...,
      *   status: ...,
      *   storageID: ...,
@@ -274,7 +274,7 @@ final class Asset implements BaseModel
      *   ->withMetadata(...)
      *   ->withMinResolution(...)
      *   ->withPlaybackReady(...)
-     *   ->withPreviewEnabled(...)
+     *   ->withPublicPlayback(...)
      *   ->withSourceMetadata(...)
      *   ->withStatus(...)
      *   ->withStorageID(...)
@@ -312,7 +312,7 @@ final class Asset implements BaseModel
         array $metadata,
         MinResolution|string $minResolution,
         bool $playbackReady,
-        bool $previewEnabled,
+        bool $publicPlayback,
         AssetSourceMetadata|array $sourceMetadata,
         AssetStatus|string $status,
         string $storageID,
@@ -344,7 +344,7 @@ final class Asset implements BaseModel
         $self['metadata'] = $metadata;
         $self['minResolution'] = $minResolution;
         $self['playbackReady'] = $playbackReady;
-        $self['previewEnabled'] = $previewEnabled;
+        $self['publicPlayback'] = $publicPlayback;
         $self['sourceMetadata'] = $sourceMetadata;
         $self['status'] = $status;
         $self['storageID'] = $storageID;
@@ -456,12 +456,12 @@ final class Asset implements BaseModel
     }
 
     /**
-     * Allow public preview access without an API token. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
+     * Allow public playback without an API token, through the public preview page and embeds. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
      */
-    public function withPreviewEnabled(bool $previewEnabled): self
+    public function withPublicPlayback(bool $publicPlayback): self
     {
         $self = clone $this;
-        $self['previewEnabled'] = $previewEnabled;
+        $self['publicPlayback'] = $publicPlayback;
 
         return $self;
     }
@@ -656,7 +656,7 @@ final class Asset implements BaseModel
     }
 
     /**
-     * Public HLS preview URL. Available when playback_ready and preview_enabled are true. No API token is required.
+     * Public HLS preview URL. Available when playback_ready and public_playback are true. No API token is required.
      */
     public function withPreviewURL(string $previewURL): self
     {

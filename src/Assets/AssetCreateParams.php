@@ -26,7 +26,7 @@ use Chunkify\Core\Omit;
  *   metadata?: array<string,string>|null,
  *   minResolution?: null|MinResolution|value-of<MinResolution>,
  *   pathTemplate?: string|null,
- *   previewEnabled?: bool|null,
+ *   publicPlayback?: bool|null,
  *   storage?: null|AssetCreateStorageParams|AssetCreateStorageParamsShape,
  *   title?: string|null,
  *   workflowID?: string|null,
@@ -78,10 +78,10 @@ final class AssetCreateParams implements BaseModel
     public ?string $pathTemplate;
 
     /**
-     * Allow public preview access without an API token. Omit to use the Project default. Does not control CDN or static download access.
+     * Allow public playback without an API token, through the public preview page and embeds. Omit to use the Project default. Does not control CDN or static download access.
      */
-    #[Optional('preview_enabled')]
-    public ?bool $previewEnabled;
+    #[Optional('public_playback')]
+    public ?bool $publicPlayback;
 
     /**
      * Output Storage. Omit to use the Project default. The path_template controls the folder for generated output paths.
@@ -136,7 +136,7 @@ final class AssetCreateParams implements BaseModel
         ?array $metadata = null,
         MinResolution|string|null $minResolution = null,
         ?string $pathTemplate = null,
-        ?bool $previewEnabled = null,
+        ?bool $publicPlayback = null,
         AssetCreateStorageParams|array|null $storage = null,
         ?string $title = null,
         string|Omit|null $workflowID = Omit::Value,
@@ -149,7 +149,7 @@ final class AssetCreateParams implements BaseModel
         null !== $metadata && $self['metadata'] = $metadata;
         null !== $minResolution && $self['minResolution'] = $minResolution;
         null !== $pathTemplate && $self['pathTemplate'] = $pathTemplate;
-        null !== $previewEnabled && $self['previewEnabled'] = $previewEnabled;
+        null !== $publicPlayback && $self['publicPlayback'] = $publicPlayback;
         null !== $storage && $self['storage'] = $storage;
         null !== $title && $self['title'] = $title;
         Omit::Value !== $workflowID && $self['workflowID'] = $workflowID;
@@ -222,12 +222,12 @@ final class AssetCreateParams implements BaseModel
     }
 
     /**
-     * Allow public preview access without an API token. Omit to use the Project default. Does not control CDN or static download access.
+     * Allow public playback without an API token, through the public preview page and embeds. Omit to use the Project default. Does not control CDN or static download access.
      */
-    public function withPreviewEnabled(bool $previewEnabled): self
+    public function withPublicPlayback(bool $publicPlayback): self
     {
         $self = clone $this;
-        $self['previewEnabled'] = $previewEnabled;
+        $self['publicPlayback'] = $publicPlayback;
 
         return $self;
     }

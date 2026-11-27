@@ -16,7 +16,7 @@ use Chunkify\Core\Contracts\BaseModel;
  *
  * @phpstan-type AssetUpdateParamsShape = array{
  *   metadata?: array<string,string>|null,
- *   previewEnabled?: bool|null,
+ *   publicPlayback?: bool|null,
  *   title?: string|null,
  * }
  */
@@ -35,10 +35,10 @@ final class AssetUpdateParams implements BaseModel
     public ?array $metadata;
 
     /**
-     * Allow public preview access without an API token. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
+     * Allow public playback without an API token, through the public preview page and embeds. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
      */
-    #[Optional('preview_enabled')]
-    public ?bool $previewEnabled;
+    #[Optional('public_playback')]
+    public ?bool $publicPlayback;
 
     /**
      * Asset title, up to 256 characters. Send an empty string to clear it; omit to leave unchanged.
@@ -60,13 +60,13 @@ final class AssetUpdateParams implements BaseModel
      */
     public static function with(
         ?array $metadata = null,
-        ?bool $previewEnabled = null,
+        ?bool $publicPlayback = null,
         ?string $title = null
     ): self {
         $self = new self;
 
         null !== $metadata && $self['metadata'] = $metadata;
-        null !== $previewEnabled && $self['previewEnabled'] = $previewEnabled;
+        null !== $publicPlayback && $self['publicPlayback'] = $publicPlayback;
         null !== $title && $self['title'] = $title;
 
         return $self;
@@ -86,12 +86,12 @@ final class AssetUpdateParams implements BaseModel
     }
 
     /**
-     * Allow public preview access without an API token. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
+     * Allow public playback without an API token, through the public preview page and embeds. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
      */
-    public function withPreviewEnabled(bool $previewEnabled): self
+    public function withPublicPlayback(bool $publicPlayback): self
     {
         $self = clone $this;
-        $self['previewEnabled'] = $previewEnabled;
+        $self['publicPlayback'] = $publicPlayback;
 
         return $self;
     }

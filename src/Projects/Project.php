@@ -13,12 +13,14 @@ use Chunkify\Core\Omit;
 
 /**
  * @phpstan-import-type AssetDefaultsShape from \Chunkify\Assets\AssetDefaults
+ * @phpstan-import-type PlayerAppearanceShape from \Chunkify\Projects\PlayerAppearance
  *
  * @phpstan-type ProjectShape = array{
  *   id: string,
  *   assetDefaults: AssetDefaults|AssetDefaultsShape,
  *   createdAt: \DateTimeInterface,
  *   name: string,
+ *   playerAppearance: PlayerAppearance|PlayerAppearanceShape,
  *   slug: string,
  *   storageID: string,
  *   defaultWorkflowID?: string|null,
@@ -54,6 +56,12 @@ final class Project implements BaseModel
     public string $name;
 
     /**
+     * Player colours and controls used by Chunkify-hosted playback pages, such as embeds.
+     */
+    #[Required('player_appearance')]
+    public PlayerAppearance $playerAppearance;
+
+    /**
      * Slug is the slug for the project.
      */
     #[Required]
@@ -81,6 +89,7 @@ final class Project implements BaseModel
      *   assetDefaults: ...,
      *   createdAt: ...,
      *   name: ...,
+     *   playerAppearance: ...,
      *   slug: ...,
      *   storageID: ...,
      * )
@@ -94,6 +103,7 @@ final class Project implements BaseModel
      *   ->withAssetDefaults(...)
      *   ->withCreatedAt(...)
      *   ->withName(...)
+     *   ->withPlayerAppearance(...)
      *   ->withSlug(...)
      *   ->withStorageID(...)
      * ```
@@ -109,12 +119,14 @@ final class Project implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param AssetDefaults|AssetDefaultsShape $assetDefaults
+     * @param PlayerAppearance|PlayerAppearanceShape $playerAppearance
      */
     public static function with(
         string $id,
         AssetDefaults|array $assetDefaults,
         \DateTimeInterface $createdAt,
         string $name,
+        PlayerAppearance|array $playerAppearance,
         string $slug,
         string $storageID,
         string|Omit|null $defaultWorkflowID = Omit::Value,
@@ -125,6 +137,7 @@ final class Project implements BaseModel
         $self['assetDefaults'] = $assetDefaults;
         $self['createdAt'] = $createdAt;
         $self['name'] = $name;
+        $self['playerAppearance'] = $playerAppearance;
         $self['slug'] = $slug;
         $self['storageID'] = $storageID;
 
@@ -175,6 +188,20 @@ final class Project implements BaseModel
     {
         $self = clone $this;
         $self['name'] = $name;
+
+        return $self;
+    }
+
+    /**
+     * Player colours and controls used by Chunkify-hosted playback pages, such as embeds.
+     *
+     * @param PlayerAppearance|PlayerAppearanceShape $playerAppearance
+     */
+    public function withPlayerAppearance(
+        PlayerAppearance|array $playerAppearance
+    ): self {
+        $self = clone $this;
+        $self['playerAppearance'] = $playerAppearance;
 
         return $self;
     }
