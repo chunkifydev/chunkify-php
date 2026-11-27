@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chunkify\Projects\Project\PlayerAppearance;
+namespace Chunkify\Projects;
 
-enum HiddenControl: string
+enum PlayerControl: string
 {
     case CAPTIONS = 'captions';
 

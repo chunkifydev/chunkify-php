@@ -10,11 +10,10 @@ use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Omit;
-use Chunkify\Projects\Project\PlayerAppearance;
 
 /**
  * @phpstan-import-type AssetDefaultsShape from \Chunkify\Assets\AssetDefaults
- * @phpstan-import-type PlayerAppearanceShape from \Chunkify\Projects\Project\PlayerAppearance
+ * @phpstan-import-type PlayerAppearanceShape from \Chunkify\Projects\PlayerAppearance
  *
  * @phpstan-type ProjectShape = array{
  *   id: string,

@@ -2,22 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Chunkify\Projects\ProjectUpdateParams\PlayerAppearance;
+namespace Chunkify\Projects;
 
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Dark specifies the player colours in dark mode. Omit to use the default dark colours.
- *
- * @phpstan-type DarkShape = array{
+ * @phpstan-type PlayerPaletteParamsShape = array{
  *   accent: string, primary: string, secondary: string
  * }
  */
-final class Dark implements BaseModel
+final class PlayerPaletteParams implements BaseModel
 {
-    /** @use SdkModel<DarkShape> */
+    /** @use SdkModel<PlayerPaletteParamsShape> */
     use SdkModel;
 
     /**
@@ -39,17 +37,17 @@ final class Dark implements BaseModel
     public string $secondary;
 
     /**
-     * `new Dark()` is missing required properties by the API.
+     * `new PlayerPaletteParams()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
-     * Dark::with(accent: ..., primary: ..., secondary: ...)
+     * PlayerPaletteParams::with(accent: ..., primary: ..., secondary: ...)
      * ```
      *
      * Otherwise ensure the following setters are called
      *
      * ```
-     * (new Dark)->withAccent(...)->withPrimary(...)->withSecondary(...)
+     * (new PlayerPaletteParams)->withAccent(...)->withPrimary(...)->withSecondary(...)
      * ```
      */
     public function __construct()

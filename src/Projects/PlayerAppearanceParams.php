@@ -2,62 +2,55 @@
 
 declare(strict_types=1);
 
-namespace Chunkify\Projects\ProjectUpdateParams;
+namespace Chunkify\Projects;
 
 use Chunkify\Core\Attributes\Optional;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Projects\ProjectUpdateParams\PlayerAppearance\Dark;
-use Chunkify\Projects\ProjectUpdateParams\PlayerAppearance\HiddenControl;
-use Chunkify\Projects\ProjectUpdateParams\PlayerAppearance\Light;
-use Chunkify\Projects\ProjectUpdateParams\PlayerAppearance\Mode;
 
 /**
- * Player colours and controls for Chunkify-hosted playback pages, such as embeds. Replaces the whole object. Omitted fields reset to their defaults. Existing embeds use the new values.
+ * @phpstan-import-type PlayerPaletteParamsShape from \Chunkify\Projects\PlayerPaletteParams
  *
- * @phpstan-import-type DarkShape from \Chunkify\Projects\ProjectUpdateParams\PlayerAppearance\Dark
- * @phpstan-import-type LightShape from \Chunkify\Projects\ProjectUpdateParams\PlayerAppearance\Light
- *
- * @phpstan-type PlayerAppearanceShape = array{
- *   dark?: null|Dark|DarkShape,
- *   hiddenControls?: list<HiddenControl|value-of<HiddenControl>>|null,
- *   light?: null|Light|LightShape,
- *   mode?: null|Mode|value-of<Mode>,
+ * @phpstan-type PlayerAppearanceParamsShape = array{
+ *   dark?: null|PlayerPaletteParams|PlayerPaletteParamsShape,
+ *   hiddenControls?: list<PlayerControl|value-of<PlayerControl>>|null,
+ *   light?: null|PlayerPaletteParams|PlayerPaletteParamsShape,
+ *   mode?: null|PlayerThemeMode|value-of<PlayerThemeMode>,
  * }
  */
-final class PlayerAppearance implements BaseModel
+final class PlayerAppearanceParams implements BaseModel
 {
-    /** @use SdkModel<PlayerAppearanceShape> */
+    /** @use SdkModel<PlayerAppearanceParamsShape> */
     use SdkModel;
 
     /**
      * Dark specifies the player colours in dark mode. Omit to use the default dark colours.
      */
     #[Optional]
-    public ?Dark $dark;
+    public ?PlayerPaletteParams $dark;
 
     /**
      * HiddenControls lists the player buttons to hide. Defaults to an empty list.
      * Other buttons appear when the browser and video support them.
      *
-     * @var list<value-of<HiddenControl>>|null $hiddenControls
+     * @var list<value-of<PlayerControl>>|null $hiddenControls
      */
-    #[Optional('hidden_controls', list: HiddenControl::class)]
+    #[Optional('hidden_controls', list: PlayerControl::class)]
     public ?array $hiddenControls;
 
     /**
      * Light specifies the player colours in light mode. Omit to use the default light colours.
      */
     #[Optional]
-    public ?Light $light;
+    public ?PlayerPaletteParams $light;
 
     /**
      * Mode specifies which palette the player uses. auto follows the viewer's system setting.
      * An embed can override it with its theme URL parameter. Defaults to auto.
      *
-     * @var value-of<Mode>|null $mode
+     * @var value-of<PlayerThemeMode>|null $mode
      */
-    #[Optional(enum: Mode::class)]
+    #[Optional(enum: PlayerThemeMode::class)]
     public ?string $mode;
 
     public function __construct()
@@ -70,16 +63,16 @@ final class PlayerAppearance implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Dark|DarkShape|null $dark
-     * @param list<HiddenControl|value-of<HiddenControl>>|null $hiddenControls
-     * @param Light|LightShape|null $light
-     * @param Mode|value-of<Mode>|null $mode
+     * @param PlayerPaletteParams|PlayerPaletteParamsShape|null $dark
+     * @param list<PlayerControl|value-of<PlayerControl>>|null $hiddenControls
+     * @param PlayerPaletteParams|PlayerPaletteParamsShape|null $light
+     * @param PlayerThemeMode|value-of<PlayerThemeMode>|null $mode
      */
     public static function with(
-        Dark|array|null $dark = null,
+        PlayerPaletteParams|array|null $dark = null,
         ?array $hiddenControls = null,
-        Light|array|null $light = null,
-        Mode|string|null $mode = null,
+        PlayerPaletteParams|array|null $light = null,
+        PlayerThemeMode|string|null $mode = null,
     ): self {
         $self = new self;
 
@@ -94,9 +87,9 @@ final class PlayerAppearance implements BaseModel
     /**
      * Dark specifies the player colours in dark mode. Omit to use the default dark colours.
      *
-     * @param Dark|DarkShape $dark
+     * @param PlayerPaletteParams|PlayerPaletteParamsShape $dark
      */
-    public function withDark(Dark|array $dark): self
+    public function withDark(PlayerPaletteParams|array $dark): self
     {
         $self = clone $this;
         $self['dark'] = $dark;
@@ -108,7 +101,7 @@ final class PlayerAppearance implements BaseModel
      * HiddenControls lists the player buttons to hide. Defaults to an empty list.
      * Other buttons appear when the browser and video support them.
      *
-     * @param list<HiddenControl|value-of<HiddenControl>> $hiddenControls
+     * @param list<PlayerControl|value-of<PlayerControl>> $hiddenControls
      */
     public function withHiddenControls(array $hiddenControls): self
     {
@@ -121,9 +114,9 @@ final class PlayerAppearance implements BaseModel
     /**
      * Light specifies the player colours in light mode. Omit to use the default light colours.
      *
-     * @param Light|LightShape $light
+     * @param PlayerPaletteParams|PlayerPaletteParamsShape $light
      */
-    public function withLight(Light|array $light): self
+    public function withLight(PlayerPaletteParams|array $light): self
     {
         $self = clone $this;
         $self['light'] = $light;
@@ -135,9 +128,9 @@ final class PlayerAppearance implements BaseModel
      * Mode specifies which palette the player uses. auto follows the viewer's system setting.
      * An embed can override it with its theme URL parameter. Defaults to auto.
      *
-     * @param Mode|value-of<Mode> $mode
+     * @param PlayerThemeMode|value-of<PlayerThemeMode> $mode
      */
-    public function withMode(Mode|string $mode): self
+    public function withMode(PlayerThemeMode|string $mode): self
     {
         $self = clone $this;
         $self['mode'] = $mode;

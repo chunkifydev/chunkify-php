@@ -2,27 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Chunkify\Projects\Project;
+namespace Chunkify\Projects;
 
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
-use Chunkify\Projects\Project\PlayerAppearance\Dark;
-use Chunkify\Projects\Project\PlayerAppearance\HiddenControl;
-use Chunkify\Projects\Project\PlayerAppearance\Light;
-use Chunkify\Projects\Project\PlayerAppearance\Mode;
 
 /**
- * Player colours and controls used by Chunkify-hosted playback pages, such as embeds.
- *
- * @phpstan-import-type DarkShape from \Chunkify\Projects\Project\PlayerAppearance\Dark
- * @phpstan-import-type LightShape from \Chunkify\Projects\Project\PlayerAppearance\Light
+ * @phpstan-import-type PlayerPaletteShape from \Chunkify\Projects\PlayerPalette
  *
  * @phpstan-type PlayerAppearanceShape = array{
- *   dark: Dark|DarkShape,
- *   hiddenControls: list<HiddenControl|value-of<HiddenControl>>,
- *   light: Light|LightShape,
- *   mode: Mode|value-of<Mode>,
+ *   dark: PlayerPalette|PlayerPaletteShape,
+ *   hiddenControls: list<PlayerControl|value-of<PlayerControl>>,
+ *   light: PlayerPalette|PlayerPaletteShape,
+ *   mode: PlayerThemeMode|value-of<PlayerThemeMode>,
  * }
  */
 final class PlayerAppearance implements BaseModel
@@ -34,29 +27,29 @@ final class PlayerAppearance implements BaseModel
      * Dark specifies the player colours in dark mode.
      */
     #[Required]
-    public Dark $dark;
+    public PlayerPalette $dark;
 
     /**
      * HiddenControls lists the player buttons to hide.
      * Other buttons appear when the browser and video support them.
      *
-     * @var list<value-of<HiddenControl>> $hiddenControls
+     * @var list<value-of<PlayerControl>> $hiddenControls
      */
-    #[Required('hidden_controls', list: HiddenControl::class)]
+    #[Required('hidden_controls', list: PlayerControl::class)]
     public array $hiddenControls;
 
     /**
      * Light specifies the player colours in light mode.
      */
     #[Required]
-    public Light $light;
+    public PlayerPalette $light;
 
     /**
      * Mode specifies which palette the player uses. auto follows the viewer's system setting.
      *
-     * @var value-of<Mode> $mode
+     * @var value-of<PlayerThemeMode> $mode
      */
-    #[Required(enum: Mode::class)]
+    #[Required(enum: PlayerThemeMode::class)]
     public string $mode;
 
     /**
@@ -87,16 +80,16 @@ final class PlayerAppearance implements BaseModel
      *
      * You must use named parameters to construct any parameters with a default value.
      *
-     * @param Dark|DarkShape $dark
-     * @param list<HiddenControl|value-of<HiddenControl>> $hiddenControls
-     * @param Light|LightShape $light
-     * @param Mode|value-of<Mode> $mode
+     * @param PlayerPalette|PlayerPaletteShape $dark
+     * @param list<PlayerControl|value-of<PlayerControl>> $hiddenControls
+     * @param PlayerPalette|PlayerPaletteShape $light
+     * @param PlayerThemeMode|value-of<PlayerThemeMode> $mode
      */
     public static function with(
-        Dark|array $dark,
+        PlayerPalette|array $dark,
         array $hiddenControls,
-        Light|array $light,
-        Mode|string $mode,
+        PlayerPalette|array $light,
+        PlayerThemeMode|string $mode,
     ): self {
         $self = new self;
 
@@ -111,9 +104,9 @@ final class PlayerAppearance implements BaseModel
     /**
      * Dark specifies the player colours in dark mode.
      *
-     * @param Dark|DarkShape $dark
+     * @param PlayerPalette|PlayerPaletteShape $dark
      */
-    public function withDark(Dark|array $dark): self
+    public function withDark(PlayerPalette|array $dark): self
     {
         $self = clone $this;
         $self['dark'] = $dark;
@@ -125,7 +118,7 @@ final class PlayerAppearance implements BaseModel
      * HiddenControls lists the player buttons to hide.
      * Other buttons appear when the browser and video support them.
      *
-     * @param list<HiddenControl|value-of<HiddenControl>> $hiddenControls
+     * @param list<PlayerControl|value-of<PlayerControl>> $hiddenControls
      */
     public function withHiddenControls(array $hiddenControls): self
     {
@@ -138,9 +131,9 @@ final class PlayerAppearance implements BaseModel
     /**
      * Light specifies the player colours in light mode.
      *
-     * @param Light|LightShape $light
+     * @param PlayerPalette|PlayerPaletteShape $light
      */
-    public function withLight(Light|array $light): self
+    public function withLight(PlayerPalette|array $light): self
     {
         $self = clone $this;
         $self['light'] = $light;
@@ -151,9 +144,9 @@ final class PlayerAppearance implements BaseModel
     /**
      * Mode specifies which palette the player uses. auto follows the viewer's system setting.
      *
-     * @param Mode|value-of<Mode> $mode
+     * @param PlayerThemeMode|value-of<PlayerThemeMode> $mode
      */
-    public function withMode(Mode|string $mode): self
+    public function withMode(PlayerThemeMode|string $mode): self
     {
         $self = clone $this;
         $self['mode'] = $mode;

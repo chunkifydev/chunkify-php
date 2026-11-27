@@ -2,22 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Chunkify\Projects\Project\PlayerAppearance;
+namespace Chunkify\Projects;
 
 use Chunkify\Core\Attributes\Required;
 use Chunkify\Core\Concerns\SdkModel;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Light specifies the player colours in light mode.
- *
- * @phpstan-type LightShape = array{
+ * @phpstan-type PlayerPaletteShape = array{
  *   accent: string, primary: string, secondary: string
  * }
  */
-final class Light implements BaseModel
+final class PlayerPalette implements BaseModel
 {
-    /** @use SdkModel<LightShape> */
+    /** @use SdkModel<PlayerPaletteShape> */
     use SdkModel;
 
     /**
@@ -39,17 +37,17 @@ final class Light implements BaseModel
     public string $secondary;
 
     /**
-     * `new Light()` is missing required properties by the API.
+     * `new PlayerPalette()` is missing required properties by the API.
      *
      * To enforce required parameters use
      * ```
-     * Light::with(accent: ..., primary: ..., secondary: ...)
+     * PlayerPalette::with(accent: ..., primary: ..., secondary: ...)
      * ```
      *
      * Otherwise ensure the following setters are called
      *
      * ```
-     * (new Light)->withAccent(...)->withPrimary(...)->withSecondary(...)
+     * (new PlayerPalette)->withAccent(...)->withPrimary(...)->withSecondary(...)
      * ```
      */
     public function __construct()
