@@ -11,7 +11,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Metrics\MetricUsageParams\Format;
 
 /**
- * Retrieve project usage totals and daily values for a UTC date range.
+ * Retrieve the Project's usage totals and daily values for a UTC date range, as JSON or CSV. Without dates, it covers the past 7 UTC calendar days.
  *
  * @see Chunkify\Services\MetricsService::usage()
  *

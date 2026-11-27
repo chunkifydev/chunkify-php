@@ -11,7 +11,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Create a standalone file export with resolved encoding settings.
+ * Create a standalone Transcoding that exports a Source as an MP4, WebM, or M4A file. Encoding settings are resolved and processing starts asynchronously.
  *
  * @see Chunkify\Services\TranscodingsService::create()
  *

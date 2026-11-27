@@ -12,7 +12,7 @@ use Chunkify\Transcodings\TranscodingListParams\Created;
 use Chunkify\Transcodings\TranscodingListParams\Format;
 
 /**
- * List Transcodings in the authenticated Project, newest first by default.
+ * List Transcodings in the authenticated Project, newest first by default. Filter by status, format, Source, Storage, metadata, or creation date.
  *
  * @see Chunkify\Services\TranscodingsService::list()
  *

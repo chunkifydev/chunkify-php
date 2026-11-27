@@ -12,7 +12,7 @@ use Chunkify\Workflows\Runs\RunListParams\Created;
 use Chunkify\Workflows\Runs\RunListParams\Status;
 
 /**
- * List retained runs for this Workflow, newest first. Each run corresponds to one matching Asset event.
+ * List retained runs for a Workflow, newest first. Each run corresponds to one matching Asset event; filter by Asset, status, event, or date.
  *
  * @see Chunkify\Services\Workflows\RunsService::list()
  *

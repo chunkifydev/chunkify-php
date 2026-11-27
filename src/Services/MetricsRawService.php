@@ -32,7 +32,7 @@ final class MetricsRawService implements MetricsRawContract
     /**
      * @api
      *
-     * Retrieve Asset outcomes, timings, output sizes and source profiles by UTC creation date.
+     * Retrieve Asset outcomes, processing timings, output sizes, and source profiles by UTC creation date, as JSON or CSV, for the past 7 days by default.
      *
      * @param array{
      *   format?: Format|value-of<Format>, from?: string, to?: string
@@ -105,7 +105,7 @@ final class MetricsRawService implements MetricsRawContract
     /**
      * @api
      *
-     * Retrieve project usage totals and daily values for a UTC date range.
+     * Retrieve the Project's usage totals and daily values for a UTC date range, as JSON or CSV. Without dates, it covers the past 7 UTC calendar days.
      *
      * @param array{
      *   format?: MetricUsageParams\Format|value-of<MetricUsageParams\Format>,

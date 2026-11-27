@@ -34,7 +34,7 @@ final class NotificationsRawService implements NotificationsRawContract
     /**
      * @api
      *
-     * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
+     * Send an event notification to one of the Project's webhook endpoints. Recorded events are replayed with their original payload.
      *
      * @param array{
      *   event: value-of<WebhookEvent>, objectID: string, webhookID: string
@@ -69,7 +69,7 @@ final class NotificationsRawService implements NotificationsRawContract
     /**
      * @api
      *
-     * Retrieve details of a specific notification
+     * Retrieve a notification delivery, including its event, payload, target webhook, and the response status code returned by your endpoint.
      *
      * @param string $notificationID Notification ID
      * @param RequestOpts|null $requestOptions
@@ -96,7 +96,7 @@ final class NotificationsRawService implements NotificationsRawContract
     /**
      * @api
      *
-     * Retrieve a list of notifications with optional filtering and pagination
+     * List webhook notification deliveries in the Project. Filter by event, object, webhook, response status code, or creation date, with pagination.
      *
      * @param array{
      *   created?: Created|CreatedShape,
@@ -146,7 +146,7 @@ final class NotificationsRawService implements NotificationsRawContract
     /**
      * @api
      *
-     * Delete a notification.
+     * Delete a delivered notification from the Project's history. Notifications still being processed cannot be deleted, and the webhook is unchanged.
      *
      * @param string $notificationID Notification id
      * @param RequestOpts|null $requestOptions

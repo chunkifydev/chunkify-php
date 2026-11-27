@@ -11,7 +11,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * List Assets in the Project, with filtering and pagination.
+ * List Assets in the Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date, and search by ID or title.
  *
  * @see Chunkify\Services\AssetsService::list()
  *

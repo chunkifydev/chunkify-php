@@ -12,7 +12,7 @@ use Chunkify\Uploads\UploadListParams\Created;
 use Chunkify\Uploads\UploadListParams\Status;
 
 /**
- * Retrieve a list of all uploads with optional filtering and pagination.
+ * List Upload sessions in the Project, newest first by default. Filter by ID, status, Source, Storage, metadata, or creation date, with pagination.
  *
  * @see Chunkify\Services\UploadsService::list()
  *
