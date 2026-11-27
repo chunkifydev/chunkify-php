@@ -48,7 +48,7 @@ final class AssetsRawService implements AssetsRawContract
      *   metadata?: array<string,string>,
      *   minResolution?: MinResolution|value-of<MinResolution>,
      *   pathTemplate?: string,
-     *   previewEnabled?: bool,
+     *   publicPlayback?: bool,
      *   storage?: AssetCreateStorageParams|AssetCreateStorageParamsShape,
      *   title?: string,
      *   workflowID?: string|null,
@@ -112,7 +112,7 @@ final class AssetsRawService implements AssetsRawContract
      * Update an Asset's title, metadata, or whether its preview can be watched without an API token. Omitted fields remain unchanged.
      *
      * @param array{
-     *   metadata?: array<string,string>, previewEnabled?: bool, title?: string
+     *   metadata?: array<string,string>, publicPlayback?: bool, title?: string
      * }|AssetUpdateParams $params
      * @param RequestOpts|null $requestOptions
      *

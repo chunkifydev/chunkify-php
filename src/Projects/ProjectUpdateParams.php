@@ -17,11 +17,13 @@ use Chunkify\Core\Omit;
  * @see Chunkify\Services\ProjectsService::update()
  *
  * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
+ * @phpstan-import-type PlayerAppearanceParamsShape from \Chunkify\Projects\PlayerAppearanceParams
  *
  * @phpstan-type ProjectUpdateParamsShape = array{
  *   assetDefaults?: null|AssetDefaultsParams|AssetDefaultsParamsShape,
  *   defaultWorkflowID?: string|null,
  *   name?: string|null,
+ *   playerAppearance?: null|PlayerAppearanceParams|PlayerAppearanceParamsShape,
  *   storageID?: string|null,
  * }
  */
@@ -50,6 +52,12 @@ final class ProjectUpdateParams implements BaseModel
     public ?string $name;
 
     /**
+     * Player colours and controls for Chunkify-hosted playback pages, such as embeds. Replaces the whole object. Omitted fields reset to their defaults. Existing embeds use the new values.
+     */
+    #[Optional('player_appearance')]
+    public ?PlayerAppearanceParams $playerAppearance;
+
+    /**
      * ID of this Project's default Storage.
      */
     #[Optional('storage_id')]
@@ -66,11 +74,13 @@ final class ProjectUpdateParams implements BaseModel
      * You must use named parameters to construct any parameters with a default value.
      *
      * @param AssetDefaultsParams|AssetDefaultsParamsShape|null $assetDefaults
+     * @param PlayerAppearanceParams|PlayerAppearanceParamsShape|null $playerAppearance
      */
     public static function with(
         AssetDefaultsParams|array|null $assetDefaults = null,
         string|Omit|null $defaultWorkflowID = Omit::Value,
         ?string $name = null,
+        PlayerAppearanceParams|array|null $playerAppearance = null,
         ?string $storageID = null,
     ): self {
         $self = new self;
@@ -78,6 +88,7 @@ final class ProjectUpdateParams implements BaseModel
         null !== $assetDefaults && $self['assetDefaults'] = $assetDefaults;
         Omit::Value !== $defaultWorkflowID && $self['defaultWorkflowID'] = $defaultWorkflowID;
         null !== $name && $self['name'] = $name;
+        null !== $playerAppearance && $self['playerAppearance'] = $playerAppearance;
         null !== $storageID && $self['storageID'] = $storageID;
 
         return $self;
@@ -115,6 +126,20 @@ final class ProjectUpdateParams implements BaseModel
     {
         $self = clone $this;
         $self['name'] = $name;
+
+        return $self;
+    }
+
+    /**
+     * Player colours and controls for Chunkify-hosted playback pages, such as embeds. Replaces the whole object. Omitted fields reset to their defaults. Existing embeds use the new values.
+     *
+     * @param PlayerAppearanceParams|PlayerAppearanceParamsShape $playerAppearance
+     */
+    public function withPlayerAppearance(
+        PlayerAppearanceParams|array $playerAppearance
+    ): self {
+        $self = clone $this;
+        $self['playerAppearance'] = $playerAppearance;
 
         return $self;
     }
