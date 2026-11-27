@@ -61,7 +61,7 @@ final class AssetsTest extends TestCase
             metadata: ['key' => 'value', 'key2' => 'value2'],
             minResolution: 'auto',
             pathTemplate: 'videos/{metadata.VideoID}',
-            previewEnabled: true,
+            publicPlayback: true,
             storage: ['id' => 'stor_3GldXEVxF304PlE1B1cFKKiykDN'],
             title: 'Launch video',
             workflowID: 'x',

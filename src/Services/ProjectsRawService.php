@@ -12,11 +12,13 @@ use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectCreateParams;
 use Chunkify\Projects\ProjectListResponse;
 use Chunkify\Projects\ProjectUpdateParams;
+use Chunkify\Projects\ProjectUpdateParams\PlayerAppearance;
 use Chunkify\RequestOptions;
 use Chunkify\ServiceContracts\ProjectsRawContract;
 
 /**
  * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
+ * @phpstan-import-type PlayerAppearanceShape from \Chunkify\Projects\ProjectUpdateParams\PlayerAppearance
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 final class ProjectsRawService implements ProjectsRawContract
@@ -97,6 +99,7 @@ final class ProjectsRawService implements ProjectsRawContract
      *   assetDefaults?: AssetDefaultsParams|AssetDefaultsParamsShape,
      *   defaultWorkflowID?: string|null,
      *   name?: string,
+     *   playerAppearance?: PlayerAppearance|PlayerAppearanceShape,
      *   storageID?: string,
      * }|ProjectUpdateParams $params
      * @param RequestOpts|null $requestOptions
