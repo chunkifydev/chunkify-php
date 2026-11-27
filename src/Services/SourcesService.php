@@ -75,7 +75,7 @@ final class SourcesService implements SourcesContract
     /**
      * @api
      *
-     * Retrieve details of a specific source by its ID, including metadata, media properties, and associated jobs.
+     * Retrieve a Source by its ID, including its Storage location, file size, duration, dimensions, codecs, bitrates, frame rate, and metadata.
      *
      * @param string $sourceID Source ID
      * @param RequestOpts|null $requestOptions
@@ -159,7 +159,7 @@ final class SourcesService implements SourcesContract
     /**
      * @api
      *
-     * Delete a source. It will fail if there are processing jobs using this source.
+     * Delete a Source that no processing still needs and record a source.deleted event. Assets and other outputs created from the Source are preserved.
      *
      * @param string $sourceID Source id
      * @param RequestOpts|null $requestOptions

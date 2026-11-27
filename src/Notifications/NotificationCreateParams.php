@@ -11,7 +11,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Webhooks\WebhookEvent;
 
 /**
- * Send an event notification to a webhook endpoint. Recorded events replay their original payload.
+ * Send an event notification to one of the Project's webhook endpoints. Recorded events are replayed with their original payload.
  *
  * @see Chunkify\Services\NotificationsService::create()
  *

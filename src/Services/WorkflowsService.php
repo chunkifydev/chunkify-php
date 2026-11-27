@@ -81,7 +81,7 @@ final class WorkflowsService implements WorkflowsContract
     /**
      * @api
      *
-     * Retrieve a Workflow and its current definition, including archived Workflows.
+     * Retrieve a Workflow with its name, current revision, and rules. Archived Workflows can still be retrieved and include the date they were archived.
      *
      * @param string $workflowID ID of the Workflow
      * @param RequestOpts|null $requestOptions
@@ -139,7 +139,7 @@ final class WorkflowsService implements WorkflowsContract
     /**
      * @api
      *
-     * List Workflows in the Project, newest first. Archived Workflows are excluded unless archived is true.
+     * List the Workflows in the Project, newest first, with their current revision and rules. Archived Workflows are included only when archived is true.
      *
      * @param bool $archived Archived specifies whether to include archived Workflows. Defaults to false.
      * @param int $limit Limit specifies the maximum number of results to return.

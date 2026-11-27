@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Retrieve non-secret connection metadata within its owning project.
+ * Retrieve one analytics connection in its owning Project, including its type, endpoint, status, and allowed origins. Secret keys are not returned.
  *
  * @see Chunkify\Services\Projects\Analytics\ConnectionsService::retrieve()
  *

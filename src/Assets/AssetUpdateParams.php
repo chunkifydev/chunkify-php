@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Update the title, metadata, or public preview access. Omitted fields remain unchanged.
+ * Update an Asset's title, metadata, or whether its preview can be watched without an API token. Omitted fields remain unchanged.
  *
  * @see Chunkify\Services\AssetsService::update()
  *

@@ -79,7 +79,7 @@ final class UploadsRawService implements UploadsRawContract
     /**
      * @api
      *
-     * Retrieve details of a specific upload by its ID, including metadata, status, and associated source.
+     * Retrieve an Upload session by its ID, including its status, file size, expiry, error details, and the Source or Asset created from it.
      *
      * @param string $uploadID Upload ID
      * @param RequestOpts|null $requestOptions
@@ -106,7 +106,7 @@ final class UploadsRawService implements UploadsRawContract
     /**
      * @api
      *
-     * Retrieve a list of all uploads with optional filtering and pagination.
+     * List Upload sessions in the Project, newest first by default. Filter by ID, status, Source, Storage, metadata, or creation date, with pagination.
      *
      * @param array{
      *   id?: string,
@@ -151,7 +151,7 @@ final class UploadsRawService implements UploadsRawContract
     /**
      * @api
      *
-     * Delete an upload.
+     * Delete an Upload session record from the Project. A Source already created from a completed Upload is not deleted and can still be processed.
      *
      * @param string $uploadID Upload id
      * @param RequestOpts|null $requestOptions

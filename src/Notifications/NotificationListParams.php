@@ -13,7 +13,7 @@ use Chunkify\Notifications\NotificationListParams\ResponseStatusCode;
 use Chunkify\Webhooks\WebhookEvent;
 
 /**
- * Retrieve a list of notifications with optional filtering and pagination.
+ * List webhook notification deliveries in the Project. Filter by event, object, webhook, response status code, or creation date, with pagination.
  *
  * @see Chunkify\Services\NotificationsService::list()
  *

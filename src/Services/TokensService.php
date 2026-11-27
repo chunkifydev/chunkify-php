@@ -80,7 +80,7 @@ final class TokensService implements TokensContract
     /**
      * @api
      *
-     * Revoke an access token by its ID. This action is irreversible and will immediately invalidate the token.
+     * Revoke an access token by its ID. Revocation is immediate and irreversible, so requests that still use the token are rejected right away.
      *
      * @param string $tokenID Token ID
      * @param RequestOpts|null $requestOptions

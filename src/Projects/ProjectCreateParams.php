@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * Create a new project with the specified name. The project will be created with default Chunkify storage settings.
+ * Create a Project in your team with a name of 4 to 32 characters. New Projects start with Chunkify storage until you connect your own Storage.
  *
  * @see Chunkify\Services\ProjectsService::create()
  *

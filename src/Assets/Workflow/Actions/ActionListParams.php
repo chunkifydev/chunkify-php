@@ -13,7 +13,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * List retained Workflow actions for an Asset, newest first. Direct output requests are excluded.
+ * List the retained Workflow actions for an Asset, newest first, with status, type, and date filters. Direct output requests are excluded.
  *
  * @see Chunkify\Services\Assets\Workflow\ActionsService::list()
  *

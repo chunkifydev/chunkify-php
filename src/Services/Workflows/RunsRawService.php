@@ -32,7 +32,7 @@ final class RunsRawService implements RunsRawContract
     /**
      * @api
      *
-     * Retrieve a retained run with its triggering event, status, and action counts.
+     * Retrieve a retained Workflow run with its triggering event, Asset, revision, status, and action counts, plus any error the run reported.
      *
      * @param string $runID ID of the Workflow run
      * @param array{workflowID: string}|RunRetrieveParams $params
@@ -68,7 +68,7 @@ final class RunsRawService implements RunsRawContract
     /**
      * @api
      *
-     * List retained runs for this Workflow, newest first. Each run corresponds to one matching Asset event.
+     * List retained runs for a Workflow, newest first. Each run corresponds to one matching Asset event; filter by Asset, status, event, or date.
      *
      * @param string $workflowID ID of the Workflow
      * @param array{

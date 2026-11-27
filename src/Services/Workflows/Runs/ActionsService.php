@@ -37,7 +37,7 @@ final class ActionsService implements ActionsContract
     /**
      * @api
      *
-     * Retrieve one action execution in a retained Workflow run, including its resolved inputs, status, and result.
+     * Retrieve one action execution in a retained Workflow run, including the Asset it ran on, its resolved inputs, status, result, and error.
      *
      * @param string $actionRunID ID of the Asset action run
      * @param string $workflowID ID of the Workflow

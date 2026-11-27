@@ -72,7 +72,7 @@ final class ConnectionsRawService implements ConnectionsRawContract
     /**
      * @api
      *
-     * Retrieve non-secret connection metadata within its owning project.
+     * Retrieve one analytics connection in its owning Project, including its type, endpoint, status, and allowed origins. Secret keys are not returned.
      *
      * @param string $connectionID the saved analytics connection ID
      * @param array{projectID: string}|ConnectionRetrieveParams $params
@@ -157,7 +157,7 @@ final class ConnectionsRawService implements ConnectionsRawContract
     /**
      * @api
      *
-     * List the saved connections for this project. No connection is activated by this request.
+     * List the analytics connections saved for a Project, with their type, endpoint, and status. Listing connections does not activate any of them.
      *
      * @param string $projectID the owning Chunkify project ID
      * @param RequestOpts|null $requestOptions
