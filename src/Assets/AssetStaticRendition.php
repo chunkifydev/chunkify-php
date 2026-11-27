@@ -190,7 +190,7 @@ final class AssetStaticRendition implements BaseModel
     public ?int $size;
 
     /**
-     * Signed MP4 download URL, available when ready and unexpired. Valid for up to ten minutes. Retrieve the output to refresh it. Independent of preview_enabled.
+     * Signed MP4 download URL, available when ready and unexpired. Valid for up to ten minutes. Retrieve the output to refresh it. Independent of public_playback.
      */
     #[Optional]
     public ?string $url;
@@ -570,7 +570,7 @@ final class AssetStaticRendition implements BaseModel
     }
 
     /**
-     * Signed MP4 download URL, available when ready and unexpired. Valid for up to ten minutes. Retrieve the output to refresh it. Independent of preview_enabled.
+     * Signed MP4 download URL, available when ready and unexpired. Valid for up to ten minutes. Retrieve the output to refresh it. Independent of public_playback.
      */
     public function withURL(string $url): self
     {

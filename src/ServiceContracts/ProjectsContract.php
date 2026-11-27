@@ -9,10 +9,12 @@ use Chunkify\Core\Exceptions\APIException;
 use Chunkify\Core\Omit;
 use Chunkify\Projects\Project;
 use Chunkify\Projects\ProjectListResponse;
+use Chunkify\Projects\ProjectUpdateParams\PlayerAppearance;
 use Chunkify\RequestOptions;
 
 /**
  * @phpstan-import-type AssetDefaultsParamsShape from \Chunkify\Assets\AssetDefaultsParams
+ * @phpstan-import-type PlayerAppearanceShape from \Chunkify\Projects\ProjectUpdateParams\PlayerAppearance
  * @phpstan-import-type RequestOpts from \Chunkify\RequestOptions
  */
 interface ProjectsContract
@@ -50,6 +52,7 @@ interface ProjectsContract
      * @param AssetDefaultsParams|AssetDefaultsParamsShape $assetDefaults Defaults for new Assets and automatic Uploads. Replaces the whole object. Omitted fields reset to their defaults. Existing Assets are unchanged.
      * @param string|Omit|null $defaultWorkflowID DefaultWorkflowId specifies the default Workflow for new Assets. Set null to clear it.
      * @param string $name project name
+     * @param PlayerAppearance|PlayerAppearanceShape $playerAppearance Player colours and controls for Chunkify-hosted playback pages, such as embeds. Replaces the whole object. Omitted fields reset to their defaults. Existing embeds use the new values.
      * @param string $storageID ID of this Project's default Storage
      * @param RequestOpts|null $requestOptions
      *
@@ -60,6 +63,7 @@ interface ProjectsContract
         AssetDefaultsParams|array|null $assetDefaults = null,
         string|Omit|null $defaultWorkflowID = Omit::Value,
         ?string $name = null,
+        PlayerAppearance|array|null $playerAppearance = null,
         ?string $storageID = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed;
