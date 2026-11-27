@@ -14,7 +14,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Omit;
 
 /**
- * Create an Asset from a video Source. Processing starts asynchronously.
+ * Create an Asset from a video Source to prepare it for streaming. Processing starts asynchronously, and the Asset is returned while it is preparing.
  *
  * @see Chunkify\Services\AssetsService::create()
  *

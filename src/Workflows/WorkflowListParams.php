@@ -10,7 +10,7 @@ use Chunkify\Core\Concerns\SdkParams;
 use Chunkify\Core\Contracts\BaseModel;
 
 /**
- * List Workflows in the Project, newest first. Archived Workflows are excluded unless archived is true.
+ * List the Workflows in the Project, newest first, with their current revision and rules. Archived Workflows are included only when archived is true.
  *
  * @see Chunkify\Services\WorkflowsService::list()
  *

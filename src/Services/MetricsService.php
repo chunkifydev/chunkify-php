@@ -35,7 +35,7 @@ final class MetricsService implements MetricsContract
     /**
      * @api
      *
-     * Retrieve Asset outcomes, timings, output sizes and source profiles by UTC creation date.
+     * Retrieve Asset outcomes, processing timings, output sizes, and source profiles by UTC creation date, as JSON or CSV, for the past 7 days by default.
      *
      * @param Format|value-of<Format> $format Response format. Defaults to JSON unless Accept requests CSV. Overrides Accept when supplied; errors remain JSON.
      * @param string $from Inclusive UTC start date, YYYY-MM-DD. Supply both dates for a custom range of at most 366 days. Omit both for the past 7 UTC calendar days including today.
@@ -98,7 +98,7 @@ final class MetricsService implements MetricsContract
     /**
      * @api
      *
-     * Retrieve project usage totals and daily values for a UTC date range.
+     * Retrieve the Project's usage totals and daily values for a UTC date range, as JSON or CSV. Without dates, it covers the past 7 UTC calendar days.
      *
      * @param \Chunkify\Metrics\MetricUsageParams\Format|value-of<\Chunkify\Metrics\MetricUsageParams\Format> $format Response format. Defaults to JSON unless Accept requests CSV. Overrides Accept when supplied; errors remain JSON.
      * @param string $from Inclusive UTC start date, YYYY-MM-DD. Supply both dates for a custom range of at most 366 days. Omit both for the past 7 UTC calendar days including today.

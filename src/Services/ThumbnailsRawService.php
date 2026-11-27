@@ -82,7 +82,7 @@ final class ThumbnailsRawService implements ThumbnailsRawContract
     /**
      * @api
      *
-     * Retrieve the accepted settings, published files and current state of one Thumbnail.
+     * Retrieve one Thumbnail request with its accepted settings, current status, sampled frames, and published image files with their delivery URLs.
      *
      * @param string $thumbnailID thumbnailId identifies a Thumbnail in the authenticated Project
      * @param RequestOpts|null $requestOptions
@@ -109,7 +109,7 @@ final class ThumbnailsRawService implements ThumbnailsRawContract
     /**
      * @api
      *
-     * List Thumbnails in the authenticated Project, newest first by default.
+     * List Thumbnails in the authenticated Project, newest first by default. Filter by status, Source, Storage, metadata, or creation date.
      *
      * @param array{
      *   id?: string,

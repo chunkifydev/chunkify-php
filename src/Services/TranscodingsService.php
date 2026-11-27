@@ -45,7 +45,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * Create a standalone file export with resolved encoding settings.
+     * Create a standalone Transcoding that exports a Source as an MP4, WebM, or M4A file. Encoding settings are resolved and processing starts asynchronously.
      *
      * @param TranscodingCreateFormatParamsShape $format format specifies the requested encoding settings
      * @param string $sourceID sourceId identifies a Source in this Project
@@ -77,7 +77,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * Retrieve the accepted settings, published files and current state of one Transcoding.
+     * Retrieve one Transcoding with its accepted encoding settings, current status and progress, and published files with their delivery URLs.
      *
      * @param string $transcodingID transcodingId identifies a Transcoding in the authenticated Project
      * @param RequestOpts|null $requestOptions
@@ -97,7 +97,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * List Transcodings in the authenticated Project, newest first by default.
+     * List Transcodings in the authenticated Project, newest first by default. Filter by status, format, Source, Storage, metadata, or creation date.
      *
      * @param string $id Id filters by an exact Transcoding ID. Omit to include all matching resources.
      * @param Created|CreatedShape $created
@@ -173,7 +173,7 @@ final class TranscodingsService implements TranscodingsContract
     /**
      * @api
      *
-     * Cancel a preparing Transcoding and release its unpaid reservation. Repeating an accepted cancellation succeeds.
+     * Cancel a Transcoding that is still preparing and release its unpaid reservation. Repeating an accepted cancellation succeeds without changes.
      *
      * @param string $transcodingID transcodingId identifies a Transcoding in the authenticated Project
      * @param RequestOpts|null $requestOptions

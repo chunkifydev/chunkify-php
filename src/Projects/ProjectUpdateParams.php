@@ -12,7 +12,7 @@ use Chunkify\Core\Contracts\BaseModel;
 use Chunkify\Core\Omit;
 
 /**
- * Update a project's name or storage settings. Only team owners can update projects.
+ * Update a Project's name, default Storage, Asset defaults, or default Workflow. Only team owners can update Projects, and project names must be unique.
  *
  * @see Chunkify\Services\ProjectsService::update()
  *
