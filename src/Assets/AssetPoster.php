@@ -51,7 +51,7 @@ final class AssetPoster implements BaseModel
     public ?string $cdnURL;
 
     /**
-     * Public poster preview URL. Available when the Asset is ready and preview_enabled is true.
+     * Public poster preview URL. Available when the Asset is ready and public_playback is true.
      */
     #[Optional('preview_url')]
     public ?string $previewURL;
@@ -69,7 +69,7 @@ final class AssetPoster implements BaseModel
     public ?float $timeSeconds;
 
     /**
-     * Signed image URL, valid for up to ten minutes. Available once the poster exists, regardless of preview_enabled.
+     * Signed image URL, valid for up to ten minutes. Available once the poster exists, regardless of public_playback.
      */
     #[Optional]
     public ?string $url;
@@ -168,7 +168,7 @@ final class AssetPoster implements BaseModel
     }
 
     /**
-     * Public poster preview URL. Available when the Asset is ready and preview_enabled is true.
+     * Public poster preview URL. Available when the Asset is ready and public_playback is true.
      */
     public function withPreviewURL(string $previewURL): self
     {
@@ -201,7 +201,7 @@ final class AssetPoster implements BaseModel
     }
 
     /**
-     * Signed image URL, valid for up to ten minutes. Available once the poster exists, regardless of preview_enabled.
+     * Signed image URL, valid for up to ten minutes. Available once the poster exists, regardless of public_playback.
      */
     public function withURL(string $url): self
     {

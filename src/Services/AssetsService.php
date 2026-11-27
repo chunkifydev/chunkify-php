@@ -67,7 +67,7 @@ final class AssetsService implements AssetsContract
      * Supports {assetID} and case-sensitive {metadata.<key>}; referenced values must be non-empty.
      * Ignored for Chunkify storage, which always uses {assetID}.
      * Overrides the Project default. Defaults to {assetID} when neither is set. Maximum template size: 1024 UTF-8 bytes. Expanded prefix: 768 bytes including base_prefix and trailing slash.
-     * @param bool $previewEnabled Allow public preview access without an API token. Omit to use the Project default. Does not control CDN or static download access.
+     * @param bool $publicPlayback Allow public playback without an API token, through the public preview page and embeds. Omit to use the Project default. Does not control CDN or static download access.
      * @param AssetCreateStorageParams|AssetCreateStorageParamsShape $storage Output Storage. Omit to use the Project default. The path_template controls the folder for generated output paths.
      * @param string $title Asset title, up to 256 characters. Defaults to an empty string.
      * @param string|Omit|null $workflowID WorkflowId specifies the Workflow to select. Omit to use the Project default. Set null to disable automatic actions. The current revision is pinned when creation is accepted.
@@ -81,7 +81,7 @@ final class AssetsService implements AssetsContract
         ?array $metadata = null,
         MinResolution|string|null $minResolution = null,
         ?string $pathTemplate = null,
-        ?bool $previewEnabled = null,
+        ?bool $publicPlayback = null,
         AssetCreateStorageParams|array|null $storage = null,
         ?string $title = null,
         string|Omit|null $workflowID = Omit::Value,
@@ -93,7 +93,7 @@ final class AssetsService implements AssetsContract
         null !== $metadata && $params['metadata'] = $metadata;
         null !== $minResolution && $params['minResolution'] = $minResolution;
         null !== $pathTemplate && $params['pathTemplate'] = $pathTemplate;
-        null !== $previewEnabled && $params['previewEnabled'] = $previewEnabled;
+        null !== $publicPlayback && $params['publicPlayback'] = $publicPlayback;
         null !== $storage && $params['storage'] = $storage;
         null !== $title && $params['title'] = $title;
         Omit::Value !== $workflowID && $params['workflowID'] = $workflowID;
@@ -129,7 +129,7 @@ final class AssetsService implements AssetsContract
      * Update an Asset's title, metadata, or whether its preview can be watched without an API token. Omitted fields remain unchanged.
      *
      * @param array<string,string> $metadata Replaces all metadata. Send {} to clear it; omit to leave unchanged. Maximum encoded JSON size: 2,048 bytes.
-     * @param bool $previewEnabled Allow public preview access without an API token. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
+     * @param bool $publicPlayback Allow public playback without an API token, through the public preview page and embeds. Does not control CDN or static download access. Disabling it does not revoke signed URLs already issued.
      * @param string $title Asset title, up to 256 characters. Send an empty string to clear it; omit to leave unchanged.
      * @param RequestOpts|null $requestOptions
      *
@@ -138,13 +138,13 @@ final class AssetsService implements AssetsContract
     public function update(
         string $assetID,
         ?array $metadata = null,
-        ?bool $previewEnabled = null,
+        ?bool $publicPlayback = null,
         ?string $title = null,
         RequestOptions|array|null $requestOptions = null,
     ): mixed {
         $params = [];
         null !== $metadata && $params['metadata'] = $metadata;
-        null !== $previewEnabled && $params['previewEnabled'] = $previewEnabled;
+        null !== $publicPlayback && $params['publicPlayback'] = $publicPlayback;
         null !== $title && $params['title'] = $title;
 
         // @phpstan-ignore-next-line argument.type

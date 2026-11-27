@@ -14,7 +14,7 @@ use Chunkify\Core\Contracts\BaseModel;
  *   maxResolution?: null|AssetDefaultsMaxResolution|value-of<AssetDefaultsMaxResolution>,
  *   minResolution?: null|AssetDefaultsMinResolution|value-of<AssetDefaultsMinResolution>,
  *   pathTemplate?: string|null,
- *   previewEnabled?: bool|null,
+ *   publicPlayback?: bool|null,
  * }
  */
 final class AssetDefaultsParams implements BaseModel
@@ -54,10 +54,10 @@ final class AssetDefaultsParams implements BaseModel
     public ?string $pathTemplate;
 
     /**
-     * Allow public preview access for new Assets without an API token. Defaults to true. Existing Assets are unchanged.
+     * Allow public playback of new Assets without an API token, through the public preview page and embeds. Defaults to true. Existing Assets are unchanged.
      */
-    #[Optional('preview_enabled')]
-    public ?bool $previewEnabled;
+    #[Optional('public_playback')]
+    public ?bool $publicPlayback;
 
     public function __construct()
     {
@@ -77,7 +77,7 @@ final class AssetDefaultsParams implements BaseModel
         AssetDefaultsMaxResolution|string|null $maxResolution = null,
         AssetDefaultsMinResolution|string|null $minResolution = null,
         ?string $pathTemplate = null,
-        ?bool $previewEnabled = null,
+        ?bool $publicPlayback = null,
     ): self {
         $self = new self;
 
@@ -85,7 +85,7 @@ final class AssetDefaultsParams implements BaseModel
         null !== $maxResolution && $self['maxResolution'] = $maxResolution;
         null !== $minResolution && $self['minResolution'] = $minResolution;
         null !== $pathTemplate && $self['pathTemplate'] = $pathTemplate;
-        null !== $previewEnabled && $self['previewEnabled'] = $previewEnabled;
+        null !== $publicPlayback && $self['publicPlayback'] = $publicPlayback;
 
         return $self;
     }
@@ -144,12 +144,12 @@ final class AssetDefaultsParams implements BaseModel
     }
 
     /**
-     * Allow public preview access for new Assets without an API token. Defaults to true. Existing Assets are unchanged.
+     * Allow public playback of new Assets without an API token, through the public preview page and embeds. Defaults to true. Existing Assets are unchanged.
      */
-    public function withPreviewEnabled(bool $previewEnabled): self
+    public function withPublicPlayback(bool $publicPlayback): self
     {
         $self = clone $this;
-        $self['previewEnabled'] = $previewEnabled;
+        $self['publicPlayback'] = $publicPlayback;
 
         return $self;
     }

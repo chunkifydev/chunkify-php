@@ -61,7 +61,7 @@ final class AssetTimelinePreviews implements BaseModel
     public ?float $intervalSeconds;
 
     /**
-     * Public WebVTT preview URL with signed image references. Available when the Asset is ready and preview_enabled is true.
+     * Public WebVTT preview URL with signed image references. Available when the Asset is ready and public_playback is true.
      */
     #[Optional('preview_url')]
     public ?string $previewURL;
@@ -199,7 +199,7 @@ final class AssetTimelinePreviews implements BaseModel
     }
 
     /**
-     * Public WebVTT preview URL with signed image references. Available when the Asset is ready and preview_enabled is true.
+     * Public WebVTT preview URL with signed image references. Available when the Asset is ready and public_playback is true.
      */
     public function withPreviewURL(string $previewURL): self
     {
